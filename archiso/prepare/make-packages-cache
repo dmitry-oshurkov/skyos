@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+
+#--------------- Подготовка -------------------------------------
+rm -f /root/pacman-cache/*
+rm -rf /root/aur-cache/*
+rm -rf /tmp/arch-pkgs
+mkdir /tmp/arch-pkgs
+
+
+#--------------- Временный пользователь -------------------------
+useradd -m -s /bin/bash -G wheel aur_builder_user
+mkdir -p /etc/sudoers.d
+echo "aur_builder_user ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/aur_builder_user && chmod 440 /etc/sudoers.d/aur_builder_user
+
+
+#--------------- Установка --------------------------------------
+mapfile -t PACKAGES_ARR < <(sed -e 's/#.*//' -e 's/[[:space:]]*$//' -e '/^[[:space:]]*$/d' /root/aur-packages.conf)
+
+sudo -u aur_builder_user bash -lc "
+  cd /tmp
+  git clone https://aur.archlinux.org/yay-bin.git
+  cd /tmp/yay-bin
+  makepkg --syncdeps --install --noconfirm --noprogressbar"
+
+
+for pkg in "${PACKAGES_ARR[@]}"; do
+  sudo -u aur_builder_user bash -lc "yay -S --noconfirm --noprogressbar --cachedir /tmp/arch-pkgs $pkg"
+  rm -rf /tmp/$pkg
+done
+
+
+mv /tmp/arch-pkgs/*.{zst,zst.sig} /root/pacman-cache
+chmod -R a+w /root/pacman-cache
+
+mv /home/aur_builder_user/.cache/yay /root/aur-cache
+mv /tmp/yay-bin /root/aur-cache/yay
+chmod -R a+w /root/aur-cache
+
+
+#--------------- Очистка --------------------------------------
+rm -f /etc/sudoers.d/aur_builder_user
+userdel -f aur_builder_user

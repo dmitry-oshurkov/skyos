@@ -1,0 +1,24 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="prepare" type="docker-deploy" factoryName="dockerfile" server-name="Local docker">
+    <deployment type="dockerfile">
+      <settings>
+        <option name="containerName" value="" />
+        <option name="commandLineOptions" value="--rm" />
+        <option name="sourceFilePath" value="archiso/prepare/Dockerfile" />
+        <option name="volumeBindings">
+          <list>
+            <DockerVolumeBindingImpl>
+              <option name="containerPath" value="/root/pacman-cache" />
+              <option name="hostPath" value="$PROJECT_DIR$/configs/releng/airootfs/root/pacman-cache" />
+            </DockerVolumeBindingImpl>
+            <DockerVolumeBindingImpl>
+              <option name="containerPath" value="/root/aur-cache" />
+              <option name="hostPath" value="$PROJECT_DIR$/configs/releng/airootfs/root/aur-cache" />
+            </DockerVolumeBindingImpl>
+          </list>
+        </option>
+      </settings>
+    </deployment>
+    <method v="2" />
+  </configuration>
+</component>
