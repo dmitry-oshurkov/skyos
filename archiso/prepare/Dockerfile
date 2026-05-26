@@ -1,7 +1,6 @@
 FROM archlinux
 
-RUN pacman -S --refresh --noconfirm --noprogressbar \
-    && pacman -S --noconfirm --noprogressbar --needed base-devel git sudo
+RUN pacman -S --refresh --noconfirm --noprogressbar
 
 WORKDIR /root
 COPY . .
