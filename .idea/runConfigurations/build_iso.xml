@@ -1,0 +1,28 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="build iso" type="docker-deploy" factoryName="dockerfile" server-name="Local docker">
+    <deployment type="dockerfile">
+      <settings>
+        <option name="containerName" value="" />
+        <option name="commandLineOptions" value="--rm --privileged" />
+        <option name="sourceFilePath" value="Dockerfile" />
+        <option name="volumeBindings">
+          <list>
+            <DockerVolumeBindingImpl>
+              <option name="containerPath" value="/tmp/skyos-build/archiso" />
+              <option name="hostPath" value="$PROJECT_DIR$/archiso" />
+            </DockerVolumeBindingImpl>
+            <DockerVolumeBindingImpl>
+              <option name="containerPath" value="/tmp/skyos-build/releng/airootfs/root/pacman-cache" />
+              <option name="hostPath" value="$PROJECT_DIR$/configs/releng/airootfs/root/pacman-cache" />
+            </DockerVolumeBindingImpl>
+            <DockerVolumeBindingImpl>
+              <option name="containerPath" value="/tmp/skyos-build/releng/airootfs/root/aur-cache" />
+              <option name="hostPath" value="$PROJECT_DIR$/configs/releng/airootfs/root/aur-cache" />
+            </DockerVolumeBindingImpl>
+          </list>
+        </option>
+      </settings>
+    </deployment>
+    <method v="2" />
+  </configuration>
+</component>
