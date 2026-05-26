@@ -16,3 +16,5 @@ network-config
 man/version.rst
 .idea/*.xml
 *.iml
+pacman-cache
+aur-cache

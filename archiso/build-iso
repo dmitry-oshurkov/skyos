@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+archiso/mkarchiso -v -w work -o archiso/out releng
+
+chmod -R a+w archiso/out

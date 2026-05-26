@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+
+
+DISK=/dev/sda
+ROOT_PART=${DISK}1
+
+
+loadkeys ru
+setfont cyr-sun16
+
+echo -e "\e[96mНачало установки на $DISK. Это уничтожит все данные на диске.\e[0m"
+
+timedatectl set-ntp true
+
+
+#--------------- Подготовка таблицы разделов ----------------
+sgdisk --zap-all $DISK || true
+parted --script $DISK mklabel msdos
+parted --script $DISK mkpart primary ext4 0% 100%
+parted --script $DISK set 1 boot on
+partprobe $DISK
+
+mkfs.ext4 $ROOT_PART
+mount $ROOT_PART /mnt
+
+
+#--------------- Установка системы -------------------------
+rate-mirrors --entry-country=RU --allow-root arch | tee /etc/pacman.d/mirrorlist
+
+mkdir -p /mnt/var/cache/pacman/pkg
+mv pacman-cache/* /mnt/var/cache/pacman/pkg
+
+PACKAGES=$(sed 's/#.*//' pacman-packages.conf | sed '/^[[:space:]]*$/d' | xargs)
+pacstrap -K /mnt $PACKAGES
+
+genfstab -U /mnt >> /mnt/etc/fstab
+
+
+#--------------- Завершение --------------------------------
+umount -R /mnt
+
+echo "Установка завершена. Перезагрузите систему."
