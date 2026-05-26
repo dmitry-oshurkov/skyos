@@ -1,0 +1,115 @@
+#!/usr/bin/env bash
+
+
+#--------------- Настройка -------------------------------------
+source /root/setup-config
+
+# timezone and clock
+ln -sf /usr/share/zoneinfo/$TIMEZONE /etc/localtime
+hwclock --systohc
+
+# locale
+echo "en_US.UTF-8 UTF-8
+ru_RU.UTF-8 UTF-8" > /etc/locale.gen
+locale-gen
+echo "LANG=ru_RU.UTF-8" > /etc/locale.conf
+
+# console keymap
+echo "KEYMAP=ru
+FONT=cyr-sun16" > /etc/vconsole.conf
+
+# hostname
+echo "$HOSTNAME" > /etc/hostname
+cat > /etc/hosts <<HOSTS
+127.0.0.1   localhost
+::1         localhost
+127.0.1.1   $HOSTNAME.localdomain $HOSTNAME
+HOSTS
+
+# образ initramfs
+mkinitcpio -P
+
+# root password
+echo "root:$USER_PASSWORD" | chpasswd
+
+# create user
+useradd --create-home --user-group --groups wheel $USERNAME
+echo "$USERNAME:$USER_PASSWORD" | chpasswd
+echo '%wheel ALL=(ALL) ALL' | EDITOR='tee -a' /usr/bin/visudo
+
+# enable multilib
+sed -i 's|\#Color|Color|g' /etc/pacman.conf
+sed -i 's|\#\[multilib\]|\[multilib\]|g' /etc/pacman.conf
+sed -i '94s|\#Include|Include|g' /etc/pacman.conf
+
+
+
+#--------------- Настройка системных приложений -------------------------
+# lightdm
+sed -i 's|#greeter-session=example-gtk-gnome|greeter-session=lightdm-slick-greeter|g' /etc/lightdm/lightdm.conf
+# slick-greeter
+echo "[Greeter]" > /etc/lightdm/slick-greeter.conf
+echo "draw-user-backgrounds=false" >> /etc/lightdm/slick-greeter.conf
+echo "draw-grid=true" >> /etc/lightdm/slick-greeter.conf
+echo "show-a11y=false" >> /etc/lightdm/slick-greeter.conf
+
+
+# applications category
+echo "[Desktop Entry]
+Name=RemoteAndVMs
+Comment=Remote connections and VMs
+Name[ru]=Подключения и ВМ
+Comment[ru]=Удалённые подключения и виртуальные машины
+Icon=AppImage
+Type=Directory" > /usr/share/desktop-directories/remote-and-vm.directory
+
+mkdir --parents /etc/xdg/menus/applications-merged
+echo "<Menu>
+  <Name>Applications</Name>
+  <Menu>
+    <Name>RemoteAndVMs</Name>
+    <Directory>remote-and-vm.directory</Directory>
+    <Include>
+      <Category>RemoteAndVMs</Category>
+    </Include>
+  </Menu>
+</Menu>" > /etc/xdg/menus/applications-merged/remote-and-vm.menu
+
+
+# sudo
+echo "Defaults passwd_timeout=0" >> /etc/sudoers
+echo "Defaults timestamp_timeout=15" >> /etc/sudoers
+
+# all cores for aur builds
+sed -i 's|#MAKEFLAGS="-j2"|MAKEFLAGS="-j$(nproc)"|g' /etc/makepkg.conf
+
+
+# docker
+mkdir -p /home/docker
+mkdir -p /etc/docker
+rm -rf /var/lib/docker
+echo $'{
+"data-root": "/home/docker",
+"registry-mirrors": [
+        "https://dockerhub.timeweb.cloud",
+        "https://dh-mirror.gitverse.ru",
+        "https://mirror.gcr.io",
+        "https://daocloud.io",
+        "https://c.163.com/",
+        "https://registry.docker-cn.com",
+        "https://huecker.io"
+    ]
+}' > /etc/docker/daemon.json
+
+echo "options overlay metacopy=off redirect_dir=off" > /etc/modprobe.d/disable-overlay-redirect-dir.conf
+
+
+
+#--------------- Завершение -------------------------
+systemctl enable NetworkManager
+systemctl enable qemu-guest-agent
+systemctl enable lightdm
+
+DISK=/dev/sda
+grub-install --target=i386-pc --recheck $DISK
+grub-mkconfig -o /boot/grub/grub.cfg

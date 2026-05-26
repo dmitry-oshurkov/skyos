@@ -36,6 +36,16 @@ pacstrap -K /mnt $PACKAGES
 genfstab -U /mnt >> /mnt/etc/fstab
 
 
+#--------------- Настройка системы -------------------------
+cp /root/setup-config /mnt/root/setup-config
+cp /root/setup /mnt/root/setup
+
+arch-chroot /mnt /root/setup
+
+rm -f /mnt/root/setup-config
+rm -f /mnt/root/setup
+
+
 #--------------- Завершение --------------------------------
 umount -R /mnt
 
