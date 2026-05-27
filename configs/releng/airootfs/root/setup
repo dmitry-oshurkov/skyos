@@ -43,6 +43,15 @@ sed -i 's|\#\[multilib\]|\[multilib\]|g' /etc/pacman.conf
 sed -i '94s|\#Include|Include|g' /etc/pacman.conf
 
 
+#--------------- Установка AUR-пакетов -------------------------
+mkdir -p /home/$USERNAME/.cache/yay
+mv /var/tmp/aur-cache/* /home/$USERNAME/.cache/yay
+chown -R "$USERNAME:$USERNAME" /home/$USERNAME/.cache
+
+mapfile -t ZST_FILES < <(find /home/$USERNAME/.cache/yay -type f -name '*.zst' ! -iname '*-debug*.zst' -print0 | xargs -0 -r -n1 echo)
+
+pacman -U --needed --noconfirm --noprogressbar ${ZST_FILES[@]}
+
 
 #--------------- Настройка системных приложений -------------------------
 # lightdm

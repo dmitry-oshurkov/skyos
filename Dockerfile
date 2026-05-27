@@ -7,5 +7,6 @@ WORKDIR /tmp/skyos-build
 
 COPY configs/releng releng
 COPY archiso/prepare/pacman-packages.conf releng/airootfs/root/pacman-packages.conf
+COPY archiso/prepare/aur-packages.conf releng/airootfs/root/aur-packages.conf
 
 ENTRYPOINT ["archiso/build-iso"]
