@@ -2,15 +2,19 @@
 
 
 pacman-cache() {
+    rm -f /root/pacman-cache/*
 
     mapfile -t PACMAN_PACKAGES_ARR < <(sed -e 's/#.*//' -e 's/[[:space:]]*$//' -e '/^[[:space:]]*$/d' /root/pacman-packages.conf)
 
-    for pkg in "${PACMAN_PACKAGES_ARR[@]}"; do
-      pacman -S --needed --noconfirm --noprogressbar $pkg
-    done
+    PACMAN_PACKAGES=$(sed 's/#.*//' /root/pacman-packages.conf | sed '/^[[:space:]]*$/d' | xargs)
+    pacman -S --needed --noconfirm --noprogressbar $PACMAN_PACKAGES
+
+    mv /var/cache/pacman/pkg/*.{zst,zst.sig} /root/pacman-cache
+    chmod -R a+w /root/pacman-cache
 }
 
 aur-cache() {
+    rm -rf /root/aur-cache/*
 
     #--------------- Временный пользователь -------------------------
     useradd -m -s /bin/bash -G wheel aur_builder_user
@@ -37,20 +41,12 @@ aur-cache() {
     #--------------- Очистка --------------------------------------
     rm -f /etc/sudoers.d/aur_builder_user
     userdel -f aur_builder_user
+
+    mv /home/aur_builder_user/.cache/yay/* /root/aur-cache
+    mv /tmp/yay-bin /root/aur-cache/yay
+    chmod -R a+w /root/aur-cache
 }
-
-
-rm -f /root/pacman-cache/*
-rm -rf /root/aur-cache/*
 
 
 pacman-cache
 aur-cache
-
-
-mv /var/cache/pacman/pkg/*.{zst,zst.sig} /root/pacman-cache
-chmod -R a+w /root/pacman-cache
-
-mv /home/aur_builder_user/.cache/yay/* /root/aur-cache
-mv /tmp/yay-bin /root/aur-cache/yay
-chmod -R a+w /root/aur-cache
