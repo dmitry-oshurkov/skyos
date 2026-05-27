@@ -57,10 +57,17 @@ pacman -U --needed --noconfirm --noprogressbar ${ZST_FILES[@]}
 #--------------- Настройка системных приложений -------------------------
 # lightdm
 sed -i 's|#greeter-session=example-gtk-gnome|greeter-session=lightdm-slick-greeter|g' /etc/lightdm/lightdm.conf
+sed -i 's|#greeter-setup-script=|greeter-setup-script=/usr/bin/numlockx on|g' /etc/lightdm/lightdm.conf # numlock on
 # slick-greeter
 echo "[Greeter]" > /etc/lightdm/slick-greeter.conf
+echo "background=/usr/share/backgrounds/linuxmint-serena/capelli_ears_of_corn.jpg" >> /etc/lightdm/slick-greeter.conf
+echo "theme-name=Sky-Mint-Y-Dark-Aqua" >> /etc/lightdm/slick-greeter.conf
+echo "icon-theme-name=Newaita-reborn-mint-dark" >> /etc/lightdm/slick-greeter.conf
+echo "cursor-theme-name=Empty-Butterfly-Yellow-vr1" >> /etc/lightdm/slick-greeter.conf
+echo "clock-format=%H:%M     %e %B, %A" >> /etc/lightdm/slick-greeter.conf
 echo "draw-user-backgrounds=false" >> /etc/lightdm/slick-greeter.conf
 echo "draw-grid=true" >> /etc/lightdm/slick-greeter.conf
+echo "activate-numlock=true" >> /etc/lightdm/slick-greeter.conf
 echo "show-a11y=false" >> /etc/lightdm/slick-greeter.conf
 
 
@@ -112,6 +119,42 @@ echo $'{
 }' > /etc/docker/daemon.json
 
 echo "options overlay metacopy=off redirect_dir=off" > /etc/modprobe.d/disable-overlay-redirect-dir.conf
+
+
+rm -rf /usr/share/backgrounds/gnome/
+rm -f /usr/share/gnome-background-properties/adwaita.xml
+rm -f /usr/share/gnome-background-properties/amber.xml
+rm -f /usr/share/gnome-background-properties/blobs.xml
+rm -f /usr/share/gnome-background-properties/drool.xml
+rm -f /usr/share/gnome-background-properties/fold.xml
+rm -f /usr/share/gnome-background-properties/geometrics.xml
+rm -f /usr/share/gnome-background-properties/glass-chip.xml
+rm -f /usr/share/gnome-background-properties/lcd-rainbow.xml
+rm -f /usr/share/gnome-background-properties/lcd.xml
+rm -f /usr/share/gnome-background-properties/map.xml
+rm -f /usr/share/gnome-background-properties/mollnar.xml
+rm -f /usr/share/gnome-background-properties/morphogenesis.xml
+rm -f /usr/share/gnome-background-properties/neogeo.xml
+rm -f /usr/share/gnome-background-properties/pills.xml
+rm -f /usr/share/gnome-background-properties/pixels.xml
+rm -f /usr/share/gnome-background-properties/pride.xml
+rm -f /usr/share/gnome-background-properties/progress.xml
+rm -f /usr/share/gnome-background-properties/ring.xml
+rm -f /usr/share/gnome-background-properties/sheet.xml
+rm -f /usr/share/gnome-background-properties/swoosh.xml
+rm -f /usr/share/gnome-background-properties/symbolic-soup.xml
+rm -f /usr/share/gnome-background-properties/symbolic.xml
+rm -f /usr/share/gnome-background-properties/tarka.xml
+rm -f /usr/share/gnome-background-properties/vnc.xml
+rm -f /usr/share/gnome-background-properties/balls.xml
+rm -f /usr/share/gnome-background-properties/blendpills.xml
+rm -f /usr/share/gnome-background-properties/curvy.xml
+rm -f /usr/share/gnome-background-properties/dithered-sun.xml
+rm -f /usr/share/gnome-background-properties/pixel-pusher.xml
+rm -f /usr/share/gnome-background-properties/tarkov-pills.xml
+rm -f /usr/share/gnome-background-properties/tubes.xml
+
+
 
 
 
