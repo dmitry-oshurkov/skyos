@@ -43,6 +43,11 @@ cp /root/setup /mnt/root/setup
 mkdir -p /mnt/var/tmp/aur-cache
 mv aur-cache/* /mnt/var/tmp/aur-cache
 
+mkdir -p /mnt/usr/share/plank/themes
+mv custom-cache/usr/share/themes/* /mnt/usr/share/themes/
+mv custom-cache/usr/share/plank/themes/* /mnt/usr/share/plank/themes/
+mv custom-cache/usr/share/icons/* /mnt/usr/share/icons/
+
 arch-chroot /mnt /root/setup
 
 rm -f /mnt/root/setup-config

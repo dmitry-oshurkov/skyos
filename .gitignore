@@ -19,3 +19,4 @@ man/version.rst
 setup-config
 pacman-cache
 aur-cache
+custom-cache

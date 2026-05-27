@@ -41,6 +41,7 @@ echo '%wheel ALL=(ALL) ALL' | EDITOR='tee -a' /usr/bin/visudo
 sed -i 's|\#Color|Color|g' /etc/pacman.conf
 sed -i 's|\#\[multilib\]|\[multilib\]|g' /etc/pacman.conf
 sed -i '94s|\#Include|Include|g' /etc/pacman.conf
+pacman -Sy --noprogressbar
 
 
 #--------------- Установка AUR-пакетов -------------------------

@@ -15,6 +15,10 @@
               <option name="containerPath" value="/root/aur-cache" />
               <option name="hostPath" value="$PROJECT_DIR$/configs/releng/airootfs/root/aur-cache" />
             </DockerVolumeBindingImpl>
+            <DockerVolumeBindingImpl>
+              <option name="containerPath" value="/root/custom-cache" />
+              <option name="hostPath" value="$PROJECT_DIR$/configs/releng/airootfs/root/custom-cache" />
+            </DockerVolumeBindingImpl>
           </list>
         </option>
       </settings>

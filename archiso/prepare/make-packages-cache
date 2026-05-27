@@ -47,6 +47,21 @@ aur-cache() {
     chmod -R a+w /root/aur-cache
 }
 
+custom() {
+    rm -rf /root/custom-cache/*
+    mkdir -p /root/custom-cache/usr/share/themes
+    mkdir -p /root/custom-cache/usr/share/plank/themes
+    mkdir -p /root/custom-cache/usr/share/icons
+
+    curl -sL https://github.com/dmitry-oshurkov/sky-arc-theme/releases/download/22.1/Sky-Arc-Darker.tar.gz | tar -xz -C /root/custom-cache/usr/share/themes/
+    curl -sL https://github.com/dmitry-oshurkov/sky-arc-theme/releases/download/22.1/Sky-Arc-Darker-Plank.tar.gz | tar -xz -C /root/custom-cache/usr/share/plank/themes/
+    curl -sL https://github.com/dmitry-oshurkov/mint-themes/releases/download/22.1/themes.tar.gz | tar -xz -C /root/custom-cache/usr/share/themes/
+    curl -sL https://github.com/dmitry-oshurkov/files/releases/download/1/Empty-Butterfly-Yellow-vr1-Linux.tar.gz | tar -xz -C /root/custom-cache/usr/share/icons/
+
+    chmod -R a+w /root/custom-cache
+}
+
 
 pacman-cache
 aur-cache
+custom
