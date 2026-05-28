@@ -24,4 +24,5 @@ file_permissions=(
   ["/usr/local/bin/livecd-sound"]="0:0:755"
   ["/root/install"]="0:0:755"
   ["/root/setup"]="0:0:755"
+  ["/root/setup-user"]="0:0:755"
 )
