@@ -91,12 +91,6 @@ chown $USERNAME:$USERNAME $USER_HOME/.config/autostart/mailspring.desktop
 chmod +x $USER_HOME/.config/autostart/mailspring.desktop
 sed -i "s|Exec=mailspring %U|Exec=mailspring --background|g" $USER_HOME/.config/autostart/mailspring.desktop
 
-# cp /usr/share/applications/teams-for-linux.desktop $USER_HOME/.config/autostart/teams-for-linux.desktop
-# chown $USERNAME:$USERNAME $USER_HOME/.config/autostart/teams-for-linux.desktop
-# chmod +x $USER_HOME/.config/autostart/teams-for-linux.desktop
-# sed -i "s|Exec=/opt/teams-for-linux/teams-for-linux %U|Exec=/opt/teams-for-linux/teams-for-linux --appIconType light --minimized true|g" $USER_HOME/.config/autostart/teams-for-linux.desktop
-# echo 'X-GNOME-Autostart-enabled=false' >> $USER_HOME/.config/autostart/teams-for-linux.desktop
-
 cp /etc/xdg/autostart/blueman.desktop $USER_HOME/.config/autostart/blueman.desktop
 chown $USERNAME:$USERNAME $USER_HOME/.config/autostart/blueman.desktop
 chmod +x $USER_HOME/.config/autostart/blueman.desktop
@@ -114,8 +108,6 @@ X-GNOME-Autostart-enabled=true
 X-GNOME-Autostart-Delay=0" > $USER_HOME/.config/autostart/vscodium-backups.desktop
 chown $USERNAME:$USERNAME $USER_HOME/.config/autostart/vscodium-backups.desktop
 chmod +x $USER_HOME/.config/autostart/vscodium-backups.desktop
-
-rm -rf $USER_HOME/.config/autostart/cachyos-hello.desktop
 
 
 
