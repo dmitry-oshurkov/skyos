@@ -23,6 +23,8 @@ partprobe $DISK
 mkfs.ext4 $ROOT_PART
 mount $ROOT_PART /mnt
 
+tune2fs -m 1 $ROOT_PART # 1% reserved space on /
+
 
 #--------------- Установка системы -------------------------
 rate-mirrors --entry-country=RU --allow-root arch | tee /etc/pacman.d/mirrorlist

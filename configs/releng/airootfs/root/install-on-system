@@ -4,6 +4,8 @@
 #--------------- Настройка -------------------------------------
 source /root/install-on-system.env
 
+USER_HOME=/home/$USERNAME
+
 #chsh -s /bin/fish
 
 # timezone and clock
@@ -47,11 +49,11 @@ pacman -Sy --noprogressbar
 
 
 #--------------- Установка AUR-пакетов -------------------------
-mkdir -p /home/$USERNAME/.cache/yay
-mv /var/tmp/aur-cache/* /home/$USERNAME/.cache/yay
-chown -R "$USERNAME:$USERNAME" /home/$USERNAME/.cache
+mkdir -p $USER_HOME/.cache/yay
+mv /var/tmp/aur-cache/* $USER_HOME/.cache/yay
+chown -R "$USERNAME:$USERNAME" $USER_HOME/.cache
 
-mapfile -t ZST_FILES < <(find /home/$USERNAME/.cache/yay -type f -name '*.zst' ! -iname '*-debug*.zst' -print0 | xargs -0 -r -n1 echo)
+mapfile -t ZST_FILES < <(find $USER_HOME/.cache/yay -type f -name '*.zst' ! -iname '*-debug*.zst' -print0 | xargs -0 -r -n1 echo)
 
 pacman -U --needed --noconfirm --noprogressbar ${ZST_FILES[@]}
 
@@ -71,6 +73,50 @@ echo "draw-user-backgrounds=false" >> /etc/lightdm/slick-greeter.conf
 echo "draw-grid=true" >> /etc/lightdm/slick-greeter.conf
 echo "activate-numlock=true" >> /etc/lightdm/slick-greeter.conf
 echo "show-a11y=false" >> /etc/lightdm/slick-greeter.conf
+
+
+# user autostart
+cp /usr/share/applications/net.launchpad.plank.desktop $USER_HOME/.config/autostart/net.launchpad.plank.desktop
+chown $USERNAME:$USERNAME $USER_HOME/.config/autostart/net.launchpad.plank.desktop
+chmod +x $USER_HOME/.config/autostart/net.launchpad.plank.desktop
+echo $'X-GNOME-Autostart-enabled=true\nHidden=false\nX-GNOME-Autostart-Delay=0' >> $USER_HOME/.config/autostart/net.launchpad.plank.desktop
+
+cp /usr/share/applications/Yandex.Disk-indicator.desktop $USER_HOME/.config/autostart/Yandex.Disk-indicator.desktop
+chown $USERNAME:$USERNAME $USER_HOME/.config/autostart/Yandex.Disk-indicator.desktop
+chmod +x $USER_HOME/.config/autostart/Yandex.Disk-indicator.desktop
+echo 'X-GNOME-Autostart-enabled=false' >> $USER_HOME/.config/autostart/Yandex.Disk-indicator.desktop
+
+cp /usr/share/applications/mailspring.desktop $USER_HOME/.config/autostart/mailspring.desktop
+chown $USERNAME:$USERNAME $USER_HOME/.config/autostart/mailspring.desktop
+chmod +x $USER_HOME/.config/autostart/mailspring.desktop
+sed -i "s|Exec=mailspring %U|Exec=mailspring --background|g" $USER_HOME/.config/autostart/mailspring.desktop
+
+# cp /usr/share/applications/teams-for-linux.desktop $USER_HOME/.config/autostart/teams-for-linux.desktop
+# chown $USERNAME:$USERNAME $USER_HOME/.config/autostart/teams-for-linux.desktop
+# chmod +x $USER_HOME/.config/autostart/teams-for-linux.desktop
+# sed -i "s|Exec=/opt/teams-for-linux/teams-for-linux %U|Exec=/opt/teams-for-linux/teams-for-linux --appIconType light --minimized true|g" $USER_HOME/.config/autostart/teams-for-linux.desktop
+# echo 'X-GNOME-Autostart-enabled=false' >> $USER_HOME/.config/autostart/teams-for-linux.desktop
+
+cp /etc/xdg/autostart/blueman.desktop $USER_HOME/.config/autostart/blueman.desktop
+chown $USERNAME:$USERNAME $USER_HOME/.config/autostart/blueman.desktop
+chmod +x $USER_HOME/.config/autostart/blueman.desktop
+echo 'X-GNOME-Autostart-enabled=false' >> $USER_HOME/.config/autostart/blueman.desktop
+
+echo "[Desktop Entry]
+Type=Application
+Exec=$USER_HOME/projects/skylab/scripts/tools/vscodium-backups
+Icon=mintbackup
+NoDisplay=false
+Hidden=false
+Name[ru_RU]=Резервирование текста VSCodium
+Comment[ru_RU]=Резервирование текста VSCodium
+X-GNOME-Autostart-enabled=true
+X-GNOME-Autostart-Delay=0" > $USER_HOME/.config/autostart/vscodium-backups.desktop
+chown $USERNAME:$USERNAME $USER_HOME/.config/autostart/vscodium-backups.desktop
+chmod +x $USER_HOME/.config/autostart/vscodium-backups.desktop
+
+rm -rf $USER_HOME/.config/autostart/cachyos-hello.desktop
+
 
 
 # applications category
@@ -159,16 +205,16 @@ rm -f /usr/share/gnome-background-properties/tubes.xml
 
 
 #--------------- Настройка пользовательских приложений -------------
-mv /root/install-on-user /home/$USERNAME/install-on-user
-mv /root/user-first-login /home/$USERNAME/user-first-login
-chown "$USERNAME:$USERNAME" /home/$USERNAME/user-first-login
-mv /root/user-prefs.dconf /home/$USERNAME/user-prefs.dconf
-chown "$USERNAME:$USERNAME" /home/$USERNAME/user-prefs.dconf
+mv /root/install-on-user $USER_HOME/install-on-user
+mv /root/user-first-login $USER_HOME/user-first-login
+chown "$USERNAME:$USERNAME" $USER_HOME/user-first-login
+mv /root/user-prefs.dconf $USER_HOME/user-prefs.dconf
+chown "$USERNAME:$USERNAME" $USER_HOME/user-prefs.dconf
 
-sudo -u $USERNAME /home/$USERNAME/install-on-user
+sudo -u $USERNAME $USER_HOME/install-on-user
 
-rm -f /home/$USERNAME/install-on-user
-rm -f /home/$USERNAME/user-prefs.dconf
+rm -f $USER_HOME/install-on-user
+rm -f $USER_HOME/user-prefs.dconf
 
 
 
