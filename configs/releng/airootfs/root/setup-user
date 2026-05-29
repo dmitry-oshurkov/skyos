@@ -8,81 +8,12 @@ sed -i "s|TPROF|$TPROF|g" $HOME/user-prefs.dconf
 dbus-launch dconf load / < $HOME/user-prefs.dconf
 
 
-
-#######################################################################################################################################################
-#
-#  Setup desktop
-#
-#######################################################################################################################################################
-
-sed -i 's|"%A, %B %e, %H:%M"|"%H:%M     %e %B, %A"|g' $HOME/.config/cinnamon/spices/calendar@cinnamon.org/12.json
-sed -i '25s|false|true|g' $HOME/.config/cinnamon/spices/calendar@cinnamon.org/12.json
-sed -i '189s|true|false|g' $HOME/.config/cinnamon/spices/menu@cinnamon.org/0.json # show-desktop.value
-sed -i '201s|true|false|g' $HOME/.config/cinnamon/spices/menu@cinnamon.org/0.json # show-downloads.value
-sed -i '225s|true|false|g' $HOME/.config/cinnamon/spices/menu@cinnamon.org/0.json # show-bookmarks.value
-sed -i '256s|22|32|g' $HOME/.config/cinnamon/spices/menu@cinnamon.org/0.json # sidebar-icon-size.value
-sed -i '339s|665|800|g' $HOME/.config/cinnamon/spices/menu@cinnamon.org/0.json # popup-width.value
-sed -i '344s|425|620|g' $HOME/.config/cinnamon/spices/menu@cinnamon.org/0.json # popup-height.value
-sed -i 's|"value": "visual"|"value": "buttons"|g' $HOME/.config/cinnamon/spices/workspace-switcher@cinnamon.org/17.json
-sed -i '14d' $HOME/.config/cinnamon/spices/panel-launchers@cinnamon.org/13.json
-sed -i '14d' $HOME/.config/cinnamon/spices/panel-launchers@cinnamon.org/13.json
-sed -i '14s|"nemo.desktop"|"org.gnome.SystemMonitor.desktop",\n"org.gnome.Terminal.desktop",\n"org.gnome.Calculator.desktop",\n"org.gnome.Screenshot.desktop",\n"deluge.desktop",\n"org.gnome.meld.desktop",\n"postman.desktop",\n"bitwarden.desktop",\n"codium.desktop",\n"video-collector-client.desktop"|g' $HOME/.config/cinnamon/spices/panel-launchers@cinnamon.org/13.json
-
-echo '{"width":{"type":"scale","default":10,"min":2,"max":400,"step":1,"value":7},"__md5__":"ce7d0d70f40859fec53e8c70cde93a17"}
-' > $HOME/.config/cinnamon/spices/spacer@cinnamon.org/23.json
-cp $HOME/.config/cinnamon/spices/spacer@cinnamon.org/23.json $HOME/.config/cinnamon/spices/spacer@cinnamon.org/24.json
-cp $HOME/.config/cinnamon/spices/spacer@cinnamon.org/23.json $HOME/.config/cinnamon/spices/spacer@cinnamon.org/25.json
-cp $HOME/.config/cinnamon/spices/spacer@cinnamon.org/23.json $HOME/.config/cinnamon/spices/spacer@cinnamon.org/26.json
-cp $HOME/.config/cinnamon/spices/spacer@cinnamon.org/23.json $HOME/.config/cinnamon/spices/spacer@cinnamon.org/27.json
-cp $HOME/.config/cinnamon/spices/spacer@cinnamon.org/23.json $HOME/.config/cinnamon/spices/spacer@cinnamon.org/34.json
-
-sed -i 's|"value":7|"value":20|g' $HOME/.config/cinnamon/spices/spacer@cinnamon.org/27.json
-cp $HOME/.config/cinnamon/spices/spacer@cinnamon.org/27.json $HOME/.config/cinnamon/spices/spacer@cinnamon.org/32.json
-cp $HOME/.config/cinnamon/spices/spacer@cinnamon.org/27.json $HOME/.config/cinnamon/spices/spacer@cinnamon.org/33.json
-
-
-
-
-
-#######################################################################################################################################################
-#
-#  System config
-#
-#######################################################################################################################################################
-
-
-
-
-
-sed -i 's|nemo-icon-view-auto-layout=true|nemo-icon-view-auto-layout=false|g' $HOME/.config/nemo/desktop-metadata
-
 # bluetoothctl power on # проверить, что стартует
 # bluetoothctl power off
 # bluetoothctl power on
 # scan on
 # remove CF:0B:0C:C1:57:95
 # bluetoothctl connect CF:0B:0C:C1:57:95
-
-
-
-#######################################################################################################################################################
-#
-#  Setup apps
-#
-#######################################################################################################################################################
-
-
-plank >> /dev/null . &
-sleep 3
-pkill plank
-rm -f $HOME/.config/plank/dock1/launchers/*
-
-echo $'[PlankDockItemPreferences]\nLauncher=docklet://clock\n\n[DockyClockPreferences]\n#If the clock shows 24hr time (when showing digital and in the hover).\nShowMilitary=false\n#If the clock shows a digital clock (true) or an analog clock (false).\nShowDigital=false\n#If the clock shows the date in digital mode.\nShowDate=false' > $HOME/.config/plank/dock1/launchers/clock.dockitem
-echo $'[PlankDockItemPreferences]\nLauncher=docklet://clippy\n\n[DockyClippyPreferences]\n#How many recent clipboard entries to keep.\nMaxEntries=15\n#If it should track the primary (mouse selection) clipboard.\nTrackMouseSelections=false' > $HOME/.config/plank/dock1/launchers/clippy.dockitem
-echo $'[PlankDockItemPreferences]\nLauncher=file:///usr/share/applications/yandex-browser.desktop' > $HOME/.config/plank/dock1/launchers/yandex-browser.dockitem
-echo $'[PlankDockItemPreferences]\nLauncher=file:///usr/share/applications/nemo.desktop' > $HOME/.config/plank/dock1/launchers/nemo.dockitem
-echo $'[PlankDockItemPreferences]\nLauncher=file:///usr/share/applications/jetbrains-idea.desktop' > $HOME/.config/plank/dock1/launchers/jetbrains-idea.dockitem
-echo $'[PlankDockItemPreferences]\nLauncher=file:///usr/share/applications/GitKraken.desktop' > $HOME/.config/plank/dock1/launchers/GitKraken.dockitem
 
 
 mkdir $HOME/.config/yandex-disk
@@ -221,26 +152,6 @@ XDG_VIDEOS_DIR=\"\$HOME/Видео\"
 " > $HOME/.config/user-dirs.dirs
 
 
-# folders icons
-gio set $HOME/Фотографии metadata::custom-icon file:///usr/share/icons/Newaita-reborn-pop-os-dark/places/64/folder-photos.svg
-gio set "$HOME/Семейные древа" metadata::custom-icon file:///usr/share/icons/Newaita-reborn-pop-os-dark/places/64/folder-activities.svg
-gio set $HOME/Архив metadata::custom-icon file:///usr/share/icons/Newaita-reborn-pop-os-dark/places/64/folder-tar.svg
-gio set $HOME/projects metadata::custom-icon file:///usr/share/icons/Newaita-reborn-dracula-dark/places/64/folder-templates.svg
-gio set $HOME/yandex.disk metadata::custom-icon file:///usr/share/icons/Newaita-reborn-deep-purple-dark/places/64/folder-yandex-disk.svg
-gio set $HOME/mega.sync metadata::custom-icon file:///usr/share/icons/Newaita-reborn/places/24/folder-cloud.svg
-gio set $HOME/.config metadata::custom-icon file:///usr/share/icons/Newaita-reborn-ubuntu-dark/places/64/folder-gray.svg
-gio set $HOME/.local metadata::custom-icon file:///usr/share/icons/Newaita-reborn-ubuntu-dark/places/64/folder-brown.svg
-gio set $HOME/.local/backups metadata::custom-icon file:///usr/share/icons/Newaita-reborn-ubuntu-dark/places/64/folder-gray.svg
-gio set $HOME/skylab metadata::custom-icon file:///usr/share/icons/Newaita-reborn-gray-dark/places/64/folder-favorites.svg
-
-gio set $HOME/projects/kodepix metadata::custom-icon file:///usr/share/icons/Newaita-reborn-ubuntu-dark/places/64/folder-green.svg
-gio set $HOME/projects/demo metadata::custom-icon file:///usr/share/icons/Newaita-reborn-ubuntu-dark/places/64/folder-light-brown.svg
-gio set $HOME/projects/skylab/bookstore metadata::custom-icon file:///usr/share/icons/Newaita-reborn-ubuntu-dark/places/64/folder-light-blue.svg
-gio set $HOME/projects/skylab metadata::custom-icon file:///usr/share/icons/Newaita-reborn-ubuntu-dark/places/64/folder-purple.svg
-gio set $HOME/projects/skylab/scripts metadata::custom-icon file:///usr/share/icons/Newaita-reborn-ubuntu-dark/places/64/folder-purple.svg
-gio set $HOME/projects/skylab/tools metadata::custom-icon file:///usr/share/icons/Newaita-reborn-ubuntu-dark/places/64/folder-gray.svg
-gio set $HOME/projects/skylab/video-collector metadata::custom-icon file:///usr/share/icons/Newaita-reborn-ubuntu-dark/places/64/folder-mojito.svg
-
 
 # preffered apps
 echo $'[Default Applications]\ntext/plain=codium.desktop\naudio/aac=org.gnome.Lollypop.desktop\naudio/ac3=org.gnome.Lollypop.desktop\naudio/flac=org.gnome.Lollypop.desktop\naudio/m4a=org.gnome.Lollypop.desktop\naudio/mp3=org.gnome.Lollypop.desktop\naudio/mp4=org.gnome.Lollypop.desktop\naudio/mpeg=org.gnome.Lollypop.desktop\naudio/mpegurl=org.gnome.Lollypop.desktop\naudio/ogg=org.gnome.Lollypop.desktop\naudio/vnd.rn-realaudio=org.gnome.Lollypop.desktop\naudio/vorbis=org.gnome.Lollypop.desktop\naudio/x-aac=org.gnome.Lollypop.desktop\naudio/x-flac=org.gnome.Lollypop.desktop\naudio/x-m4a=org.gnome.Lollypop.desktop\naudio/x-mp3=org.gnome.Lollypop.desktop\naudio/x-mpeg=org.gnome.Lollypop.desktop\naudio/x-mpegurl=org.gnome.Lollypop.desktop\naudio/x-ms-wma=org.gnome.Lollypop.desktop\naudio/x-musepack=org.gnome.Lollypop.desktop\naudio/x-oggflac=org.gnome.Lollypop.desktop\naudio/x-opus+ogg=org.gnome.Lollypop.desktop\naudio/x-pn-realaudio=org.gnome.Lollypop.desktop\naudio/x-scpls=org.gnome.Lollypop.desktop\naudio/x-speex=org.gnome.Lollypop.desktop\naudio/x-vorbis=org.gnome.Lollypop.desktop\naudio/x-vorbis+ogg=org.gnome.Lollypop.desktop\naudio/x-wav=org.gnome.Lollypop.desktop\naudio/3gpp=org.gnome.Lollypop.desktop\naudio/midi=org.gnome.Lollypop.desktop\naudio/mp4a-latm=org.gnome.Lollypop.desktop\naudio/mpeg3=org.gnome.Lollypop.desktop\naudio/mpg=org.gnome.Lollypop.desktop\naudio/wav=org.gnome.Lollypop.desktop\naudio/wave=org.gnome.Lollypop.desktop\naudio/webm=org.gnome.Lollypop.desktop\naudio/x-aiff=org.gnome.Lollypop.desktop\naudio/x-mpeg-3=org.gnome.Lollypop.desktop\naudio/x-mpg=org.gnome.Lollypop.desktop\naudio/x-ms-asf=org.gnome.Lollypop.desktop\naudio/x-ogg=org.gnome.Lollypop.desktop\naudio/x-wavpack=org.gnome.Lollypop.desktop\nvideo/avi=smplayer.desktop\nvideo/flv=smplayer.desktop\nvideo/mp4=smplayer.desktop\nvideo/mpeg=smplayer.desktop\nvideo/quicktime=smplayer.desktop\nvideo/vnd.rn-realvideo=smplayer.desktop\nvideo/webm=smplayer.desktop\nvideo/x-matroska=smplayer.desktop\nvideo/x-ms-asf=smplayer.desktop\nvideo/x-ms-wmv=smplayer.desktop\nvideo/x-msvideo=smplayer.desktop\nvideo/x-ogm+ogg=smplayer.desktop\nvideo/x-theora=smplayer.desktop\nvideo/3gp=smplayer.desktop\nvideo/3gpp=smplayer.desktop\nvideo/divx=smplayer.desktop\nvideo/mp4v-es=smplayer.desktop\nvideo/msvideo=smplayer.desktop\nvideo/ogg=smplayer.desktop\nvideo/vivo=smplayer.desktop\nvideo/vnd.divx=smplayer.desktop\nvideo/x-anim=smplayer.desktop\nvideo/x-avi=smplayer.desktop\nvideo/x-flc=smplayer.desktop\nvideo/x-fli=smplayer.desktop\nvideo/x-flic=smplayer.desktop\nvideo/x-flv=smplayer.desktop\nvideo/x-m4v=smplayer.desktop\nvideo/x-mng=smplayer.desktop\nvideo/x-mpeg=smplayer.desktop\nvideo/x-mpeg2=smplayer.desktop\nvideo/x-ms-afs=smplayer.desktop\nvideo/x-ms-asx=smplayer.desktop\nvideo/x-ms-wm=smplayer.desktop\nvideo/x-ms-wvx=smplayer.desktop\nvideo/x-ms-wvxvideo=smplayer.desktop\nvideo/x-nsv=smplayer.desktop\nvideo/x-theora+ogg=smplayer.desktop\napplication/javascript=codium.desktop\napplication/x-httpd-php3=codium.desktop\napplication/x-httpd-php4=codium.desktop\napplication/x-httpd-php5=codium.desktop\napplication/x-m4=codium.desktop\napplication/x-php=codium.desktop\napplication/x-ruby=codium.desktop\napplication/x-shellscript=codium.desktop\napplication/xml=codium.desktop\ntext/css=codium.desktop\ntext/turtle=codium.desktop\ntext/x-c++hdr=codium.desktop\ntext/x-c++src=codium.desktop\ntext/x-chdr=codium.desktop\ntext/x-csharp=codium.desktop\ntext/x-csrc=codium.desktop\ntext/x-diff=codium.desktop\ntext/x-dsrc=codium.desktop\ntext/x-fortran=codium.desktop\ntext/x-java=codium.desktop\ntext/x-makefile=codium.desktop\ntext/x-pascal=codium.desktop\ntext/x-perl=codium.desktop\ntext/x-python=codium.desktop\ntext/x-sql=codium.desktop\ntext/x-vb=codium.desktop\ntext/yaml=codium.desktop\napplication/pdf=org.gnome.Evince.desktop\ntext/html=yandex-browser.desktop\nx-scheme-handler/gitkraken=GitKraken.desktop\nx-scheme-handler/http=yandex-browser.desktop\nx-scheme-handler/https=yandex-browser.desktop\nx-scheme-handler/about=yandex-browser.desktop\nx-scheme-handler/unknown=yandex-browser.desktop\ninode/directory=nemo.desktop\nimage/bmp=org.gnome.gThumb.desktop\nimage/gif=org.gnome.gThumb.desktop\nimage/jpeg=org.gnome.gThumb.desktop\nimage/jpg=xviewer.desktop\nimage/pjpeg=xviewer.desktop\nimage/png=org.gnome.gThumb.desktop\nimage/svg+xml=org.gnome.gThumb.desktop\nimage/svg+xml-compressed=xviewer.desktop\nimage/tiff=org.gnome.gThumb.desktop\nimage/vnd.wap.wbmp=xviewer.desktop\nimage/x-bmp=org.gnome.gThumb.desktop\nimage/x-gray=xviewer.desktop\nimage/x-icb=xviewer.desktop\nimage/x-ico=org.gnome.gThumb.desktop\nimage/x-pcx=org.gnome.gThumb.desktop\nimage/x-png=org.gnome.gThumb.desktop\nimage/x-portable-anymap=xviewer.desktop\nimage/x-portable-bitmap=xviewer.desktop\nimage/x-portable-graymap=xviewer.desktop\nimage/x-portable-pixmap=xviewer.desktop\nimage/x-xbitmap=xviewer.desktop\nimage/x-xpixmap=xviewer.desktop\nimage/svg-xml=xviewer.desktop\nimage/x-portable-greymap=xviewer.desktop\nimage/x-targa=xviewer.desktop\nimage/x-tga=org.gnome.gThumb.desktop\nimage/jxl=org.gnome.gThumb.desktop\nimage/webp=xviewer.desktop\nimage/xpm=org.gnome.gThumb.desktop\nx-scheme-handler/mailspring=Mailspring.desktop\nx-scheme-handler/mailto=thunderbird.desktop\napplication/x-msdownload=wine.desktop\nx-scheme-handler/postman=Postman.desktop\nvideo/mp2t=smplayer.desktop\nx-scheme-handler/max=MAX.desktop\nx-scheme-handler/jetbrains=jetbrainsd.desktop\n\n[Added Associations]\ntext/plain=code-oss.desktop;VSCodium.desktop;codium.desktop;jetbrains-idea.desktop;\naudio/aac=org.gnome.Lollypop.desktop;\naudio/ac3=org.gnome.Lollypop.desktop;\naudio/flac=org.gnome.Lollypop.desktop;\naudio/m4a=org.gnome.Lollypop.desktop;\naudio/mp3=org.gnome.Lollypop.desktop;\naudio/mp4=org.gnome.Lollypop.desktop;\naudio/mpeg=org.gnome.Lollypop.desktop;\naudio/mpegurl=org.gnome.Lollypop.desktop;\naudio/ogg=org.gnome.Lollypop.desktop;\naudio/vnd.rn-realaudio=org.gnome.Lollypop.desktop;\naudio/vorbis=org.gnome.Lollypop.desktop;\naudio/x-aac=org.gnome.Lollypop.desktop;\naudio/x-flac=org.gnome.Lollypop.desktop;\naudio/x-m4a=org.gnome.Lollypop.desktop;\naudio/x-mp3=org.gnome.Lollypop.desktop;\naudio/x-mpeg=org.gnome.Lollypop.desktop;\naudio/x-mpegurl=org.gnome.Lollypop.desktop;\naudio/x-ms-wma=org.gnome.Lollypop.desktop;\naudio/x-musepack=org.gnome.Lollypop.desktop;\naudio/x-oggflac=org.gnome.Lollypop.desktop;\naudio/x-opus+ogg=org.gnome.Lollypop.desktop;\naudio/x-pn-realaudio=org.gnome.Lollypop.desktop;\naudio/x-scpls=org.gnome.Lollypop.desktop;\naudio/x-speex=org.gnome.Lollypop.desktop;\naudio/x-vorbis=org.gnome.Lollypop.desktop;\naudio/x-vorbis+ogg=org.gnome.Lollypop.desktop;\naudio/x-wav=org.gnome.Lollypop.desktop;\naudio/3gpp=org.gnome.Lollypop.desktop;\naudio/midi=org.gnome.Lollypop.desktop;\naudio/mp4a-latm=org.gnome.Lollypop.desktop;\naudio/mpeg3=org.gnome.Lollypop.desktop;\naudio/mpg=org.gnome.Lollypop.desktop;\naudio/wav=org.gnome.Lollypop.desktop;\naudio/wave=org.gnome.Lollypop.desktop;\naudio/webm=org.gnome.Lollypop.desktop;\naudio/x-aiff=org.gnome.Lollypop.desktop;\naudio/x-mpeg-3=org.gnome.Lollypop.desktop;\naudio/x-mpg=org.gnome.Lollypop.desktop;\naudio/x-ms-asf=org.gnome.Lollypop.desktop;\naudio/x-ogg=org.gnome.Lollypop.desktop;\naudio/x-wavpack=org.gnome.Lollypop.desktop;\nvideo/avi=smplayer.desktop;\nvideo/flv=smplayer.desktop;\nvideo/mp4=smplayer.desktop;\nvideo/mpeg=smplayer.desktop;\nvideo/quicktime=smplayer.desktop;\nvideo/vnd.rn-realvideo=smplayer.desktop;\nvideo/webm=smplayer.desktop;\nvideo/x-matroska=smplayer.desktop;\nvideo/x-ms-asf=smplayer.desktop;\nvideo/x-ms-wmv=smplayer.desktop;\nvideo/x-msvideo=smplayer.desktop;\nvideo/x-ogm+ogg=smplayer.desktop;\nvideo/x-theora=smplayer.desktop;\nvideo/3gp=smplayer.desktop;\nvideo/3gpp=smplayer.desktop;\nvideo/divx=smplayer.desktop;\nvideo/mp4v-es=smplayer.desktop;\nvideo/msvideo=smplayer.desktop;\nvideo/ogg=smplayer.desktop;\nvideo/vivo=smplayer.desktop;\nvideo/vnd.divx=smplayer.desktop;\nvideo/x-anim=smplayer.desktop;\nvideo/x-avi=smplayer.desktop;\nvideo/x-flc=smplayer.desktop;\nvideo/x-fli=smplayer.desktop;\nvideo/x-flic=smplayer.desktop;\nvideo/x-flv=smplayer.desktop;\nvideo/x-m4v=smplayer.desktop;\nvideo/x-mng=smplayer.desktop;\nvideo/x-mpeg=smplayer.desktop;\nvideo/x-mpeg2=smplayer.desktop;\nvideo/x-ms-afs=smplayer.desktop;\nvideo/x-ms-asx=smplayer.desktop;\nvideo/x-ms-wm=smplayer.desktop;\nvideo/x-ms-wvx=smplayer.desktop;\nvideo/x-ms-wvxvideo=smplayer.desktop;\nvideo/x-nsv=smplayer.desktop;\nvideo/x-theora+ogg=smplayer.desktop;\ntext/x-python=codium.desktop;VSCodium.desktop;code-oss.desktop;\napplication/javascript=code-oss.desktop;VSCodium.desktop;codium.desktop;\napplication/x-httpd-php3=code-oss.desktop;VSCodium.desktop;codium.desktop;\napplication/x-httpd-php4=code-oss.desktop;VSCodium.desktop;codium.desktop;\napplication/x-httpd-php5=code-oss.desktop;VSCodium.desktop;codium.desktop;\napplication/x-m4=code-oss.desktop;VSCodium.desktop;codium.desktop;\napplication/x-php=code-oss.desktop;VSCodium.desktop;codium.desktop;\napplication/x-ruby=code-oss.desktop;VSCodium.desktop;codium.desktop;\napplication/x-shellscript=codium.desktop;code-oss.desktop;VSCodium.desktop;\napplication/xml=code-oss.desktop;VSCodium.desktop;codium.desktop;\ntext/css=code-oss.desktop;VSCodium.desktop;codium.desktop;\ntext/turtle=code-oss.desktop;VSCodium.desktop;codium.desktop;\ntext/x-c++hdr=code-oss.desktop;VSCodium.desktop;codium.desktop;\ntext/x-c++src=code-oss.desktop;VSCodium.desktop;codium.desktop;\ntext/x-chdr=code-oss.desktop;VSCodium.desktop;codium.desktop;\ntext/x-csharp=code-oss.desktop;VSCodium.desktop;codium.desktop;\ntext/x-csrc=code-oss.desktop;VSCodium.desktop;codium.desktop;\ntext/x-diff=code-oss.desktop;VSCodium.desktop;codium.desktop;\ntext/x-dsrc=code-oss.desktop;VSCodium.desktop;codium.desktop;\ntext/x-fortran=code-oss.desktop;VSCodium.desktop;codium.desktop;\ntext/x-java=code-oss.desktop;VSCodium.desktop;codium.desktop;\ntext/x-makefile=code-oss.desktop;VSCodium.desktop;codium.desktop;\ntext/x-pascal=code-oss.desktop;VSCodium.desktop;codium.desktop;\ntext/x-perl=code-oss.desktop;VSCodium.desktop;codium.desktop;\ntext/x-sql=code-oss.desktop;VSCodium.desktop;codium.desktop;\ntext/x-vb=code-oss.desktop;VSCodium.desktop;codium.desktop;\ntext/yaml=code-oss.desktop;VSCodium.desktop;codium.desktop;\napplication/pdf=xreader.desktop;onlyoffice-desktopeditors.desktop;org.gnome.Evince.desktop;\ninode/directory=nemo.desktop;\napplication/x-alpm-package=org.gnome.FileRoller.desktop;\nimage/bmp=xviewer.desktop;org.gnome.gThumb.desktop;\nimage/gif=xviewer.desktop;org.gnome.gThumb.desktop;\nimage/jpeg=xviewer.desktop;org.gnome.gThumb.desktop;\nimage/jpg=xviewer.desktop;\nimage/pjpeg=xviewer.desktop;\nimage/png=xviewer.desktop;org.gnome.gThumb.desktop;\nimage/svg+xml=xviewer.desktop;org.gnome.gThumb.desktop;\nimage/svg+xml-compressed=xviewer.desktop;\nimage/tiff=xviewer.desktop;org.gnome.gThumb.desktop;\nimage/vnd.wap.wbmp=xviewer.desktop;\nimage/x-bmp=xviewer.desktop;org.gnome.gThumb.desktop;\nimage/x-gray=xviewer.desktop;\nimage/x-icb=xviewer.desktop;\nimage/x-ico=xviewer.desktop;org.gnome.gThumb.desktop;\nimage/x-pcx=xviewer.desktop;org.gnome.gThumb.desktop;\nimage/x-png=xviewer.desktop;org.gnome.gThumb.desktop;\nimage/x-portable-anymap=xviewer.desktop;\nimage/x-portable-bitmap=xviewer.desktop;\nimage/x-portable-graymap=xviewer.desktop;\nimage/x-portable-pixmap=xviewer.desktop;\nimage/x-xbitmap=xviewer.desktop;\nimage/x-xpixmap=xviewer.desktop;\nimage/svg-xml=xviewer.desktop;\nimage/x-portable-greymap=xviewer.desktop;\nimage/x-targa=xviewer.desktop;\nimage/x-tga=xviewer.desktop;org.gnome.gThumb.desktop;\nimage/jxl=org.gnome.gThumb.desktop;\nimage/webp=org.gnome.gThumb.desktop;xviewer.desktop;\nimage/xpm=org.gnome.gThumb.desktop;\napplication/x-msdownload=wine.desktop;\nvideo/mp2t=smplayer.desktop;
@@ -248,3 +159,14 @@ echo $'[Default Applications]\ntext/plain=codium.desktop\naudio/aac=org.gnome.Lo
 
 
 rm -rf $HOME/Общедоступные
+
+mkdir -p $HOME/.config/autostart
+echo "[Desktop Entry]
+      Type=Application
+      Exec=$HOME/setup-user-startup
+      Hidden=false
+      NoDisplay=false
+      X-GNOME-Autostart-enabled=true
+      Name=First Login Script
+      Comment=Run once on first login
+" > $HOME/.config/autostart/setup-user-startup.desktop

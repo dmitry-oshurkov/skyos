@@ -40,6 +40,7 @@ genfstab -U /mnt >> /mnt/etc/fstab
 cp /root/setup-config /mnt/root/setup-config
 cp /root/setup /mnt/root/setup
 cp /root/setup-user /mnt/root/setup-user
+cp /root/setup-user-startup /mnt/root/setup-user-startup
 cp /root/user-prefs.dconf /mnt/root/user-prefs.dconf
 
 mkdir -p /mnt/var/tmp/aur-cache
