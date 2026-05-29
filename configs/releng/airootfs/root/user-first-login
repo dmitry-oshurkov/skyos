@@ -68,5 +68,5 @@ gio set $HOME/projects/skylab/video-collector metadata::custom-icon file:///usr/
 
 
 
-rm -f $HOME/.config/autostart/setup-user-startup.desktop
-rm -f $HOME/setup-user-startup
+rm -f $HOME/.config/autostart/user-first-login.desktop
+rm -f $HOME/user-first-login

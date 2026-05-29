@@ -163,10 +163,10 @@ rm -rf $HOME/Общедоступные
 mkdir -p $HOME/.config/autostart
 echo "[Desktop Entry]
       Type=Application
-      Exec=$HOME/setup-user-startup
+      Exec=$HOME/user-first-login
       Hidden=false
       NoDisplay=false
       X-GNOME-Autostart-enabled=true
       Name=First Login Script
       Comment=Run once on first login
-" > $HOME/.config/autostart/setup-user-startup.desktop
+" > $HOME/.config/autostart/user-first-login.desktop

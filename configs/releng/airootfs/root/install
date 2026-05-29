@@ -37,10 +37,10 @@ genfstab -U /mnt >> /mnt/etc/fstab
 
 
 #--------------- Настройка системы -------------------------
-cp /root/setup-config /mnt/root/setup-config
-cp /root/setup /mnt/root/setup
-cp /root/setup-user /mnt/root/setup-user
-cp /root/setup-user-startup /mnt/root/setup-user-startup
+cp /root/install-on-system /mnt/root/install-on-system
+cp /root/install-on-system.env /mnt/root/install-on-system.env
+cp /root/install-on-user /mnt/root/install-on-user
+cp /root/user-first-login /mnt/root/user-first-login
 cp /root/user-prefs.dconf /mnt/root/user-prefs.dconf
 
 mkdir -p /mnt/var/tmp/aur-cache
@@ -51,10 +51,10 @@ mv custom-cache/usr/share/themes/* /mnt/usr/share/themes/
 mv custom-cache/usr/share/plank/themes/* /mnt/usr/share/plank/themes/
 mv custom-cache/usr/share/icons/* /mnt/usr/share/icons/
 
-arch-chroot /mnt /root/setup
+arch-chroot /mnt /root/install-on-system
 
-rm -f /mnt/root/setup-config
-rm -f /mnt/root/setup
+rm -f /mnt/root/install-on-system
+rm -f /mnt/root/install-on-system.env
 
 
 #--------------- Завершение --------------------------------

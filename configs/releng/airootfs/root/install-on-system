@@ -2,7 +2,9 @@
 
 
 #--------------- Настройка -------------------------------------
-source /root/setup-config
+source /root/install-on-system.env
+
+#chsh -s /bin/fish
 
 # timezone and clock
 ln -sf /usr/share/zoneinfo/$TIMEZONE /etc/localtime
@@ -157,15 +159,15 @@ rm -f /usr/share/gnome-background-properties/tubes.xml
 
 
 #--------------- Настройка пользовательских приложений -------------
-mv /root/setup-user /home/$USERNAME/setup-user
-mv /root/setup-user-startup /home/$USERNAME/setup-user-startup
-chown "$USERNAME:$USERNAME" /home/$USERNAME/setup-user-startup
+mv /root/install-on-user /home/$USERNAME/install-on-user
+mv /root/user-first-login /home/$USERNAME/user-first-login
+chown "$USERNAME:$USERNAME" /home/$USERNAME/user-first-login
 mv /root/user-prefs.dconf /home/$USERNAME/user-prefs.dconf
 chown "$USERNAME:$USERNAME" /home/$USERNAME/user-prefs.dconf
 
-sudo -u $USERNAME /home/$USERNAME/setup-user
+sudo -u $USERNAME /home/$USERNAME/install-on-user
 
-rm -f /home/$USERNAME/setup-user
+rm -f /home/$USERNAME/install-on-user
 rm -f /home/$USERNAME/user-prefs.dconf
 
 

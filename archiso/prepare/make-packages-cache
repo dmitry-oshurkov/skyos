@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+# todo загружать уже скачанные пакеты в кеш перед обновлением
 
 pacman-cache() {
     rm -f /root/pacman-cache/*

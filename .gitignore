@@ -16,7 +16,7 @@ network-config
 man/version.rst
 .idea/*.xml
 *.iml
-setup-config
+install-on-system.env
 pacman-cache
 aur-cache
 custom-cache
