@@ -1,0 +1,143 @@
+[net/launchpad/plank/docks/dock1]
+dock-items=['clock.dockitem', 'clippy.dockitem', 'yandex-browser.dockitem', 'nemo.dockitem', 'jetbrains-idea.dockitem', 'GitKraken.dockitem', 'citrix-wfica.dockitem']
+hide-mode='none'
+lock-items=true
+position='right'
+theme='Sky-Arc-Darker'
+
+[org/cinnamon]
+desklet-snap-interval=25
+enabled-applets=['panel1:left:0:menu@cinnamon.org:0', 'panel1:right:4:systray@cinnamon.org:3', 'panel1:right:8:notifications@cinnamon.org:5', 'panel1:right:9:removable-drives@cinnamon.org:7', 'panel1:center:2:keyboard@cinnamon.org:8', 'panel1:right:11:network@cinnamon.org:9', 'panel1:right:13:sound@cinnamon.org:10', 'panel1:right:15:power@cinnamon.org:11', 'panel1:center:0:calendar@cinnamon.org:12', 'panel1:right:7:trash@cinnamon.org:14', 'panel1:right:6:recent@cinnamon.org:15', 'panel1:right:2:workspace-switcher@cinnamon.org:17', 'panel1:right:17:user@cinnamon.org:18', 'panel1:left:3:panel-launchers@cinnamon.org:13', 'panel1:center:1:spacer@cinnamon.org:23', 'panel1:right:16:spacer@cinnamon.org:24', 'panel1:right:14:spacer@cinnamon.org:25', 'panel1:right:12:spacer@cinnamon.org:26', 'panel1:right:10:spacer@cinnamon.org:27', 'panel1:right:5:spacer@cinnamon.org:32', 'panel1:right:3:spacer@cinnamon.org:33', 'panel1:right:18:spacer@cinnamon.org:34', 'panel1:right:1:spacer@cinnamon.org:35', 'panel1:right:19:cornerbar@cinnamon.org:35']
+enabled-desklets=['clock@schorschii:1:150:900']
+favorite-apps=['citrix-desktop-launcher.desktop', 'cinnamon-settings.desktop', 'cachyos-hello.desktop', 'vkteamsdesktop.desktop', 'blueman-manager.desktop']
+next-applet-id=36
+next-desklet-id=2
+panel-zone-icon-sizes='[{"panelId": 1, "left": 22, "center": 22, "right": 22}]'
+panel-zone-symbolic-icon-sizes='[{"panelId": 1, "left": 16, "center": 16, "right": 16}]'
+panel-zone-text-sizes='[{"panelId": 1, "left": 0.0, "center": 11.0, "right": 0.0}]'
+panels-enabled=['1:0:top']
+panels-height=['1:28']
+
+[org/cinnamon/desktop/background]
+picture-uri='file:///usr/share/backgrounds/linuxmint-vanessa/dhoefler_path.jpg'
+
+[org/cinnamon/desktop/interface]
+cursor-theme='Empty-Butterfly-Yellow-vr1'
+font-name='Sans Regular 11'
+gtk-theme='Sky-Arc-Darker'
+icon-theme='Newaita-reborn-pop-os-dark'
+keyboard-layout-prefer-variant-names=true
+keyboard-layout-show-flags=false
+keyboard-layout-use-upper=true
+
+[org/cinnamon/desktop/keybindings]
+looking-glass-keybinding=@as []
+
+[org/cinnamon/desktop/keybindings/media-keys]
+screensaver=['<Super>l', 'XF86ScreenSaver']
+terminal=@as []
+
+[org/cinnamon/desktop/keybindings/wm]
+begin-move=@as []
+begin-resize=@as []
+switch-input-source=['Caps_Lock']
+switch-input-source-backward=@as []
+switch-to-workspace-left=@as []
+switch-to-workspace-right=@as []
+
+[org/cinnamon/desktop/peripherals/touchpad]
+tap-to-click=true
+
+[org/cinnamon/desktop/session]
+idle-delay=uint32 0
+
+[org/cinnamon/desktop/wm/preferences]
+num-workspaces=3
+titlebar-font='Sans Bold 11'
+workspace-names=@as []
+
+[org/cinnamon/settings-daemon/plugins/power]
+button-power='suspend'
+idle-brightness=10
+idle-dim-time=60
+lid-close-ac-action='nothing'
+lid-close-battery-action='suspend'
+sleep-display-ac=0
+sleep-display-battery=900
+sleep-inactive-ac-timeout=0
+sleep-inactive-battery-timeout=1800
+
+[org/cinnamon/settings-daemon/plugins/xsettings]
+menus-have-icons=true
+
+[org/cinnamon/theme]
+name='Sky-Mint-Y-Dark-Aqua'
+
+[org/gnome/desktop/interface]
+monospace-font-name='Source Code Pro 11'
+
+[org/gnome/gnome-system-monitor]
+network-in-bits=true
+
+[org/gnome/gnome-system-monitor/proctree]
+col-14-visible=true
+col-14-width=0
+
+[org/gnome/meld]
+folder-status-filters=['new', 'modified']
+highlight-current-line=true
+highlight-syntax=true
+indent-width=4
+insert-spaces-instead-of-tabs=true
+show-line-numbers=true
+style-scheme='kate'
+wrap-mode='none'
+
+[org/gnome/nm-applet]
+disable-connected-notifications=true
+disable-vpn-notifications=true
+
+[org/gnome/terminal/legacy/keybindings]
+copy='<Primary>c'
+paste='<Primary>v'
+
+[org/gnome/terminal/legacy/profiles:/:TPROF]
+audible-bell=false
+background-color='rgb(0,43,54)'
+background-transparency-percent=14
+bold-color='rgb(145,196,219)'
+bold-color-same-as-fg=false
+bold-is-bright=true
+default-size-columns=140
+default-size-rows=35
+foreground-color='rgb(125,203,197)'
+palette=['rgb(46,52,54)', 'rgb(204,0,0)', 'rgb(78,154,6)', 'rgb(196,160,0)', 'rgb(52,101,164)', 'rgb(117,80,123)', 'rgb(6,152,154)', 'rgb(211,215,207)', 'rgb(85,87,83)', 'rgb(239,41,41)', 'rgb(138,226,52)', 'rgb(252,233,79)', 'rgb(114,159,207)', 'rgb(173,127,168)', 'rgb(52,226,226)', 'rgb(238,238,236)']
+use-system-font=false
+use-theme-colors=false
+use-transparent-background=true
+
+[org/nemo/desktop]
+computer-icon-visible=false
+font='Noto Sans 11'
+home-icon-visible=false
+volumes-visible=false
+
+[org/nemo/preferences]
+inherit-folder-viewer=true
+inherit-show-thumbnails=true
+quick-renames-with-pause-in-between=true
+show-home-icon-toolbar=false
+show-image-thumbnails='always'
+show-new-folder-icon-toolbar=true
+show-open-in-terminal-toolbar=true
+show-reload-icon-toolbar=true
+show-show-thumbnails-toolbar=true
+thumbnail-limit=uint64 68719476736
+
+[org/nemo/window-state]
+sidebar-bookmark-breakpoint=5
+sidebar-width=300
+start-with-menu-bar=false
+
+[org/x/apps/favorites]
+list=[ 'file://$HOME/projects/skylab/scripts/os-setup/skybook-cachy::application/x-shellscript', 'file://$HOME/projects/skylab/scripts/tools/backup::application/x-shellscript', 'file://$HOME/projects/skylab/scripts/multimedia/place-photo-video::application/x-shellscript', 'file://$HOME/projects/skylab/scripts/multimedia/rescan-home-video-nfo::application/x-shellscript', 'file://$HOME/projects/skylab/scripts/tools/pacman-fix::application/x-shellscript', 'file://$HOME/projects/skylab/scripts/tools/yay-cleanup::application/x-shellscript']

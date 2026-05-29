@@ -158,8 +158,13 @@ rm -f /usr/share/gnome-background-properties/tubes.xml
 
 #--------------- Настройка пользовательских приложений -------------
 mv /root/setup-user /home/$USERNAME/setup-user
+mv /root/user-prefs.dconf /home/$USERNAME/user-prefs.dconf
+chown "$USERNAME:$USERNAME" /home/$USERNAME/user-prefs.dconf
+
 sudo -u $USERNAME /home/$USERNAME/setup-user
+
 rm -f /home/$USERNAME/setup-user
+rm -f /home/$USERNAME/user-prefs.dconf
 
 
 

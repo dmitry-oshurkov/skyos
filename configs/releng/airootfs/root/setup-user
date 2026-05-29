@@ -1,26 +1,19 @@
 #!/usr/bin/env bash
 
 
+TPROF=$(gsettings get org.gnome.Terminal.ProfilesList default) # пример: 'b1dcc9dd-5262-4d8d-a863-c897e6d979b9'
+TPROF=${TPROF:1:-1} # remove leading and trailing single quotes
+sed -i "s|TPROF|$TPROF|g" $HOME/user-prefs.dconf
+
+dbus-launch dconf load / < $HOME/user-prefs.dconf
+
+
+
 #######################################################################################################################################################
 #
 #  Setup desktop
 #
 #######################################################################################################################################################
-
-
-gsettings set org.cinnamon enabled-applets "['panel1:left:0:menu@cinnamon.org:0', 'panel1:right:4:systray@cinnamon.org:3', 'panel1:right:8:notifications@cinnamon.org:5', 'panel1:right:9:removable-drives@cinnamon.org:7', 'panel1:center:2:keyboard@cinnamon.org:8', 'panel1:right:11:network@cinnamon.org:9', 'panel1:right:13:sound@cinnamon.org:10', 'panel1:right:15:power@cinnamon.org:11', 'panel1:center:0:calendar@cinnamon.org:12', 'panel1:right:7:trash@cinnamon.org:14', 'panel1:right:6:recent@cinnamon.org:15', 'panel1:right:2:workspace-switcher@cinnamon.org:17', 'panel1:right:17:user@cinnamon.org:18', 'panel1:left:3:panel-launchers@cinnamon.org:13', 'panel1:center:1:spacer@cinnamon.org:23', 'panel1:right:16:spacer@cinnamon.org:24', 'panel1:right:14:spacer@cinnamon.org:25', 'panel1:right:12:spacer@cinnamon.org:26', 'panel1:right:10:spacer@cinnamon.org:27', 'panel1:right:5:spacer@cinnamon.org:32', 'panel1:right:3:spacer@cinnamon.org:33', 'panel1:right:18:spacer@cinnamon.org:34', 'panel1:right:1:spacer@cinnamon.org:35', 'panel1:right:19:cornerbar@cinnamon.org:35']"
-gsettings set org.cinnamon next-applet-id 36
-gsettings set org.cinnamon enabled-desklets "['clock@schorschii:1:150:900']"
-gsettings set org.cinnamon next-desklet-id 2
-gsettings set org.cinnamon desklet-snap-interval 25
-gsettings set org.cinnamon panel-zone-icon-sizes '[{"panelId": 1, "left": 22, "center": 22, "right": 22}]'
-gsettings set org.cinnamon panel-zone-symbolic-icon-sizes '[{"panelId": 1, "left": 16, "center": 16, "right": 16}]'
-gsettings set org.cinnamon panel-zone-text-sizes '[{"panelId": 1, "left": 0.0, "center": 11.0, "right": 0.0}]'
-gsettings set org.cinnamon panels-enabled "['1:0:top']"
-gsettings set org.cinnamon panels-height "['1:28']"
-gsettings set org.cinnamon favorite-apps "['cinnamon-settings.desktop']"
-
-#sleep 5
 
 sed -i 's|"%A, %B %e, %H:%M"|"%H:%M     %e %B, %A"|g' $HOME/.config/cinnamon/spices/calendar@cinnamon.org/12.json
 sed -i '25s|false|true|g' $HOME/.config/cinnamon/spices/calendar@cinnamon.org/12.json
@@ -50,37 +43,6 @@ cp $HOME/.config/cinnamon/spices/spacer@cinnamon.org/27.json $HOME/.config/cinna
 
 
 
-#######################################################################################################################################################
-#
-#  Setup theme
-#
-#######################################################################################################################################################
-
-
-gsettings set org.cinnamon.desktop.background picture-uri "file:///usr/share/backgrounds/linuxmint-vanessa/dhoefler_path.jpg"
-
-gsettings set org.cinnamon.desktop.interface font-name "Sans Regular 11"
-gsettings set org.cinnamon.desktop.interface cursor-theme "Empty-Butterfly-Yellow-vr1"
-gsettings set org.cinnamon.desktop.interface gtk-theme "Sky-Arc-Darker"
-gsettings set org.cinnamon.desktop.interface icon-theme "Newaita-reborn-pop-os-dark"
-gsettings set org.cinnamon.desktop.wm.preferences num-workspaces 3
-gsettings set org.cinnamon.desktop.wm.preferences workspace-names "@as []"
-gsettings set org.cinnamon.desktop.wm.preferences titlebar-font "Sans Bold 11"
-
-gsettings set org.cinnamon.theme name "Sky-Mint-Y-Dark-Aqua"
-
-gsettings set org.cinnamon.settings-daemon.plugins.xsettings menus-have-icons true
-
-gsettings set org.gnome.desktop.interface monospace-font-name "Source Code Pro 11"
-
-gsettings set org.nemo.desktop computer-icon-visible false
-gsettings set org.nemo.desktop home-icon-visible false
-gsettings set org.nemo.desktop volumes-visible false
-gsettings set org.nemo.desktop font "Noto Sans 11"
-gsettings set org.nemo.window-state sidebar-bookmark-breakpoint 5
-
-
-
 
 #######################################################################################################################################################
 #
@@ -89,56 +51,7 @@ gsettings set org.nemo.window-state sidebar-bookmark-breakpoint 5
 #######################################################################################################################################################
 
 
-gsettings set org.cinnamon.desktop.interface keyboard-layout-use-upper true
-gsettings set org.cinnamon.desktop.interface keyboard-layout-show-flags false
-gsettings set org.cinnamon.desktop.interface keyboard-layout-prefer-variant-names true
 
-gsettings set org.cinnamon.desktop.peripherals.touchpad tap-to-click true
-
-gsettings set org.cinnamon.desktop.keybindings looking-glass-keybinding "[]"
-gsettings set org.cinnamon.desktop.keybindings.media-keys screensaver "['<Super>l', 'XF86ScreenSaver']"
-gsettings set org.cinnamon.desktop.keybindings.media-keys terminal "@as []"
-gsettings set org.cinnamon.desktop.keybindings.wm begin-move "@as []"
-gsettings set org.cinnamon.desktop.keybindings.wm begin-resize "@as []"
-gsettings set org.cinnamon.desktop.keybindings.wm switch-to-workspace-left "@as []"
-gsettings set org.cinnamon.desktop.keybindings.wm switch-to-workspace-right "@as []"
-
-gsettings set org.cinnamon.desktop.screensaver lock-enabled false
-gsettings set org.cinnamon.desktop.session idle-delay 0
-
-gsettings set org.cinnamon.settings-daemon.plugins.power button-power "suspend"
-gsettings set org.cinnamon.settings-daemon.plugins.power idle-brightness 10
-gsettings set org.cinnamon.settings-daemon.plugins.power idle-dim-time 60
-gsettings set org.cinnamon.settings-daemon.plugins.power lid-close-ac-action "nothing"
-gsettings set org.cinnamon.settings-daemon.plugins.power lid-close-battery-action "suspend"
-gsettings set org.cinnamon.settings-daemon.plugins.power sleep-display-battery 900
-gsettings set org.cinnamon.settings-daemon.plugins.power sleep-display-ac 0
-gsettings set org.cinnamon.settings-daemon.plugins.power sleep-inactive-battery-timeout 1800
-gsettings set org.cinnamon.settings-daemon.plugins.power sleep-inactive-ac-timeout 0
-
-
-TPROF=$(gsettings get org.gnome.Terminal.ProfilesList default)
-TPROF=${TPROF:1:-1} # remove leading and trailing single quotes
-gsettings set "org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:$TPROF/" audible-bell false
-gsettings set "org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:$TPROF/" background-color "rgb(0,43,54)"
-gsettings set "org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:$TPROF/" bold-color "rgb(145,196,219)"
-gsettings set "org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:$TPROF/" bold-color-same-as-fg false
-gsettings set "org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:$TPROF/" bold-is-bright true
-gsettings set "org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:$TPROF/" default-size-columns 140
-gsettings set "org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:$TPROF/" default-size-rows 35
-gsettings set "org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:$TPROF/" foreground-color "rgb(125,203,197)"
-gsettings set "org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:$TPROF/" use-theme-colors false
-gsettings set "org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:$TPROF/" palette "['rgb(46,52,54)', 'rgb(204,0,0)', 'rgb(78,154,6)', 'rgb(196,160,0)', 'rgb(52,101,164)', 'rgb(117,80,123)', 'rgb(6,152,154)', 'rgb(211,215,207)', 'rgb(85,87,83)', 'rgb(239,41,41)', 'rgb(138,226,52)', 'rgb(252,233,79)', 'rgb(114,159,207)', 'rgb(173,127,168)', 'rgb(52,226,226)', 'rgb(238,238,236)']"
-gsettings set "org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:$TPROF/" background-transparency-percent 14
-gsettings set "org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:$TPROF/" use-transparent-background true
-gsettings set "org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:$TPROF/" use-system-font false
-gsettings set org.gnome.Terminal.Legacy.Keybindings:/org/gnome/terminal/legacy/keybindings/ copy "<Primary>c"
-gsettings set org.gnome.Terminal.Legacy.Keybindings:/org/gnome/terminal/legacy/keybindings/ paste "<Primary>v"
-
-gsettings set org.cinnamon.desktop.keybindings.wm switch-input-source "['Caps_Lock']"
-gsettings set org.cinnamon.desktop.keybindings.wm switch-input-source-backward "@as []"
-gsettings set org.cinnamon.desktop.input-sources per-window true
-gsettings set org.cinnamon.desktop.input-sources xkb-options "['grp_led:caps', 'grp:caps_toggle']"
 
 
 sed -i 's|nemo-icon-view-auto-layout=true|nemo-icon-view-auto-layout=false|g' $HOME/.config/nemo/desktop-metadata
@@ -159,17 +72,17 @@ sed -i 's|nemo-icon-view-auto-layout=true|nemo-icon-view-auto-layout=false|g' $H
 #######################################################################################################################################################
 
 
-#plank >> /dev/null . &
-#sleep 3
-#pkill plank
-#rm -f $HOME/.config/plank/dock1/launchers/*
-#
-#echo $'[PlankDockItemPreferences]\nLauncher=docklet://clock\n\n[DockyClockPreferences]\n#If the clock shows 24hr time (when showing digital and in the hover).\nShowMilitary=false\n#If the clock shows a digital clock (true) or an analog clock (false).\nShowDigital=false\n#If the clock shows the date in digital mode.\nShowDate=false' > $HOME/.config/plank/dock1/launchers/clock.dockitem
-#echo $'[PlankDockItemPreferences]\nLauncher=docklet://clippy\n\n[DockyClippyPreferences]\n#How many recent clipboard entries to keep.\nMaxEntries=15\n#If it should track the primary (mouse selection) clipboard.\nTrackMouseSelections=false' > $HOME/.config/plank/dock1/launchers/clippy.dockitem
-#echo $'[PlankDockItemPreferences]\nLauncher=file:///usr/share/applications/yandex-browser.desktop' > $HOME/.config/plank/dock1/launchers/yandex-browser.dockitem
-#echo $'[PlankDockItemPreferences]\nLauncher=file:///usr/share/applications/nemo.desktop' > $HOME/.config/plank/dock1/launchers/nemo.dockitem
-#echo $'[PlankDockItemPreferences]\nLauncher=file:///usr/share/applications/jetbrains-idea.desktop' > $HOME/.config/plank/dock1/launchers/jetbrains-idea.dockitem
-#echo $'[PlankDockItemPreferences]\nLauncher=file:///usr/share/applications/GitKraken.desktop' > $HOME/.config/plank/dock1/launchers/GitKraken.dockitem
+plank >> /dev/null . &
+sleep 3
+pkill plank
+rm -f $HOME/.config/plank/dock1/launchers/*
+
+echo $'[PlankDockItemPreferences]\nLauncher=docklet://clock\n\n[DockyClockPreferences]\n#If the clock shows 24hr time (when showing digital and in the hover).\nShowMilitary=false\n#If the clock shows a digital clock (true) or an analog clock (false).\nShowDigital=false\n#If the clock shows the date in digital mode.\nShowDate=false' > $HOME/.config/plank/dock1/launchers/clock.dockitem
+echo $'[PlankDockItemPreferences]\nLauncher=docklet://clippy\n\n[DockyClippyPreferences]\n#How many recent clipboard entries to keep.\nMaxEntries=15\n#If it should track the primary (mouse selection) clipboard.\nTrackMouseSelections=false' > $HOME/.config/plank/dock1/launchers/clippy.dockitem
+echo $'[PlankDockItemPreferences]\nLauncher=file:///usr/share/applications/yandex-browser.desktop' > $HOME/.config/plank/dock1/launchers/yandex-browser.dockitem
+echo $'[PlankDockItemPreferences]\nLauncher=file:///usr/share/applications/nemo.desktop' > $HOME/.config/plank/dock1/launchers/nemo.dockitem
+echo $'[PlankDockItemPreferences]\nLauncher=file:///usr/share/applications/jetbrains-idea.desktop' > $HOME/.config/plank/dock1/launchers/jetbrains-idea.dockitem
+echo $'[PlankDockItemPreferences]\nLauncher=file:///usr/share/applications/GitKraken.desktop' > $HOME/.config/plank/dock1/launchers/GitKraken.dockitem
 
 
 mkdir $HOME/.config/yandex-disk
@@ -200,48 +113,6 @@ mkdir $HOME/mega.sync
 mkdir $HOME/projects
 mkdir $HOME/skylab
 
-
-gsettings set org.nemo.preferences inherit-folder-viewer true
-gsettings set org.nemo.preferences inherit-show-thumbnails true
-gsettings set org.nemo.preferences quick-renames-with-pause-in-between true
-gsettings set org.nemo.preferences show-home-icon-toolbar false
-gsettings set org.nemo.preferences show-image-thumbnails 'always'
-gsettings set org.nemo.preferences show-new-folder-icon-toolbar true
-gsettings set org.nemo.preferences show-open-in-terminal-toolbar true
-gsettings set org.nemo.preferences show-reload-icon-toolbar true
-gsettings set org.nemo.preferences show-show-thumbnails-toolbar true
-gsettings set org.nemo.preferences thumbnail-limit 68719476736
-gsettings set org.nemo.window-state sidebar-width 300
-gsettings set org.nemo.window-state start-with-menu-bar false
-
-gsettings set org.gnome.gnome-system-monitor network-in-bits true
-gsettings set org.gnome.gnome-system-monitor network-total-in-bits true
-gsettings set org.gnome.gnome-system-monitor.proctree col-14-visible true
-gsettings set org.gnome.gnome-system-monitor.proctree col-14-width 0
-
-gsettings set org.gnome.meld folder-status-filters "['new', 'modified']"
-gsettings set org.gnome.meld highlight-current-line true
-gsettings set org.gnome.meld highlight-syntax true
-gsettings set org.gnome.meld indent-width 4
-gsettings set org.gnome.meld insert-spaces-instead-of-tabs true
-gsettings set org.gnome.meld show-line-numbers true
-gsettings set org.gnome.meld style-scheme "kate"
-gsettings set org.gnome.meld wrap-mode "none"
-
-gsettings set org.gnome.nm-applet disable-connected-notifications true
-gsettings set org.gnome.nm-applet disable-vpn-notifications true
-
-gsettings set net.launchpad.plank.dock.settings:/net/launchpad/plank/docks/dock1/ position "right"
-gsettings set net.launchpad.plank.dock.settings:/net/launchpad/plank/docks/dock1/ hide-mode "none"
-gsettings set net.launchpad.plank.dock.settings:/net/launchpad/plank/docks/dock1/ lock-items true
-gsettings set net.launchpad.plank.dock.settings:/net/launchpad/plank/docks/dock1/ theme "Sky-Arc-Darker"
-gsettings set net.launchpad.plank.dock.settings:/net/launchpad/plank/docks/dock1/ dock-items "[]"
-gsettings set net.launchpad.plank.dock.settings:/net/launchpad/plank/docks/dock1/ dock-items "['clock.dockitem', 'clippy.dockitem', 'yandex-browser.dockitem', 'nemo.dockitem', 'jetbrains-idea.dockitem', 'GitKraken.dockitem']"
-
-gsettings set org.x.apps.favorites list "[
-    'file://$HOME/projects/skylab/scripts/multimedia/place-photo-video::application/x-shellscript',
-    'file://$HOME/projects/skylab/scripts/os-setup/skybook-eos::application/x-shellscript'
-    ]"
 
 
 mkdir --parents $HOME/.gradle
