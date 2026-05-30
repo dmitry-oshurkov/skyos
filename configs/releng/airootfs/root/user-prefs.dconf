@@ -1,5 +1,4 @@
 [net/launchpad/plank/docks/dock1]
-dock-items=['clock.dockitem', 'clippy.dockitem', 'yandex-browser.dockitem', 'nemo.dockitem', 'jetbrains-idea.dockitem', 'GitKraken.dockitem', 'citrix-wfica.dockitem']
 hide-mode='none'
 lock-items=true
 position='right'
@@ -20,6 +19,11 @@ panels-height=['1:28']
 
 [org/cinnamon/desktop/background]
 picture-uri='file:///usr/share/backgrounds/linuxmint-vanessa/dhoefler_path.jpg'
+
+[org/cinnamon/desktop/input-sources]
+per-window=true
+sources=[('xkb', 'us'), ('xkb', 'ru')]
+xkb-options=['grp_led:caps', 'grp:caps_toggle']
 
 [org/cinnamon/desktop/interface]
 cursor-theme='Empty-Butterfly-Yellow-vr1'
@@ -47,6 +51,9 @@ switch-to-workspace-right=@as []
 
 [org/cinnamon/desktop/peripherals/touchpad]
 tap-to-click=true
+
+[org/cinnamon/desktop/screensaver]
+lock-enabled=false
 
 [org/cinnamon/desktop/session]
 idle-delay=uint32 0

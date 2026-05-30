@@ -22,6 +22,15 @@ echo "LANG=ru_RU.UTF-8" > /etc/locale.conf
 echo "KEYMAP=ru
 FONT=cyr-sun16" > /etc/vconsole.conf
 
+echo 'Section "InputClass"
+  Identifier "system-keyboard"
+  MatchIsKeyboard "on"
+  Option "XkbLayout" "us,ru"
+  Option "XkbVariant" ""
+  Option "XkbOptions" "grp:alt_shift_toggle"
+EndSection' > /etc/X11/xorg.conf.d/00-keyboard.conf
+
+
 # hostname
 echo "$HOSTNAME" > /etc/hostname
 cat > /etc/hosts <<HOSTS
@@ -51,7 +60,6 @@ pacman -Sy --noprogressbar
 #--------------- Установка AUR-пакетов -------------------------
 mkdir -p $USER_HOME/.cache/yay
 mv /var/tmp/aur-cache/* $USER_HOME/.cache/yay
-chown -R "$USERNAME:$USERNAME" $USER_HOME/.cache
 
 mapfile -t ZST_FILES < <(find $USER_HOME/.cache/yay -type f -name '*.zst' ! -iname '*-debug*.zst' -print0 | xargs -0 -r -n1 echo)
 
@@ -73,42 +81,6 @@ echo "draw-user-backgrounds=false" >> /etc/lightdm/slick-greeter.conf
 echo "draw-grid=true" >> /etc/lightdm/slick-greeter.conf
 echo "activate-numlock=true" >> /etc/lightdm/slick-greeter.conf
 echo "show-a11y=false" >> /etc/lightdm/slick-greeter.conf
-
-
-# user autostart
-cp /usr/share/applications/net.launchpad.plank.desktop $USER_HOME/.config/autostart/net.launchpad.plank.desktop
-chown $USERNAME:$USERNAME $USER_HOME/.config/autostart/net.launchpad.plank.desktop
-chmod +x $USER_HOME/.config/autostart/net.launchpad.plank.desktop
-echo $'X-GNOME-Autostart-enabled=true\nHidden=false\nX-GNOME-Autostart-Delay=0' >> $USER_HOME/.config/autostart/net.launchpad.plank.desktop
-
-cp /usr/share/applications/Yandex.Disk-indicator.desktop $USER_HOME/.config/autostart/Yandex.Disk-indicator.desktop
-chown $USERNAME:$USERNAME $USER_HOME/.config/autostart/Yandex.Disk-indicator.desktop
-chmod +x $USER_HOME/.config/autostart/Yandex.Disk-indicator.desktop
-echo 'X-GNOME-Autostart-enabled=false' >> $USER_HOME/.config/autostart/Yandex.Disk-indicator.desktop
-
-cp /usr/share/applications/mailspring.desktop $USER_HOME/.config/autostart/mailspring.desktop
-chown $USERNAME:$USERNAME $USER_HOME/.config/autostart/mailspring.desktop
-chmod +x $USER_HOME/.config/autostart/mailspring.desktop
-sed -i "s|Exec=mailspring %U|Exec=mailspring --background|g" $USER_HOME/.config/autostart/mailspring.desktop
-
-cp /etc/xdg/autostart/blueman.desktop $USER_HOME/.config/autostart/blueman.desktop
-chown $USERNAME:$USERNAME $USER_HOME/.config/autostart/blueman.desktop
-chmod +x $USER_HOME/.config/autostart/blueman.desktop
-echo 'X-GNOME-Autostart-enabled=false' >> $USER_HOME/.config/autostart/blueman.desktop
-
-echo "[Desktop Entry]
-Type=Application
-Exec=$USER_HOME/projects/skylab/scripts/tools/vscodium-backups
-Icon=mintbackup
-NoDisplay=false
-Hidden=false
-Name[ru_RU]=Резервирование текста VSCodium
-Comment[ru_RU]=Резервирование текста VSCodium
-X-GNOME-Autostart-enabled=true
-X-GNOME-Autostart-Delay=0" > $USER_HOME/.config/autostart/vscodium-backups.desktop
-chown $USERNAME:$USERNAME $USER_HOME/.config/autostart/vscodium-backups.desktop
-chmod +x $USER_HOME/.config/autostart/vscodium-backups.desktop
-
 
 
 # applications category
@@ -197,11 +169,43 @@ rm -f /usr/share/gnome-background-properties/tubes.xml
 
 
 #--------------- Настройка пользовательских приложений -------------
+# user autostart
+mkdir --parents $USER_HOME/.config/autostart
+
+cp /usr/share/applications/net.launchpad.plank.desktop $USER_HOME/.config/autostart/net.launchpad.plank.desktop
+chmod +x $USER_HOME/.config/autostart/net.launchpad.plank.desktop
+echo $'X-GNOME-Autostart-enabled=true\nHidden=false\nX-GNOME-Autostart-Delay=0' >> $USER_HOME/.config/autostart/net.launchpad.plank.desktop
+
+cp /usr/share/applications/Yandex.Disk-indicator.desktop $USER_HOME/.config/autostart/Yandex.Disk-indicator.desktop
+chmod +x $USER_HOME/.config/autostart/Yandex.Disk-indicator.desktop
+echo 'X-GNOME-Autostart-enabled=false' >> $USER_HOME/.config/autostart/Yandex.Disk-indicator.desktop
+
+cp /usr/share/applications/mailspring.desktop $USER_HOME/.config/autostart/mailspring.desktop
+chmod +x $USER_HOME/.config/autostart/mailspring.desktop
+sed -i "s|Exec=mailspring %U|Exec=mailspring --background|g" $USER_HOME/.config/autostart/mailspring.desktop
+
+cp /etc/xdg/autostart/blueman.desktop $USER_HOME/.config/autostart/blueman.desktop
+chmod +x $USER_HOME/.config/autostart/blueman.desktop
+echo 'X-GNOME-Autostart-enabled=false' >> $USER_HOME/.config/autostart/blueman.desktop
+
+echo "[Desktop Entry]
+Type=Application
+Exec=$USER_HOME/projects/skylab/scripts/tools/vscodium-backups
+Icon=mintbackup
+NoDisplay=false
+Hidden=false
+Name[ru_RU]=Резервирование текста VSCodium
+Comment[ru_RU]=Резервирование текста VSCodium
+X-GNOME-Autostart-enabled=true
+X-GNOME-Autostart-Delay=0" > $USER_HOME/.config/autostart/vscodium-backups.desktop
+chmod +x $USER_HOME/.config/autostart/vscodium-backups.desktop
+
+
 mv /root/install-on-user $USER_HOME/install-on-user
 mv /root/user-first-login $USER_HOME/user-first-login
-chown "$USERNAME:$USERNAME" $USER_HOME/user-first-login
 mv /root/user-prefs.dconf $USER_HOME/user-prefs.dconf
-chown "$USERNAME:$USERNAME" $USER_HOME/user-prefs.dconf
+
+chown -R $USERNAME:$USERNAME $USER_HOME
 
 sudo -u $USERNAME $USER_HOME/install-on-user
 

@@ -1,15 +1,16 @@
 #!/usr/bin/env bash
 
+sleep 5
 
 #--------------- Setup desktop -------------
 sed -i 's|"%A, %B %e, %H:%M"|"%H:%M     %e %B, %A"|g' $HOME/.config/cinnamon/spices/calendar@cinnamon.org/12.json
 sed -i '25s|false|true|g' $HOME/.config/cinnamon/spices/calendar@cinnamon.org/12.json
-sed -i '189s|true|false|g' $HOME/.config/cinnamon/spices/menu@cinnamon.org/0.json # show-desktop.value
-sed -i '201s|true|false|g' $HOME/.config/cinnamon/spices/menu@cinnamon.org/0.json # show-downloads.value
-sed -i '225s|true|false|g' $HOME/.config/cinnamon/spices/menu@cinnamon.org/0.json # show-bookmarks.value
-sed -i '256s|22|32|g' $HOME/.config/cinnamon/spices/menu@cinnamon.org/0.json # sidebar-icon-size.value
-sed -i '339s|665|800|g' $HOME/.config/cinnamon/spices/menu@cinnamon.org/0.json # popup-width.value
-sed -i '344s|425|620|g' $HOME/.config/cinnamon/spices/menu@cinnamon.org/0.json # popup-height.value
+sed -i '188s|true|false|g' $HOME/.config/cinnamon/spices/menu@cinnamon.org/0.json # show-desktop.value
+sed -i '200s|true|false|g' $HOME/.config/cinnamon/spices/menu@cinnamon.org/0.json # show-downloads.value
+sed -i '224s|true|false|g' $HOME/.config/cinnamon/spices/menu@cinnamon.org/0.json # show-bookmarks.value
+sed -i '255s|24|32|g' $HOME/.config/cinnamon/spices/menu@cinnamon.org/0.json # sidebar-icon-size.value
+sed -i '331s|665|730|g' $HOME/.config/cinnamon/spices/menu@cinnamon.org/0.json # popup-width.value
+sed -i '336s|425|625|g' $HOME/.config/cinnamon/spices/menu@cinnamon.org/0.json # popup-height.value
 sed -i 's|"value": "visual"|"value": "buttons"|g' $HOME/.config/cinnamon/spices/workspace-switcher@cinnamon.org/17.json
 sed -i '14d' $HOME/.config/cinnamon/spices/panel-launchers@cinnamon.org/13.json
 sed -i '14d' $HOME/.config/cinnamon/spices/panel-launchers@cinnamon.org/13.json
@@ -44,6 +45,9 @@ echo $'[PlankDockItemPreferences]\nLauncher=file:///usr/share/applications/nemo.
 echo $'[PlankDockItemPreferences]\nLauncher=file:///usr/share/applications/jetbrains-idea.desktop' > $HOME/.config/plank/dock1/launchers/jetbrains-idea.dockitem
 echo $'[PlankDockItemPreferences]\nLauncher=file:///usr/share/applications/GitKraken.desktop' > $HOME/.config/plank/dock1/launchers/GitKraken.dockitem
 
+gsettings set net.launchpad.plank.dock.settings:/net/launchpad/plank/docks/dock1/ dock-items "['clock.dockitem', 'clippy.dockitem', 'yandex-browser.dockitem', 'nemo.dockitem', 'jetbrains-idea.dockitem', 'GitKraken.dockitem']"
+
+plank &
 
 
 # folders icons
@@ -70,3 +74,5 @@ gio set $HOME/projects/skylab/video-collector metadata::custom-icon file:///usr/
 
 rm -f $HOME/.config/autostart/user-first-login.desktop
 rm -f $HOME/user-first-login
+
+cinnamon --replace &
