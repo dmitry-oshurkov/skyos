@@ -52,6 +52,8 @@ mkdir -p /mnt/usr/share/plank/themes
 mv custom-cache/usr/share/themes/* /mnt/usr/share/themes/
 mv custom-cache/usr/share/plank/themes/* /mnt/usr/share/plank/themes/
 mv custom-cache/usr/share/icons/* /mnt/usr/share/icons/
+rm -rf /mnt/usr/share/grub/themes/*
+mv custom-cache/usr/share/grub/themes/* /mnt/usr/share/grub/themes/
 
 arch-chroot /mnt /root/install-on-system
 

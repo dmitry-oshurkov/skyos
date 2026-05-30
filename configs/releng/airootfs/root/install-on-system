@@ -1,13 +1,12 @@
 #!/usr/bin/env bash
 
 
-#--------------- Настройка -------------------------------------
 source /root/install-on-system.env
 
 USER_HOME=/home/$USERNAME
 
-#chsh -s /bin/fish
 
+#--------------- Настройка системы -----------------------------
 # timezone and clock
 ln -sf /usr/share/zoneinfo/$TIMEZONE /etc/localtime
 hwclock --systohc
@@ -37,18 +36,32 @@ cat > /etc/hosts <<HOSTS
 127.0.0.1   localhost
 ::1         localhost
 127.0.1.1   $HOSTNAME.localdomain $HOSTNAME
+
+# Local
+192.168.15.1         skyrouter
+192.168.15.100       skyserver
+192.168.15.150       beelink
+127.0.0.1            bookstore.local
+192.168.15.100       bookstore.sky
+192.168.15.100       plugins.jetbrains.sky
+
+#Other
+89.187.169.39       image.tmdb.org
+0.0.0.0             release.gitkraken.com
 HOSTS
 
-# образ initramfs
-mkinitcpio -P
 
 # root password
 echo "root:$USER_PASSWORD" | chpasswd
 
 # create user
-useradd --create-home --user-group --groups wheel $USERNAME
+groupadd -r autologin
+useradd --create-home --user-group --groups wheel,kvm,docker,autologin $USERNAME
 echo "$USERNAME:$USER_PASSWORD" | chpasswd
 echo '%wheel ALL=(ALL) ALL' | EDITOR='tee -a' /usr/bin/visudo
+
+useradd --create-home --user-group $USERNAME2
+echo "$USERNAME2:$USER2_PASSWORD" | chpasswd
 
 # enable multilib
 sed -i 's|\#Color|Color|g' /etc/pacman.conf
@@ -133,6 +146,103 @@ echo $'{
 echo "options overlay metacopy=off redirect_dir=off" > /etc/modprobe.d/disable-overlay-redirect-dir.conf
 
 
+# nginx
+echo "
+events {
+    multi_accept on;
+    worker_connections 1024;
+}
+
+http {
+    client_max_body_size 0;
+
+    server {
+        listen 80;
+        server_name bookstore.local;
+
+        location / {
+            proxy_pass http://localhost:8094/;
+        }
+    }
+}
+" > /etc/nginx/nginx.conf
+
+
+# rsync (100 Мегабит = 12500 Килобайт)
+echo $'#!/usr/bin/env bash' > /etc/NetworkManager/dispatcher.d/sync-$USERNAME-files
+echo "
+if [ x\"\$2\" = \"xup\" ] ; then
+    cp --force $USER_HOME/.ssh/known_hosts /root/.ssh/known_hosts
+    /usr/bin/rsync --rsh='/usr/bin/sshpass -f $USER_HOME/.ssh/skyserver ssh -o StrictHostKeyChecking=no -l $USERNAME' --archive --verbose --compress --delete --bwlimit=12500 --log-file=/tmp/sync-$USERNAME-files.log $USER_HOME/Видео/Домашнее/Готовые/ $USERNAME@skyserver:/sky/videos/home/release
+    /usr/bin/rsync --rsh='/usr/bin/sshpass -f $USER_HOME/.ssh/skyserver ssh -o StrictHostKeyChecking=no -l $USERNAME' --archive --verbose --compress --delete --bwlimit=12500 --log-file=/tmp/sync-$USERNAME-files.log $USER_HOME/Видео/Домашнее/Источники/ $USERNAME@skyserver:/sky/videos/home/src
+    /usr/bin/rsync --rsh='/usr/bin/sshpass -f $USER_HOME/.ssh/skyserver ssh -o StrictHostKeyChecking=no -l $USERNAME' --archive --verbose --compress --delete --bwlimit=12500 --log-file=/tmp/sync-$USERNAME-files.log $USER_HOME/Фотографии/ $USERNAME@skyserver:/sky/photos
+    /usr/bin/rsync --rsh='/usr/bin/sshpass -f $USER_HOME/.ssh/skyserver ssh -o StrictHostKeyChecking=no -l $USERNAME' --archive --verbose --compress --delete --bwlimit=12500 --log-file=/tmp/sync-$USERNAME-files.log $USER_HOME/Музыка/ $USERNAME@skyserver:/sky/music
+fi
+" >> /etc/NetworkManager/dispatcher.d/sync-$USERNAME-files
+chown -R root:root /etc/NetworkManager/dispatcher.d/sync-$USERNAME-files
+chmod +x /etc/NetworkManager/dispatcher.d/sync-$USERNAME-files
+
+
+# preffered apps
+mkdir --parents /root/.config
+echo $'[Default Applications]\ntext/plain=xed.desktop\naudio/aac=org.gnome.Lollypop.desktop\naudio/ac3=org.gnome.Lollypop.desktop\naudio/flac=org.gnome.Lollypop.desktop\naudio/m4a=org.gnome.Lollypop.desktop\naudio/mp3=org.gnome.Lollypop.desktop\naudio/mp4=org.gnome.Lollypop.desktop\naudio/mpeg=org.gnome.Lollypop.desktop\naudio/mpegurl=org.gnome.Lollypop.desktop\naudio/ogg=org.gnome.Lollypop.desktop\naudio/vnd.rn-realaudio=org.gnome.Lollypop.desktop\naudio/vorbis=org.gnome.Lollypop.desktop\naudio/x-aac=org.gnome.Lollypop.desktop\naudio/x-flac=org.gnome.Lollypop.desktop\naudio/x-m4a=org.gnome.Lollypop.desktop\naudio/x-mp3=org.gnome.Lollypop.desktop\naudio/x-mpeg=org.gnome.Lollypop.desktop\naudio/x-mpegurl=org.gnome.Lollypop.desktop\naudio/x-ms-wma=org.gnome.Lollypop.desktop\naudio/x-musepack=org.gnome.Lollypop.desktop\naudio/x-oggflac=org.gnome.Lollypop.desktop\naudio/x-opus+ogg=org.gnome.Lollypop.desktop\naudio/x-pn-realaudio=org.gnome.Lollypop.desktop\naudio/x-scpls=org.gnome.Lollypop.desktop\naudio/x-speex=org.gnome.Lollypop.desktop\naudio/x-vorbis=org.gnome.Lollypop.desktop\naudio/x-vorbis+ogg=org.gnome.Lollypop.desktop\naudio/x-wav=org.gnome.Lollypop.desktop\naudio/3gpp=org.gnome.Lollypop.desktop\naudio/midi=org.gnome.Lollypop.desktop\naudio/mp4a-latm=org.gnome.Lollypop.desktop\naudio/mpeg3=org.gnome.Lollypop.desktop\naudio/mpg=org.gnome.Lollypop.desktop\naudio/wav=org.gnome.Lollypop.desktop\naudio/wave=org.gnome.Lollypop.desktop\naudio/webm=org.gnome.Lollypop.desktop\naudio/x-aiff=org.gnome.Lollypop.desktop\naudio/x-mpeg-3=org.gnome.Lollypop.desktop\naudio/x-mpg=org.gnome.Lollypop.desktop\naudio/x-ms-asf=org.gnome.Lollypop.desktop\naudio/x-ogg=org.gnome.Lollypop.desktop\naudio/x-wavpack=org.gnome.Lollypop.desktop\nvideo/avi=smplayer.desktop\nvideo/flv=smplayer.desktop\nvideo/mp4=smplayer.desktop\nvideo/mpeg=smplayer.desktop\nvideo/quicktime=smplayer.desktop\nvideo/vnd.rn-realvideo=smplayer.desktop\nvideo/webm=smplayer.desktop\nvideo/x-matroska=smplayer.desktop\nvideo/x-ms-asf=smplayer.desktop\nvideo/x-ms-wmv=smplayer.desktop\nvideo/x-msvideo=smplayer.desktop\nvideo/x-ogm+ogg=smplayer.desktop\nvideo/x-theora=smplayer.desktop\nvideo/3gp=smplayer.desktop\nvideo/3gpp=smplayer.desktop\nvideo/divx=smplayer.desktop\nvideo/mp4v-es=smplayer.desktop\nvideo/msvideo=smplayer.desktop\nvideo/ogg=smplayer.desktop\nvideo/vivo=smplayer.desktop\nvideo/vnd.divx=smplayer.desktop\nvideo/x-anim=smplayer.desktop\nvideo/x-avi=smplayer.desktop\nvideo/x-flc=smplayer.desktop\nvideo/x-fli=smplayer.desktop\nvideo/x-flic=smplayer.desktop\nvideo/x-flv=smplayer.desktop\nvideo/x-m4v=smplayer.desktop\nvideo/x-mng=smplayer.desktop\nvideo/x-mpeg=smplayer.desktop\nvideo/x-mpeg2=smplayer.desktop\nvideo/x-ms-afs=smplayer.desktop\nvideo/x-ms-asx=smplayer.desktop\nvideo/x-ms-wm=smplayer.desktop\nvideo/x-ms-wvx=smplayer.desktop\nvideo/x-ms-wvxvideo=smplayer.desktop\nvideo/x-nsv=smplayer.desktop\nvideo/x-theora+ogg=smplayer.desktop\napplication/javascript=xed.desktop\napplication/x-httpd-php3=xed.desktop\napplication/x-httpd-php4=xed.desktop\napplication/x-httpd-php5=xed.desktop\napplication/x-m4=xed.desktop\napplication/x-php=xed.desktop\napplication/x-ruby=xed.desktop\napplication/x-shellscript=xed.desktop\napplication/xml=xed.desktop\ntext/css=xed.desktop\ntext/turtle=xed.desktop\ntext/x-c++hdr=xed.desktop\ntext/x-c++src=xed.desktop\ntext/x-chdr=xed.desktop\ntext/x-csharp=xed.desktop\ntext/x-csrc=xed.desktop\ntext/x-diff=xed.desktop\ntext/x-dsrc=xed.desktop\ntext/x-fortran=xed.desktop\ntext/x-java=xed.desktop\ntext/x-makefile=xed.desktop\ntext/x-pascal=xed.desktop\ntext/x-perl=xed.desktop\ntext/x-python=xed.desktop\ntext/x-sql=xed.desktop\ntext/x-vb=xed.desktop\ntext/yaml=xed.desktop\napplication/pdf=xreader.desktop\ntext/html=yandex-browser-beta.desktop\nx-scheme-handler/gitkraken=GitKraken.desktop\nx-scheme-handler/http=yandex-browser-beta.desktop\nx-scheme-handler/https=yandex-browser-beta.desktop\nx-scheme-handler/about=yandex-browser-beta.desktop\nx-scheme-handler/unknown=yandex-browser-beta.desktop\ninode/directory=nemo.desktop\napplication/msword=freeoffice-textmaker.desktop\napplication/rtf=freeoffice-textmaker.desktop\napplication/vnd.ms-works=freeoffice-textmaker.desktop\napplication/vnd.oasis.opendocument.text=freeoffice-textmaker.desktop\napplication/vnd.oasis.opendocument.text-template=freeoffice-textmaker.desktop\napplication/vnd.openxmlformats-officedocument.wordprocessingml.document=freeoffice-textmaker.desktop\napplication/vnd.stardivision.writer=freeoffice-textmaker.desktop\napplication/vnd.wordperfect=freeoffice-textmaker.desktop\napplication/x-abiword=freeoffice-textmaker.desktop\nimage/bmp=org.gnome.gThumb.desktop\nimage/gif=org.gnome.gThumb.desktop\nimage/jpeg=org.gnome.gThumb.desktop\nimage/jxl=org.gnome.gThumb.desktop\nimage/png=org.gnome.gThumb.desktop\nimage/svg+xml=org.gnome.gThumb.desktop\nimage/tiff=org.gnome.gThumb.desktop\nimage/webp=org.gnome.gThumb.desktop\nimage/x-bmp=org.gnome.gThumb.desktop\nimage/x-ico=org.gnome.gThumb.desktop\nimage/x-pcx=org.gnome.gThumb.desktop\nimage/x-png=org.gnome.gThumb.desktop\nimage/x-tga=org.gnome.gThumb.desktop\nimage/xpm=org.gnome.gThumb.desktop\n\n[Added Associations]\ntext/plain=code-oss.desktop;VSCodium.desktop;xed.desktop;\naudio/aac=org.gnome.Lollypop.desktop;\naudio/ac3=org.gnome.Lollypop.desktop;\naudio/flac=org.gnome.Lollypop.desktop;\naudio/m4a=org.gnome.Lollypop.desktop;\naudio/mp3=org.gnome.Lollypop.desktop;\naudio/mp4=org.gnome.Lollypop.desktop;\naudio/mpeg=org.gnome.Lollypop.desktop;\naudio/mpegurl=org.gnome.Lollypop.desktop;\naudio/ogg=org.gnome.Lollypop.desktop;\naudio/vnd.rn-realaudio=org.gnome.Lollypop.desktop;\naudio/vorbis=org.gnome.Lollypop.desktop;\naudio/x-aac=org.gnome.Lollypop.desktop;\naudio/x-flac=org.gnome.Lollypop.desktop;\naudio/x-m4a=org.gnome.Lollypop.desktop;\naudio/x-mp3=org.gnome.Lollypop.desktop;\naudio/x-mpeg=org.gnome.Lollypop.desktop;\naudio/x-mpegurl=org.gnome.Lollypop.desktop;\naudio/x-ms-wma=org.gnome.Lollypop.desktop;\naudio/x-musepack=org.gnome.Lollypop.desktop;\naudio/x-oggflac=org.gnome.Lollypop.desktop;\naudio/x-opus+ogg=org.gnome.Lollypop.desktop;\naudio/x-pn-realaudio=org.gnome.Lollypop.desktop;\naudio/x-scpls=org.gnome.Lollypop.desktop;\naudio/x-speex=org.gnome.Lollypop.desktop;\naudio/x-vorbis=org.gnome.Lollypop.desktop;\naudio/x-vorbis+ogg=org.gnome.Lollypop.desktop;\naudio/x-wav=org.gnome.Lollypop.desktop;\naudio/3gpp=org.gnome.Lollypop.desktop;\naudio/midi=org.gnome.Lollypop.desktop;\naudio/mp4a-latm=org.gnome.Lollypop.desktop;\naudio/mpeg3=org.gnome.Lollypop.desktop;\naudio/mpg=org.gnome.Lollypop.desktop;\naudio/wav=org.gnome.Lollypop.desktop;\naudio/wave=org.gnome.Lollypop.desktop;\naudio/webm=org.gnome.Lollypop.desktop;\naudio/x-aiff=org.gnome.Lollypop.desktop;\naudio/x-mpeg-3=org.gnome.Lollypop.desktop;\naudio/x-mpg=org.gnome.Lollypop.desktop;\naudio/x-ms-asf=org.gnome.Lollypop.desktop;\naudio/x-ogg=org.gnome.Lollypop.desktop;\naudio/x-wavpack=org.gnome.Lollypop.desktop;\nvideo/avi=smplayer.desktop;\nvideo/flv=smplayer.desktop;\nvideo/mp4=smplayer.desktop;\nvideo/mpeg=smplayer.desktop;\nvideo/quicktime=smplayer.desktop;\nvideo/vnd.rn-realvideo=smplayer.desktop;\nvideo/webm=smplayer.desktop;\nvideo/x-matroska=smplayer.desktop;\nvideo/x-ms-asf=smplayer.desktop;\nvideo/x-ms-wmv=smplayer.desktop;\nvideo/x-msvideo=smplayer.desktop;\nvideo/x-ogm+ogg=smplayer.desktop;\nvideo/x-theora=smplayer.desktop;\nvideo/3gp=smplayer.desktop;\nvideo/3gpp=smplayer.desktop;\nvideo/divx=smplayer.desktop;\nvideo/mp4v-es=smplayer.desktop;\nvideo/msvideo=smplayer.desktop;\nvideo/ogg=smplayer.desktop;\nvideo/vivo=smplayer.desktop;\nvideo/vnd.divx=smplayer.desktop;\nvideo/x-anim=smplayer.desktop;\nvideo/x-avi=smplayer.desktop;\nvideo/x-flc=smplayer.desktop;\nvideo/x-fli=smplayer.desktop;\nvideo/x-flic=smplayer.desktop;\nvideo/x-flv=smplayer.desktop;\nvideo/x-m4v=smplayer.desktop;\nvideo/x-mng=smplayer.desktop;\nvideo/x-mpeg=smplayer.desktop;\nvideo/x-mpeg2=smplayer.desktop;\nvideo/x-ms-afs=smplayer.desktop;\nvideo/x-ms-asx=smplayer.desktop;\nvideo/x-ms-wm=smplayer.desktop;\nvideo/x-ms-wvx=smplayer.desktop;\nvideo/x-ms-wvxvideo=smplayer.desktop;\nvideo/x-nsv=smplayer.desktop;\nvideo/x-theora+ogg=smplayer.desktop;\ntext/x-python=xed.desktop;VSCodium.desktop;code-oss.desktop;\napplication/javascript=code-oss.desktop;VSCodium.desktop;xed.desktop;\napplication/x-httpd-php3=code-oss.desktop;VSCodium.desktop;xed.desktop;\napplication/x-httpd-php4=code-oss.desktop;VSCodium.desktop;xed.desktop;\napplication/x-httpd-php5=code-oss.desktop;VSCodium.desktop;xed.desktop;\napplication/x-m4=code-oss.desktop;VSCodium.desktop;xed.desktop;\napplication/x-php=code-oss.desktop;VSCodium.desktop;xed.desktop;\napplication/x-ruby=code-oss.desktop;VSCodium.desktop;xed.desktop;\napplication/x-shellscript=code-oss.desktop;VSCodium.desktop;xed.desktop;\napplication/xml=code-oss.desktop;VSCodium.desktop;xed.desktop;\ntext/css=code-oss.desktop;VSCodium.desktop;xed.desktop;\ntext/turtle=code-oss.desktop;VSCodium.desktop;xed.desktop;\ntext/x-c++hdr=code-oss.desktop;VSCodium.desktop;xed.desktop;\ntext/x-c++src=code-oss.desktop;VSCodium.desktop;xed.desktop;\ntext/x-chdr=code-oss.desktop;VSCodium.desktop;xed.desktop;\ntext/x-csharp=code-oss.desktop;VSCodium.desktop;xed.desktop;\ntext/x-csrc=code-oss.desktop;VSCodium.desktop;xed.desktop;\ntext/x-diff=code-oss.desktop;VSCodium.desktop;xed.desktop;\ntext/x-dsrc=code-oss.desktop;VSCodium.desktop;xed.desktop;\ntext/x-fortran=code-oss.desktop;VSCodium.desktop;xed.desktop;\ntext/x-java=code-oss.desktop;VSCodium.desktop;xed.desktop;\ntext/x-makefile=code-oss.desktop;VSCodium.desktop;xed.desktop;\ntext/x-pascal=code-oss.desktop;VSCodium.desktop;xed.desktop;\ntext/x-perl=code-oss.desktop;VSCodium.desktop;xed.desktop;\ntext/x-sql=code-oss.desktop;VSCodium.desktop;xed.desktop;\ntext/x-vb=code-oss.desktop;VSCodium.desktop;xed.desktop;\ntext/yaml=code-oss.desktop;VSCodium.desktop;xed.desktop;\napplication/pdf=xreader.desktop;\ninode/directory=nemo.desktop;\napplication/msword=freeoffice-textmaker.desktop;\napplication/rtf=freeoffice-textmaker.desktop;\napplication/vnd.ms-works=freeoffice-textmaker.desktop;\napplication/vnd.oasis.opendocument.text=freeoffice-textmaker.desktop;\napplication/vnd.oasis.opendocument.text-template=freeoffice-textmaker.desktop;\napplication/vnd.openxmlformats-officedocument.wordprocessingml.document=freeoffice-textmaker.desktop;\napplication/vnd.stardivision.writer=freeoffice-textmaker.desktop;\napplication/vnd.wordperfect=freeoffice-textmaker.desktop;\napplication/x-abiword=freeoffice-textmaker.desktop;\nimage/bmp=org.gnome.gThumb.desktop;\nimage/gif=org.gnome.gThumb.desktop;\nimage/jpeg=org.gnome.gThumb.desktop;\nimage/jxl=org.gnome.gThumb.desktop;\nimage/png=org.gnome.gThumb.desktop;\nimage/svg+xml=org.gnome.gThumb.desktop;\nimage/tiff=org.gnome.gThumb.desktop;\nimage/webp=org.gnome.gThumb.desktop;\nimage/x-bmp=org.gnome.gThumb.desktop;\nimage/x-ico=org.gnome.gThumb.desktop;\nimage/x-pcx=org.gnome.gThumb.desktop;\nimage/x-png=org.gnome.gThumb.desktop;\nimage/x-tga=org.gnome.gThumb.desktop;\nimage/xpm=org.gnome.gThumb.desktop;
+' > /root/.config/mimeapps.list
+
+
+# nemo/actions
+echo $'#!/usr/bin/env bash\nfind "$1" -type d -name "*" -exec gio set {} metadata::nemo-icon-view-zoom-level $2 \;' > /usr/share/nemo/actions/set-zoom-level
+chmod +x /usr/share/nemo/actions/set-zoom-level
+echo "[Nemo Action]
+
+Name=Set max zoom level
+Comment=Set max zoom level %f and children
+
+Name[ru]=Максимальный масштаб
+Comment[ru]=Установить максимальный масштаб для %f и всех подкаталогов
+
+Exec=<set-zoom-level %F 6>
+Selection=none
+Extensions=dir;
+Icon-Name=zoom-in
+" > /usr/share/nemo/actions/set-max-zoom-level.nemo_action
+echo "[Nemo Action]
+
+Name=Set mid zoom level
+Comment=Set mid zoom level %f and children
+
+Name[ru]=Обычный масштаб
+Comment[ru]=Установить обычный масштаб для %f и всех подкаталогов
+
+Exec=<set-zoom-level %F 3>
+Selection=none
+Extensions=dir;
+Icon-Name=zoom-out
+" > /usr/share/nemo/actions/set-mid-zoom-level.nemo_action
+
+
+# idea
+echo "fs.inotify.max_user_watches = 524288" > /etc/sysctl.d/99-sysctl.conf
+# обход ограничения при раздаче моб. интернета
+echo "net.ipv4.ip_default_ttl = 65" >> /etc/sysctl.d/99-sysctl.conf
+
+
+# default java
+archlinux-java set java-21-openjdk
+
+# disable PC speaker
+echo "blacklist pcspkr" > /etc/modprobe.d/nobeep.conf
+
+# disable floppy
+echo "blacklist floppy" > /etc/modprobe.d/blacklist-floppy.conf
+# disable SCSI
+echo "blacklist sr_mod" > /etc/modprobe.d/blacklist-sr_mod.conf
+
+# grub
+sed -i 's|GRUB_CMDLINE_LINUX_DEFAULT="loglevel=3 quiet"|GRUB_CMDLINE_LINUX_DEFAULT="splash quiet loglevel=3 vt.global_cursor_default=0"|g' /etc/default/grub # https://wiki.archlinux.org/title/Silent_boot_(Русский)
+sed -i "s|GRUB_TIMEOUT=5|GRUB_TIMEOUT=2|g" /etc/default/grub
+sed -i 's|#GRUB_THEME="/path/to/gfxtheme"|GRUB_THEME="/usr/share/grub/themes/skyos/theme.txt"|g' /etc/default/grub
+
+
 rm -rf /usr/share/backgrounds/gnome/
 rm -f /usr/share/gnome-background-properties/adwaita.xml
 rm -f /usr/share/gnome-background-properties/amber.xml
@@ -165,6 +275,19 @@ rm -f /usr/share/gnome-background-properties/dithered-sun.xml
 rm -f /usr/share/gnome-background-properties/pixel-pusher.xml
 rm -f /usr/share/gnome-background-properties/tarkov-pills.xml
 rm -f /usr/share/gnome-background-properties/tubes.xml
+
+
+# swapfile
+fallocate -l 7629M /.swap # 8 GB = 7629 MiB
+chmod 600 /.swap
+mkswap /.swap
+
+sed -i '/\/.swap/d' /etc/fstab
+sed -i '/skyserver:\/public/d' /etc/fstab
+echo "/.swap                                    none           swap    defaults,discard 0 0" >> /etc/fstab
+echo "skyserver:/sky                            /sky           nfs     nofail,retry=1,timeo=20,_netdev,noatime,bg   0 0" >> /etc/fstab
+
+mkdir /sky
 
 
 
@@ -218,7 +341,13 @@ rm -f $USER_HOME/user-prefs.dconf
 systemctl enable NetworkManager
 systemctl enable qemu-guest-agent
 systemctl enable lightdm
+systemctl enable bluetooth
+systemctl enable docker
+systemctl enable nginx.service
 
 DISK=/dev/sda
 grub-install --target=i386-pc --recheck $DISK
 grub-mkconfig -o /boot/grub/grub.cfg
+
+# образ initramfs
+mkinitcpio -P
