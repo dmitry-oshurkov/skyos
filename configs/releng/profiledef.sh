@@ -23,7 +23,7 @@ file_permissions=(
   ["/usr/local/bin/Installation_guide"]="0:0:755"
   ["/usr/local/bin/livecd-sound"]="0:0:755"
   ["/root/install"]="0:0:755"
-  ["/root/install-on-system"]="0:0:755"
-  ["/root/install-on-user"]="0:0:755"
-  ["/root/user-first-login"]="0:0:755"
+  ["/root/install-scripts/install-on-system"]="0:0:755"
+  ["/root/install-scripts/install-on-user"]="0:0:755"
+  ["/root/install-scripts/user-first-login"]="0:0:755"
 )

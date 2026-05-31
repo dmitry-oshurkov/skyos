@@ -12,16 +12,8 @@
               <option name="hostPath" value="$PROJECT_DIR$/archiso" />
             </DockerVolumeBindingImpl>
             <DockerVolumeBindingImpl>
-              <option name="containerPath" value="/tmp/skyos-build/releng/airootfs/root/pacman-cache" />
-              <option name="hostPath" value="$PROJECT_DIR$/configs/releng/airootfs/root/pacman-cache" />
-            </DockerVolumeBindingImpl>
-            <DockerVolumeBindingImpl>
-              <option name="containerPath" value="/tmp/skyos-build/releng/airootfs/root/aur-cache" />
-              <option name="hostPath" value="$PROJECT_DIR$/configs/releng/airootfs/root/aur-cache" />
-            </DockerVolumeBindingImpl>
-            <DockerVolumeBindingImpl>
-              <option name="containerPath" value="/tmp/skyos-build/releng/airootfs/root/custom-cache" />
-              <option name="hostPath" value="$PROJECT_DIR$/configs/releng/airootfs/root/custom-cache" />
+              <option name="containerPath" value="/tmp/skyos-build/releng/airootfs/targetfs" />
+              <option name="hostPath" value="$PROJECT_DIR$/configs/releng/airootfs/targetfs" />
             </DockerVolumeBindingImpl>
           </list>
         </option>

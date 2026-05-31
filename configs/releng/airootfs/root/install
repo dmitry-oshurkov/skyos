@@ -29,31 +29,17 @@ tune2fs -m 1 $ROOT_PART # 1% reserved space on /
 #--------------- Установка системы -------------------------
 rate-mirrors --entry-country=RU --allow-root arch | tee /etc/pacman.d/mirrorlist
 
-mkdir -p /mnt/var/cache/pacman/pkg
-mv pacman-cache/* /mnt/var/cache/pacman/pkg
+mv /targetfs/* /mnt/
 
-PACKAGES=$(sed 's/#.*//' pacman-packages.conf | sed '/^[[:space:]]*$/d' | xargs)
+PACKAGES=$(sed 's/#.*//' /root/pacman-packages.conf | sed '/^[[:space:]]*$/d' | xargs)
 pacstrap -K /mnt $PACKAGES
 
 genfstab -U /mnt >> /mnt/etc/fstab
 
 
 #--------------- Настройка системы -------------------------
-cp /root/install-on-system /mnt/root/install-on-system
-cp /root/install-on-system.env /mnt/root/install-on-system.env
-cp /root/install-on-user /mnt/root/install-on-user
-cp /root/user-first-login /mnt/root/user-first-login
-cp /root/user-prefs.dconf /mnt/root/user-prefs.dconf
-
-mkdir -p /mnt/var/tmp/aur-cache
-mv aur-cache/* /mnt/var/tmp/aur-cache
-
-mkdir -p /mnt/usr/share/plank/themes
-mv custom-cache/usr/share/themes/* /mnt/usr/share/themes/
-mv custom-cache/usr/share/plank/themes/* /mnt/usr/share/plank/themes/
-mv custom-cache/usr/share/icons/* /mnt/usr/share/icons/
-rm -rf /mnt/usr/share/grub/themes/*
-mv custom-cache/usr/share/grub/themes/* /mnt/usr/share/grub/themes/
+mv /root/install-scripts/* /mnt/root/
+rm -rf /mnt/usr/share/grub/themes/starfield
 
 arch-chroot /mnt /root/install-on-system
 

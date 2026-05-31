@@ -17,6 +17,4 @@ man/version.rst
 .idea/*.xml
 *.iml
 install-on-system.env
-pacman-cache
-aur-cache
-custom-cache
+targetfs
