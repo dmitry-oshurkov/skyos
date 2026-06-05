@@ -11,6 +11,8 @@ USER_HOME=/home/$USERNAME
 ln -sf /usr/share/zoneinfo/$TIMEZONE /etc/localtime
 hwclock --systohc
 
+# todo use localectl
+
 # locale
 echo "en_US.UTF-8 UTF-8
 ru_RU.UTF-8 UTF-8" > /etc/locale.gen
@@ -144,8 +146,13 @@ echo $'{
         "https://huecker.io"
     ]
 }' > /etc/docker/daemon.json
+# todo nvidia
+# nvidia-ctk runtime configure --runtime=docker
 
 echo "options overlay metacopy=off redirect_dir=off" > /etc/modprobe.d/disable-overlay-redirect-dir.conf
+# todo check
+# modprobe --remove overlay
+# modprobe overlay
 
 
 # nginx
@@ -342,6 +349,8 @@ mv /root/user-prefs.dconf $USER_HOME/user-prefs.dconf
 chown -R $USERNAME:$USERNAME $USER_HOME
 
 sudo -u $USERNAME $USER_HOME/install-on-user
+
+chsh --shell /usr/bin/fish $USERNAME
 
 rm -f $USER_HOME/install-on-user
 rm -f $USER_HOME/user-prefs.dconf
