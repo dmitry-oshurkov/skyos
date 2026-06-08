@@ -130,6 +130,17 @@ echo "Defaults timestamp_timeout=15" >> /etc/sudoers
 sed -i 's|#MAKEFLAGS="-j2"|MAKEFLAGS="-j$(nproc)"|g' /etc/makepkg.conf
 
 
+# intellij-idea
+sed -i '/-javaagent:\/opt\/jetbra\/ja-netfilter.jar=jetbrains/d' /opt/intellij-idea-ultimate-edition/bin/idea64.vmoptions
+sed -i '/--add-opens=java.base\/jdk.internal.org.objectweb.asm=ALL-UNNAMED/d' /opt/intellij-idea-ultimate-edition/bin/idea64.vmoptions
+sed -i '/--add-opens=java.base\/jdk.internal.org.objectweb.asm.tree=ALL-UNNAMED/d' /opt/intellij-idea-ultimate-edition/bin/idea64.vmoptions
+echo "
+-javaagent:/opt/jetbra/ja-netfilter.jar=jetbrains
+--add-opens=java.base/jdk.internal.org.objectweb.asm=ALL-UNNAMED
+--add-opens=java.base/jdk.internal.org.objectweb.asm.tree=ALL-UNNAMED
+" >> /opt/intellij-idea-ultimate-edition/bin/idea64.vmoptions
+
+
 # docker
 mkdir -p /home/docker
 mkdir -p /etc/docker
