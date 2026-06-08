@@ -1,7 +1,7 @@
 FROM archlinux
 
-RUN pacman -S --refresh --noconfirm --noprogressbar \
-    && pacman -S --noconfirm --noprogressbar --needed base-devel rate-mirrors git sudo
+RUN pacman -Sq --refresh --noconfirm --noprogressbar \
+    && pacman -Sq --noconfirm --noprogressbar --needed base-devel rate-mirrors git sudo
 
 WORKDIR /root
 COPY . .

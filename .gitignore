@@ -17,4 +17,4 @@ man/version.rst
 .idea/*.xml
 *.iml
 install-on-system.env
-targetfs
+targetfs*

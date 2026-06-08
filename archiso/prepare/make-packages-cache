@@ -25,16 +25,14 @@ aur-cache() {
 
     #--------------- Установка --------------------------------------
     sudo -u aur_builder_user bash -lc "
-      rm -rf ~/.cache/yay/yay-bin
-      cd ~/.cache/yay
-      git clone https://aur.archlinux.org/yay-bin.git
+      git clone --quiet https://aur.archlinux.org/yay-bin.git ~/.cache/yay/yay-bin
       cd ~/.cache/yay/yay-bin
       makepkg --syncdeps --install --noconfirm --noprogressbar"
 
     mapfile -t PACKAGES_ARR < <(sed -e 's/#.*//' -e 's/[[:space:]]*$//' -e '/^[[:space:]]*$/d' /root/aur-packages.conf)
 
     for pkg in "${PACKAGES_ARR[@]}"; do
-      sudo -u aur_builder_user bash -lc "yay -S --needed --noconfirm --noprogressbar $pkg"
+      sudo -u aur_builder_user bash -lc "yay -Sq --needed --noconfirm --noprogressbar $pkg"
     done
 
     rm -rf /home/aur_builder_user/.cache/yay/**/src/
