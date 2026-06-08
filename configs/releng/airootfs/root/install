@@ -2,7 +2,9 @@
 
 
 DISK=/dev/sda
-ROOT_PART=${DISK}1
+EFI_PART=${DISK}1
+ROOT_PART=${DISK}2
+HOME_PART=${DISK}3
 
 
 loadkeys ru
@@ -13,15 +15,17 @@ echo -e "\e[96mНачало установки на $DISK. Это уничтож
 timedatectl set-ntp true
 
 
-#--------------- Подготовка таблицы разделов ----------------
-sgdisk --zap-all $DISK || true
-parted --script $DISK mklabel msdos
-parted --script $DISK mkpart primary ext4 0% 100%
-parted --script $DISK set 1 boot on
-partprobe $DISK
+#--------------- Подготовка разделов ----------------
+mkfs.fat -F 16 $EFI_PART
+mkfs.ext4 -F $ROOT_PART
 
-mkfs.ext4 $ROOT_PART
 mount $ROOT_PART /mnt
+mkdir -p /mnt/boot/efi
+mkdir -p /mnt/home
+
+mount $EFI_PART /mnt/boot/efi
+mount $HOME_PART /mnt/home
+
 
 tune2fs -m 1 $ROOT_PART # 1% reserved space on /
 
@@ -48,6 +52,8 @@ rm -f /mnt/root/install-on-system.env
 
 
 #--------------- Завершение --------------------------------
+umount -R /mnt/boot/efi
+umount -R /mnt/home
 umount -R /mnt
 
 echo "Установка завершена. Перезагрузите систему."

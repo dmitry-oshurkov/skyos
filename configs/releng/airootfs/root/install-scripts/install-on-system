@@ -365,8 +365,7 @@ systemctl enable bluetooth
 systemctl enable docker
 systemctl enable nginx.service
 
-DISK=/dev/sda
-grub-install --target=i386-pc --recheck $DISK
+grub-install
 grub-mkconfig -o /boot/grub/grub.cfg
 
 # образ initramfs
