@@ -49,11 +49,19 @@ aur-cache() {
 }
 
 custom() {
+    rm -rf /targetfs/opt/jetbra
+    rm -rf /targetfs/etc
     rm -rf /targetfs/usr/share/*
+    mkdir -p /targetfs/opt/jetbra
+    mkdir -p /targetfs/etc
     mkdir -p /targetfs/usr/share/themes
     mkdir -p /targetfs/usr/share/plank/themes
     mkdir -p /targetfs/usr/share/icons
     mkdir -p /targetfs/usr/share/grub/themes
+
+    curl -sL https://github.com/dmitry-oshurkov/files/releases/download/1/jtbr.tar.gz | tar -xz -C /targetfs/opt
+    curl -sLO --output-dir /targetfs/var/tmp https://open-vsx.org/api/MS-CEINTL/vscode-language-pack-ru/1.121.0/file/MS-CEINTL.vscode-language-pack-ru-1.121.0.vsix
+    curl -sL -o /targetfs/etc/hosts https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts
 
     curl -sL https://github.com/dmitry-oshurkov/sky-arc-theme/releases/download/22.1/Sky-Arc-Darker.tar.gz | tar -xz -C /targetfs/usr/share/themes/
     curl -sL https://github.com/dmitry-oshurkov/sky-arc-theme/releases/download/22.1/Sky-Arc-Darker-Plank.tar.gz | tar -xz -C /targetfs/usr/share/plank/themes/

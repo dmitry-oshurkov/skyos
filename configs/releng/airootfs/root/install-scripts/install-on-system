@@ -141,6 +141,10 @@ echo "
 " >> /opt/intellij-idea-ultimate-edition/bin/idea64.vmoptions
 
 
+codium --install-extension /var/tmp/MS-CEINTL.vscode-language-pack-ru-1.121.0.vsix
+rm /var/tmp/MS-CEINTL.vscode-language-pack-ru-1.121.0.vsix
+
+
 # docker
 mkdir -p /home/docker
 mkdir -p /etc/docker
