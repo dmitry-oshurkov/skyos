@@ -31,7 +31,7 @@ tune2fs -m 1 $ROOT_PART # 1% reserved space on /
 
 
 #--------------- Установка системы -------------------------
-rate-mirrors --entry-country=RU --allow-root arch | tee /etc/pacman.d/mirrorlist
+rate-mirrors --allow-root --save /etc/pacman.d/mirrorlist arch
 
 mv /targetfs/* /mnt/
 

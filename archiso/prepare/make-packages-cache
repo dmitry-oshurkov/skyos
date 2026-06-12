@@ -6,7 +6,7 @@ pacman-cache() {
 
     mapfile -t PACMAN_PACKAGES_ARR < <(sed -e 's/#.*//' -e 's/[[:space:]]*$//' -e '/^[[:space:]]*$/d' /root/pacman-packages.conf)
 
-    rate-mirrors --entry-country=RU --allow-root arch | tee /etc/pacman.d/mirrorlist
+    rate-mirrors --allow-root --save /etc/pacman.d/mirrorlist arch
 
     PACMAN_PACKAGES=$(sed 's/#.*//' /root/pacman-packages.conf | sed '/^[[:space:]]*$/d' | xargs)
     pacman -S --needed --noconfirm --noprogressbar $PACMAN_PACKAGES
