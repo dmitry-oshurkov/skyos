@@ -35,6 +35,8 @@ aur-cache() {
       sudo -u aur_builder_user bash -lc "yay -Sq --needed --noconfirm --noprogressbar $pkg"
     done
 
+    rm -rf /home/aur_builder_user/.cache/yay/**/src/
+
     sudo -u aur_builder_user bash -lc "
       git clone --quiet https://aur.archlinux.org/intellij-idea-ultimate-edition.git ~/.cache/yay/intellij-idea-ultimate-edition
       cd ~/.cache/yay/intellij-idea-ultimate-edition
@@ -44,8 +46,8 @@ aur-cache() {
       git commit -a -m 'use cdn'
       yay -Sq --needed --noconfirm --noprogressbar intellij-idea-ultimate-edition"
 
-    rm -rf /home/aur_builder_user/.cache/yay/**/src/
     rm -rf /home/aur_builder_user/.cache/yay/**/*.tar.gz
+    rm -rf /home/aur_builder_user/.cache/yay/**/*.zip
     rm -rf /home/aur_builder_user/.cache/yay/**/*.deb
     rm -rf /home/aur_builder_user/.cache/yay/**/*.rpm
     rm -rf /home/aur_builder_user/.cache/yay/**/*-debug*.zst

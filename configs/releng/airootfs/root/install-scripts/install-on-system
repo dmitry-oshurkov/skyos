@@ -74,7 +74,8 @@ pacman -Sy --noprogressbar
 
 #--------------- Установка AUR-пакетов -------------------------
 mkdir -p $USER_HOME/.cache/yay
-mv -f /var/tmp/aur-cache/* $USER_HOME/.cache/yay
+mv -f /var/tmp/aur-cache/* $USER_HOME/.cache/yay/
+rm -rf /var/tmp/aur-cache
 
 mapfile -t ZST_FILES < <(find $USER_HOME/.cache/yay -type f -name '*.zst' ! -iname '*-debug*.zst' -print0 | xargs -0 -r -n1 echo)
 
@@ -139,10 +140,6 @@ echo "
 --add-opens=java.base/jdk.internal.org.objectweb.asm=ALL-UNNAMED
 --add-opens=java.base/jdk.internal.org.objectweb.asm.tree=ALL-UNNAMED
 " >> /opt/intellij-idea-ultimate-edition/bin/idea64.vmoptions
-
-
-codium --install-extension /var/tmp/MS-CEINTL.vscode-language-pack-ru-1.121.0.vsix
-rm /var/tmp/MS-CEINTL.vscode-language-pack-ru-1.121.0.vsix
 
 
 # docker
@@ -369,6 +366,7 @@ chsh --shell /usr/bin/fish $USERNAME
 
 rm -f $USER_HOME/install-on-user
 rm -f $USER_HOME/user-prefs.dconf
+rm /var/tmp/MS-CEINTL.vscode-language-pack-ru-1.121.0.vsix
 
 
 

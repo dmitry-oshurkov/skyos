@@ -85,8 +85,12 @@ monospace-font-name='Source Code Pro 11'
 
 [org/gnome/gnome-system-monitor]
 network-in-bits=true
+window-height=980
+window-width=1370
 
 [org/gnome/gnome-system-monitor/proctree]
+col-0-visible=true
+col-0-width=268
 col-14-visible=true
 col-14-width=0
 

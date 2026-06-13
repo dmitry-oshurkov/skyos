@@ -7,6 +7,8 @@ sed -i "s|TPROF|$TPROF|g" $HOME/user-prefs.dconf
 
 dbus-launch dconf load / < $HOME/user-prefs.dconf
 
+codium --install-extension /var/tmp/MS-CEINTL.vscode-language-pack-ru-1.121.0.vsix
+
 
 # bluetoothctl power on # проверить, что стартует
 # bluetoothctl power off

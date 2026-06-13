@@ -1,16 +1,16 @@
 #!/usr/bin/env bash
 
 
-DISK=/dev/nvme0n1p
-EFI_PART=${DISK}1
-ROOT_PART=${DISK}2
-HOME_PART=${DISK}4
+DISK=/dev/nvme0n1
+EFI_PART=${DISK}p1
+ROOT_PART=${DISK}p2
+HOME_PART=${DISK}p4
 
 
 loadkeys ru
 setfont cyr-sun16
 
-echo -e "\e[96mНачало установки на $DISK. Это уничтожит все данные на диске.\e[0m"
+echo -e "\e[96mНачало установки.\e[0m"
 
 timedatectl set-ntp true
 
