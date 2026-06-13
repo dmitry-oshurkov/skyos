@@ -45,6 +45,10 @@ aur-cache() {
       yay -Sq --needed --noconfirm --noprogressbar intellij-idea-ultimate-edition"
 
     rm -rf /home/aur_builder_user/.cache/yay/**/src/
+    rm -rf /home/aur_builder_user/.cache/yay/**/*.tar.gz
+    rm -rf /home/aur_builder_user/.cache/yay/**/*.deb
+    rm -rf /home/aur_builder_user/.cache/yay/**/*.rpm
+    rm -rf /home/aur_builder_user/.cache/yay/**/*-debug*.zst
     mv /home/aur_builder_user/.cache/yay/* /targetfs/var/tmp/aur-cache
 }
 

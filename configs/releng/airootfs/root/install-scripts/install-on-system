@@ -74,7 +74,7 @@ pacman -Sy --noprogressbar
 
 #--------------- Установка AUR-пакетов -------------------------
 mkdir -p $USER_HOME/.cache/yay
-mv /var/tmp/aur-cache/* $USER_HOME/.cache/yay
+mv -f /var/tmp/aur-cache/* $USER_HOME/.cache/yay
 
 mapfile -t ZST_FILES < <(find $USER_HOME/.cache/yay -type f -name '*.zst' ! -iname '*-debug*.zst' -print0 | xargs -0 -r -n1 echo)
 
