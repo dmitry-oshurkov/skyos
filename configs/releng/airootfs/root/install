@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
 
-DISK=/dev/sda
+DISK=/dev/nvme0n1p
 EFI_PART=${DISK}1
 ROOT_PART=${DISK}2
-HOME_PART=${DISK}3
+HOME_PART=${DISK}4
 
 
 loadkeys ru
@@ -28,6 +28,7 @@ mount $HOME_PART /mnt/home
 
 
 tune2fs -m 1 $ROOT_PART # 1% reserved space on /
+tune2fs -m 0 $HOME_PART #remove root reserved space on /home
 
 
 #--------------- Установка системы -------------------------
