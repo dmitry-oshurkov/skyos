@@ -37,13 +37,8 @@ plank >> /dev/null . &
 sleep 3
 pkill plank
 rm -f $HOME/.config/plank/dock1/launchers/*
-
-echo $'[PlankDockItemPreferences]\nLauncher=docklet://clock\n\n[DockyClockPreferences]\n#If the clock shows 24hr time (when showing digital and in the hover).\nShowMilitary=false\n#If the clock shows a digital clock (true) or an analog clock (false).\nShowDigital=false\n#If the clock shows the date in digital mode.\nShowDate=false' > $HOME/.config/plank/dock1/launchers/clock.dockitem
-echo $'[PlankDockItemPreferences]\nLauncher=docklet://clippy\n\n[DockyClippyPreferences]\n#How many recent clipboard entries to keep.\nMaxEntries=15\n#If it should track the primary (mouse selection) clipboard.\nTrackMouseSelections=false' > $HOME/.config/plank/dock1/launchers/clippy.dockitem
-echo $'[PlankDockItemPreferences]\nLauncher=file:///usr/share/applications/yandex-browser.desktop' > $HOME/.config/plank/dock1/launchers/yandex-browser.dockitem
-echo $'[PlankDockItemPreferences]\nLauncher=file:///usr/share/applications/nemo.desktop' > $HOME/.config/plank/dock1/launchers/nemo.dockitem
-echo $'[PlankDockItemPreferences]\nLauncher=file:///usr/share/applications/jetbrains-idea.desktop' > $HOME/.config/plank/dock1/launchers/jetbrains-idea.dockitem
-echo $'[PlankDockItemPreferences]\nLauncher=file:///usr/share/applications/GitKraken.desktop' > $HOME/.config/plank/dock1/launchers/GitKraken.dockitem
+mv $HOME/.config/plank/dock1/predefined-launchers/* $HOME/.config/plank/dock1/launchers
+rm -rf $HOME/.config/plank/dock1/predefined-launchers
 
 gsettings set net.launchpad.plank.dock.settings:/net/launchpad/plank/docks/dock1/ dock-items "['clock.dockitem', 'clippy.dockitem', 'yandex-browser.dockitem', 'nemo.dockitem', 'jetbrains-idea.dockitem', 'GitKraken.dockitem']"
 

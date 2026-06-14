@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+
+
+TPROF=$(gsettings get org.gnome.Terminal.ProfilesList default) # пример: 'b1dcc9dd-5262-4d8d-a863-c897e6d979b9'
+TPROF=${TPROF:1:-1} # remove leading and trailing single quotes
+sed -i "s|TPROF|$TPROF|g" $HOME/user-prefs.dconf
+
+dbus-launch dconf load / < $HOME/user-prefs.dconf
+
+codium --install-extension /var/tmp/skyos/MS-CEINTL.vscode-language-pack-ru-1.121.0.vsix
+
+
+# bluetoothctl power on # проверить, что стартует
+# bluetoothctl power off
+# bluetoothctl power on
+# scan on
+# remove CF:0B:0C:C1:57:95
+# bluetoothctl connect CF:0B:0C:C1:57:95
+
+
+echo $YANDEX_DISK_IID > $HOME/.config/yandex-disk/iid
+echo $YANDEX_DISK_PASSWD > $HOME/.config/yandex-disk/passwd
+
+mkdir $HOME/yandex.disk
+mkdir $HOME/mega.sync
+mkdir $HOME/projects
+mkdir $HOME/skylab
+rm -rf $HOME/Общедоступные
+
+sed -i "s|\$HOME|$HOME|g" $HOME/.config/gtk-3.0/bookmarks
+sed -i "s|\$HOME|$HOME|g" $HOME/.config/smplayer/smplayer.ini
+sed -i "s|\$HOME|$HOME|g" $HOME/.config/yandex-disk/config.cfg
+sed -i "s|\$HOME|$HOME|g" $HOME/.gradle/gradle.properties
+
+# davs://odmit@inbox.ru@webdav.cloud.mail.ru/ cloud.mail.ru 1
+# davs://zhakova.yulianna@mail.ru@webdav.cloud.mail.ru/ cloud.mail.ru 2
+# davs://+79689208789@webdav.cloudbeeline.ru/ cloudbeeline.ru 1
+# davs://+79080904199@webdav.cloudbeeline.ru/ cloudbeeline.ru 2

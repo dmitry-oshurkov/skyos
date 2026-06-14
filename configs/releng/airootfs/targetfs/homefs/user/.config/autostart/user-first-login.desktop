@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Exec=sh -c "$HOME/user-first-login"
+Hidden=false
+NoDisplay=false
+X-GNOME-Autostart-enabled=true
+Name=First Login Script
+Comment=Run once on first login

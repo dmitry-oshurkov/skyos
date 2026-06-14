@@ -1,0 +1,13 @@
+[Nemo Action]
+
+Name=Set max zoom level
+Comment=Set max zoom level %f and children
+
+Name[ru]=Максимальный масштаб
+Comment[ru]=Установить максимальный масштаб для %f и всех подкаталогов
+
+Exec=<set-zoom-level %F 6>
+Selection=none
+Extensions=dir;
+Icon-Name=zoom-in
+

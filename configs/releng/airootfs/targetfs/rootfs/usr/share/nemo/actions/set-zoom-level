@@ -1,0 +1,2 @@
+#!/bin/bash
+find "$1" -type d -name "*" -exec gio set {} metadata::nemo-icon-view-zoom-level $2 \;

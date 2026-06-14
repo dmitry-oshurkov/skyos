@@ -1,18 +1,10 @@
 #!/usr/bin/env bash
 
-
-DISK=/dev/nvme0n1
-EFI_PART=${DISK}p1
-ROOT_PART=${DISK}p2
-HOME_PART=${DISK}p4
-
-
 loadkeys ru
 setfont cyr-sun16
+timedatectl set-ntp true
 
 echo -e "\e[96mНачало установки.\e[0m"
-
-timedatectl set-ntp true
 
 
 #--------------- Подготовка разделов ----------------
@@ -20,36 +12,45 @@ mkfs.fat -F 16 $EFI_PART
 mkfs.ext4 -F $ROOT_PART
 
 mount $ROOT_PART /mnt
+
 mkdir -p /mnt/boot/efi
-mkdir -p /mnt/home
-
 mount $EFI_PART /mnt/boot/efi
-mount $HOME_PART /mnt/home
 
+mkdir -p /mnt/home
+mount $HOME_PART /mnt/home
 
 tune2fs -m 1 $ROOT_PART # 1% reserved space on /
 tune2fs -m 0 $HOME_PART #remove root reserved space on /home
 
 
 #--------------- Установка системы -------------------------
-rate-mirrors --allow-root --save /etc/pacman.d/mirrorlist arch
+echo 'Server = https://mirror.yandex.ru/archlinux/$repo/os/$arch' >> /etc/pacman.d/mirrorlist
+pacman -S --refresh
 
-mv /targetfs/* /mnt/
+mv /targetfs/rootfs/* /mnt/
+mv /targetfs/homefs/* /mnt/home
 
 PACKAGES=$(sed 's/#.*//' /root/pacman-packages.conf | sed '/^[[:space:]]*$/d' | xargs)
 pacstrap -K /mnt $PACKAGES
 
-genfstab -U /mnt >> /mnt/etc/fstab
+
+#--------------- Настройка разделов -----------------------
+genfstab -U /mnt > /mnt/etc/fstab
+sed -i '/\/.swap/d' /mnt/etc/fstab
+sed -i '/skyserver:\/public/d' /mnt/etc/fstab
+echo "/.swap                                    none           swap    defaults,discard 0 0" >> /mnt/etc/fstab
+echo "skyserver:/sky                            /sky           nfs     nofail,retry=1,timeo=20,_netdev,noatime,bg   0 0" >> /mnt/etc/fstab
+
+fallocate -l 7629M /mnt/.swap # 8 GB = 7629 MiB
+chmod 600 /mnt/.swap
+mkswap /mnt/.swap
 
 
 #--------------- Настройка системы -------------------------
-mv /root/install-scripts/* /mnt/root/
-rm -rf /mnt/usr/share/grub/themes/starfield
-
 arch-chroot /mnt /root/install-on-system
 
+rm -rf /mnt/usr/share/grub/themes/starfield
 rm -f /mnt/root/install-on-system
-rm -f /mnt/root/install-on-system.env
 
 
 #--------------- Завершение --------------------------------

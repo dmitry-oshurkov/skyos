@@ -23,7 +23,9 @@ file_permissions=(
   ["/usr/local/bin/Installation_guide"]="0:0:755"
   ["/usr/local/bin/livecd-sound"]="0:0:755"
   ["/root/install"]="0:0:755"
-  ["/root/install-scripts/install-on-system"]="0:0:755"
-  ["/root/install-scripts/install-on-user"]="0:0:755"
-  ["/root/install-scripts/user-first-login"]="0:0:755"
+  ["/targetfs/rootfs/root/install-on-system"]="0:0:755"
+  ["/targetfs/homefs/user/install-on-user"]="0:0:755"
+  ["/targetfs/homefs/user/user-first-login"]="0:0:755"
+  ["/targetfs/rootfs/usr/share/nemo/actions/set-zoom-level"]="0:0:755"
+  ["/targetfs/homefs/user/.config/autostart/vscodium-backups.desktop"]="0:0:755"
 )

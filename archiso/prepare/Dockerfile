@@ -1,7 +1,8 @@
 FROM archlinux
 
-RUN pacman -Sq --refresh --noconfirm --noprogressbar \
-    && pacman -Sq --noconfirm --noprogressbar --needed base-devel rate-mirrors git sudo
+RUN echo "Server = https://mirror.yandex.ru/archlinux/\$repo/os/\$arch" >> /etc/pacman.d/mirrorlist \
+    && pacman -S --refresh \
+    && pacman -S --quiet --noconfirm --noprogressbar --needed base-devel git sudo
 
 WORKDIR /root
 COPY . .

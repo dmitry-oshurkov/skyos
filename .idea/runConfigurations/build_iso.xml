@@ -11,10 +11,18 @@
               <option name="containerPath" value="/tmp/skyos-build/archiso" />
               <option name="hostPath" value="$PROJECT_DIR$/archiso" />
             </DockerVolumeBindingImpl>
-            <DockerVolumeBindingImpl>
-              <option name="containerPath" value="/tmp/skyos-build/releng/airootfs/targetfs" />
-              <option name="hostPath" value="$PROJECT_DIR$/configs/releng/airootfs/targetfs" />
-            </DockerVolumeBindingImpl>
+              <DockerVolumeBindingImpl>
+                  <option name="containerPath" value="/tmp/skyos-build/releng/airootfs/targetfs/rootfs/opt"/>
+                  <option name="hostPath" value="$PROJECT_DIR$/configs/releng/airootfs/targetfs/rootfs/opt"/>
+              </DockerVolumeBindingImpl>
+              <DockerVolumeBindingImpl>
+                  <option name="containerPath" value="/tmp/skyos-build/releng/airootfs/targetfs/rootfs/usr"/>
+                  <option name="hostPath" value="$PROJECT_DIR$/configs/releng/airootfs/targetfs/rootfs/usr"/>
+              </DockerVolumeBindingImpl>
+              <DockerVolumeBindingImpl>
+                  <option name="containerPath" value="/tmp/skyos-build/releng/airootfs/targetfs/rootfs/var"/>
+                  <option name="hostPath" value="$PROJECT_DIR$/configs/releng/airootfs/targetfs/rootfs/var"/>
+              </DockerVolumeBindingImpl>
           </list>
         </option>
       </settings>

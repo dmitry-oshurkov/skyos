@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=RemoteAndVMs
+Comment=Remote connections and VMs
+Name[ru]=Подключения и ВМ
+Comment[ru]=Удалённые подключения и виртуальные машины
+Icon=AppImage
+Type=Directory

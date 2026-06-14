@@ -1,0 +1,11 @@
+{
+    "files.autoSave": "afterDelay",
+    "workbench.colorTheme": "Quiet Light",
+    "workbench.startupEditor": "newUntitledFile",
+    "git.openRepositoryInParentFolders": "never",
+    "update.showReleaseNotes": false,
+    "telemetry.feedback.enabled": false,
+    "editor.quickSuggestions": {
+        "other": "off"
+    }
+}

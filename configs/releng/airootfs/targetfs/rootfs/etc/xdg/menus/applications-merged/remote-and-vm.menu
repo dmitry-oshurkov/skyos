@@ -1,0 +1,10 @@
+<Menu>
+  <Name>Applications</Name>
+  <Menu>
+    <Name>RemoteAndVMs</Name>
+    <Directory>remote-and-vm.directory</Directory>
+    <Include>
+      <Category>RemoteAndVMs</Category>
+    </Include>
+  </Menu>
+</Menu>

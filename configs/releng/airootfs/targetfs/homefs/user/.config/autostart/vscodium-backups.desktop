@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Exec=sh -c "$HOME/projects/skylab/scripts/tools/vscodium-backups"
+Icon=mintbackup
+NoDisplay=false
+Hidden=false
+Name[ru_RU]=Резервирование текста VSCodium
+Comment[ru_RU]=Резервирование текста VSCodium
+X-GNOME-Autostart-enabled=true
+X-GNOME-Autostart-Delay=0

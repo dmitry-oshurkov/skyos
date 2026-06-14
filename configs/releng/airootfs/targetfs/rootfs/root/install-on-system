@@ -1,0 +1,167 @@
+#!/usr/bin/env bash
+
+USER_HOME=/home/$USERNAME
+
+
+#--------------- Настройка системы -----------------------------
+# timezone and clock
+ln -sf /usr/share/zoneinfo/$TIMEZONE /etc/localtime
+hwclock --systohc
+
+locale-gen
+
+# hostname
+echo $HOSTNAME > /etc/hostname
+cat >> /etc/hosts <<HOSTS
+127.0.0.1   localhost
+::1         localhost
+127.0.1.1   $HOSTNAME.localdomain $HOSTNAME
+
+# Local
+192.168.15.1         skyrouter
+192.168.15.100       skyserver
+192.168.15.150       beelink
+127.0.0.1            bookstore.local
+192.168.15.100       bookstore.sky
+192.168.15.100       plugins.jetbrains.sky
+
+#Other
+89.187.169.39       image.tmdb.org
+0.0.0.0             release.gitkraken.com
+HOSTS
+
+
+# root password
+echo "root:$USER_PASSWD" | chpasswd
+
+# create user
+groupadd -r autologin
+useradd --create-home --user-group --groups wheel,kvm,docker,autologin $USERNAME
+echo "$USERNAME:$USER_PASSWD" | chpasswd
+echo '%wheel ALL=(ALL) ALL' | EDITOR='tee -a' /usr/bin/visudo
+
+useradd --create-home --user-group $USER2NAME
+echo "$USER2NAME:$USER2_PASSWD" | chpasswd
+
+
+rsync -r /home/user/ $USER_HOME/
+rm -rf /home/user
+
+rm -rf /usr/share/backgrounds/gnome/
+rm -rf /usr/share/gnome-background-properties/
+
+
+#--------------- Установка AUR-пакетов -------------------------
+mapfile -t ZST_FILES < <(find $USER_HOME/.cache/yay -type f -name '*.zst' ! -iname '*-debug*.zst' -print0 | xargs -0 -r -n1 echo)
+
+pacman -U --needed --noconfirm --noprogressbar ${ZST_FILES[@]}
+
+
+#--------------- Настройка системных приложений -------------------------
+# lightdm
+sed -i 's|#greeter-session=example-gtk-gnome|greeter-session=lightdm-slick-greeter|g' /etc/lightdm/lightdm.conf
+sed -i 's|#greeter-setup-script=|greeter-setup-script=/usr/bin/numlockx on|g' /etc/lightdm/lightdm.conf # numlock on
+sed -i 's|#logind-check-graphical=true|logind-check-graphical=true|g' /etc/lightdm/lightdm.conf # fix for system boots so fast
+sed -i "s|#display-setup-script=|display-setup-script=xrandr -s $WORKING_RESOLUTION|g" /etc/lightdm/lightdm.conf
+
+# sudo
+echo "Defaults passwd_timeout=0" >> /etc/sudoers
+echo "Defaults timestamp_timeout=15" >> /etc/sudoers
+
+# all cores for aur builds
+sed -i 's|#MAKEFLAGS="-j2"|MAKEFLAGS="-j$(nproc)"|g' /etc/makepkg.conf
+
+
+# intellij-idea
+sed -i '/-javaagent:\/opt\/jetbra\/ja-netfilter.jar=jetbrains/d' /opt/intellij-idea-ultimate-edition/bin/idea64.vmoptions
+sed -i '/--add-opens=java.base\/jdk.internal.org.objectweb.asm=ALL-UNNAMED/d' /opt/intellij-idea-ultimate-edition/bin/idea64.vmoptions
+sed -i '/--add-opens=java.base\/jdk.internal.org.objectweb.asm.tree=ALL-UNNAMED/d' /opt/intellij-idea-ultimate-edition/bin/idea64.vmoptions
+echo "
+-javaagent:/opt/jetbra/ja-netfilter.jar=jetbrains
+--add-opens=java.base/jdk.internal.org.objectweb.asm=ALL-UNNAMED
+--add-opens=java.base/jdk.internal.org.objectweb.asm.tree=ALL-UNNAMED
+" >> /opt/intellij-idea-ultimate-edition/bin/idea64.vmoptions
+
+
+# docker
+# todo nvidia
+# nvidia-ctk runtime configure --runtime=docker
+
+
+# rsync (100 Мегабит = 12500 Килобайт)
+echo $'#!/usr/bin/env bash' > /etc/NetworkManager/dispatcher.d/sync-$USERNAME-files
+echo "
+if [ x\"\$2\" = \"xup\" ] ; then
+    cp --force $USER_HOME/.ssh/known_hosts /root/.ssh/known_hosts
+    /usr/bin/rsync --rsh='/usr/bin/sshpass -f $USER_HOME/.ssh/skyserver ssh -o StrictHostKeyChecking=no -l $USERNAME' --archive --verbose --compress --delete --bwlimit=12500 --log-file=/tmp/sync-$USERNAME-files.log $USER_HOME/Видео/Домашнее/Готовые/ $USERNAME@skyserver:/sky/videos/home/release
+    /usr/bin/rsync --rsh='/usr/bin/sshpass -f $USER_HOME/.ssh/skyserver ssh -o StrictHostKeyChecking=no -l $USERNAME' --archive --verbose --compress --delete --bwlimit=12500 --log-file=/tmp/sync-$USERNAME-files.log $USER_HOME/Видео/Домашнее/Источники/ $USERNAME@skyserver:/sky/videos/home/src
+    /usr/bin/rsync --rsh='/usr/bin/sshpass -f $USER_HOME/.ssh/skyserver ssh -o StrictHostKeyChecking=no -l $USERNAME' --archive --verbose --compress --delete --bwlimit=12500 --log-file=/tmp/sync-$USERNAME-files.log $USER_HOME/Фотографии/ $USERNAME@skyserver:/sky/photos
+    /usr/bin/rsync --rsh='/usr/bin/sshpass -f $USER_HOME/.ssh/skyserver ssh -o StrictHostKeyChecking=no -l $USERNAME' --archive --verbose --compress --delete --bwlimit=12500 --log-file=/tmp/sync-$USERNAME-files.log $USER_HOME/Музыка/ $USERNAME@skyserver:/sky/music
+fi
+" >> /etc/NetworkManager/dispatcher.d/sync-$USERNAME-files
+chown -R root:root /etc/NetworkManager/dispatcher.d/sync-$USERNAME-files
+chmod +x /etc/NetworkManager/dispatcher.d/sync-$USERNAME-files
+
+
+# ignore packages update
+#пока не нужно sed -i "s|#IgnorePkg   =|IgnorePkg = linux-lts linux-lts-headers cryptopro-csp-k1 icaclient|g" /etc/pacman.conf
+
+
+# default java
+archlinux-java set java-21-openjdk
+
+
+# grub
+sed -i 's|GRUB_CMDLINE_LINUX_DEFAULT="loglevel=3 quiet"|GRUB_CMDLINE_LINUX_DEFAULT="splash quiet loglevel=3 vt.global_cursor_default=0"|g' /etc/default/grub # https://wiki.archlinux.org/title/Silent_boot_(Русский)
+sed -i "s|GRUB_TIMEOUT=5|GRUB_TIMEOUT=2|g" /etc/default/grub
+sed -i 's|#GRUB_THEME="/path/to/gfxtheme"|GRUB_THEME="/usr/share/grub/themes/skyos/theme.txt"|g' /etc/default/grub
+sed -i "s|GRUB_GFXMODE=auto|GRUB_GFXMODE=$WORKING_RESOLUTION|g" /etc/default/grub
+
+
+mkdir /sky
+
+
+
+#--------------- Настройка пользовательских приложений -------------
+cp /usr/share/applications/net.launchpad.plank.desktop $USER_HOME/.config/autostart/net.launchpad.plank.desktop
+chmod +x $USER_HOME/.config/autostart/net.launchpad.plank.desktop
+echo $'X-GNOME-Autostart-enabled=true\nHidden=false\nX-GNOME-Autostart-Delay=0' >> $USER_HOME/.config/autostart/net.launchpad.plank.desktop
+
+cp /usr/share/applications/Yandex.Disk-indicator.desktop $USER_HOME/.config/autostart/Yandex.Disk-indicator.desktop
+chmod +x $USER_HOME/.config/autostart/Yandex.Disk-indicator.desktop
+echo 'X-GNOME-Autostart-enabled=false' >> $USER_HOME/.config/autostart/Yandex.Disk-indicator.desktop
+
+cp /usr/share/applications/mailspring.desktop $USER_HOME/.config/autostart/mailspring.desktop
+chmod +x $USER_HOME/.config/autostart/mailspring.desktop
+sed -i "s|Exec=mailspring %U|Exec=mailspring --background|g" $USER_HOME/.config/autostart/mailspring.desktop
+
+cp /etc/xdg/autostart/blueman.desktop $USER_HOME/.config/autostart/blueman.desktop
+chmod +x $USER_HOME/.config/autostart/blueman.desktop
+echo 'X-GNOME-Autostart-enabled=false' >> $USER_HOME/.config/autostart/blueman.desktop
+
+
+chown -R $USERNAME:$USERNAME $USER_HOME
+
+sudo -u $USERNAME $USER_HOME/install-on-user
+
+chsh --shell /usr/bin/fish $USERNAME
+
+rm -f $USER_HOME/install-on-user
+rm -f $USER_HOME/user-prefs.dconf
+rm -rf /var/tmp/skyos
+
+
+
+#--------------- Завершение -------------------------
+systemctl enable NetworkManager
+systemctl enable qemu-guest-agent
+systemctl enable lightdm
+systemctl enable bluetooth
+systemctl enable docker
+systemctl enable nginx.service
+
+grub-install
+grub-mkconfig -o /boot/grub/grub.cfg
+
+# образ initramfs
+mkinitcpio -P

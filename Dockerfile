@@ -1,7 +1,8 @@
 FROM archlinux
 
-RUN pacman -S --refresh --sysupgrade --noconfirm --noprogressbar \
-    && pacman -S --noconfirm --noprogressbar --needed squashfs-tools dosfstools mtools arch-install-scripts xorriso
+RUN echo "Server = https://mirror.yandex.ru/archlinux/\$repo/os/\$arch" >> /etc/pacman.d/mirrorlist \
+    && pacman -S --refresh \
+    && pacman -S --quiet --noconfirm --noprogressbar --needed squashfs-tools dosfstools mtools arch-install-scripts xorriso
 
 WORKDIR /tmp/skyos-build
 
