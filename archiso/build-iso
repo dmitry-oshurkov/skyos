@@ -21,6 +21,8 @@ sed -i "s|\$USER2_PASSWD|$USER2_PASSWD|g" $INST_SYS
 sed -i "s|\$YANDEX_DISK_IID|$YANDEX_DISK_IID|g" $INST_USR
 sed -i "s|\$YANDEX_DISK_PASSWD|$YANDEX_DISK_PASSWD|g" $INST_USR
 
+mkdir -p archiso/out
+
 archiso/mkarchiso -v -w work -o archiso/out releng
 
 chmod -R a+w archiso/out

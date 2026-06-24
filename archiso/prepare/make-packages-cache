@@ -12,36 +12,36 @@ pacman-cache() {
 
 aur-cache() {
     #--------------- Временный пользователь -------------------------
-    useradd -m -s /bin/bash -G wheel aur_builder_user
+    useradd -m -s /bin/bash -G wheel auruser
     mkdir -p /etc/sudoers.d
-    echo "aur_builder_user ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/aur_builder_user && chmod 440 /etc/sudoers.d/aur_builder_user
+    echo "auruser ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/auruser && chmod 440 /etc/sudoers.d/auruser
 
     mkdir -p /targetfs/homefs/user/.cache/yay
-    mkdir -p /home/aur_builder_user/.cache/yay
-    cp -r /targetfs/homefs/user/.cache/yay/* /home/aur_builder_user/.cache/yay
-    chown -R aur_builder_user:aur_builder_user /home/aur_builder_user
+    mkdir -p /home/auruser/.cache/yay
+    cp -r /targetfs/homefs/user/.cache/yay/* /home/auruser/.cache/yay
+    chown -R auruser:auruser /home/auruser
 
     sed -i "s|debug lto)|!debug lto !autodeps)|g" /etc/makepkg.conf
     sed -i "s|-T0 -)|-T0 -9 -)|g" /etc/makepkg.conf
 
     #--------------- Установка --------------------------------------
-    if [ ! -d /home/aur_builder_user/.cache/yay/yay-bin/.git ]; then
-        sudo -u aur_builder_user bash -lc "
+    if [ ! -d /home/auruser/.cache/yay/yay-bin/.git ]; then
+        sudo -u auruser bash -lc "
           git clone --quiet https://aur.archlinux.org/yay-bin.git ~/.cache/yay/yay-bin
           cd ~/.cache/yay/yay-bin
           makepkg --syncdeps --install --noconfirm --noprogressbar"
     else
-        pacman -U --needed --noconfirm --noprogressbar /home/aur_builder_user/.cache/yay/yay-bin/yay-bin-*-x86_64.pkg.tar.zst
+        pacman -U --needed --noconfirm --noprogressbar /home/auruser/.cache/yay/yay-bin/yay-bin-*-x86_64.pkg.tar.zst
     fi
 
     mapfile -t PACKAGES_ARR < <(sed -e 's/#.*//' -e 's/[[:space:]]*$//' -e '/^[[:space:]]*$/d' /root/aur-packages.conf)
 
     for pkg in "${PACKAGES_ARR[@]}"; do
-      sudo -u aur_builder_user bash -lc "yay -S --quiet --needed --noconfirm --noprogressbar $pkg"
+      sudo -u auruser bash -lc "yay -S --quiet --needed --noconfirm --noprogressbar $pkg"
     done
 
-    if [ ! -d /home/aur_builder_user/.cache/yay/intellij-idea-ultimate-edition/.git ]; then
-        sudo -u aur_builder_user bash -lc "
+    if [ ! -d /home/auruser/.cache/yay/intellij-idea-ultimate-edition/.git ]; then
+        sudo -u auruser bash -lc "
           git clone --quiet https://aur.archlinux.org/intellij-idea-ultimate-edition.git ~/.cache/yay/intellij-idea-ultimate-edition
           cd ~/.cache/yay/intellij-idea-ultimate-edition
           sed -i 's|download.jetbrains.com|download-cdn.jetbrains.com|g' ./PKGBUILD
@@ -51,8 +51,8 @@ aur-cache() {
           makepkg --syncdeps --install --noconfirm --noprogressbar"
     fi
 
-    if [ ! -d /home/aur_builder_user/.cache/yay/gitkraken/.git ]; then
-        sudo -u aur_builder_user bash -lc "
+    if [ ! -d /home/auruser/.cache/yay/gitkraken/.git ]; then
+        sudo -u auruser bash -lc "
           git clone --quiet https://aur.archlinux.org/gitkraken.git ~/.cache/yay/gitkraken
           cd ~/.cache/yay/gitkraken
           sed -i 's|https://api.gitkraken.dev/releases/production/linux/x64/\${pkgver}/gitkraken-amd64.tar.gz|https://gitflic.ru/project/skylab/bookstore/release/aff938ee-7571-4846-b2e1-a5e528737ab6/177afc3c-54c2-4e5c-b575-88f5f5638c6f/download|g' ./PKGBUILD
@@ -69,10 +69,10 @@ aur-cache() {
           makepkg --syncdeps --install --noconfirm --noprogressbar"
     fi
 
-    rm -rf /home/aur_builder_user/.cache/yay/yandex-browser/src
-    rm -f /home/aur_builder_user/.cache/yay/gitkraken/pkg/gitkraken/opt/gitkraken/resources/app.asar.*.backup
+    rm -rf /home/auruser/.cache/yay/yandex-browser/src
+    rm -f /home/auruser/.cache/yay/gitkraken/pkg/gitkraken/opt/gitkraken/resources/app.asar.*.backup
 
-    rsync -r /home/aur_builder_user/.cache/yay/ /targetfs/homefs/user/.cache/yay/
+    rsync -r /home/auruser/.cache/yay/ /targetfs/homefs/user/.cache/yay/
 }
 
 custom() {
