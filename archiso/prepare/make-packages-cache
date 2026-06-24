@@ -21,11 +21,18 @@ aur-cache() {
     cp -r /targetfs/homefs/user/.cache/yay/* /home/aur_builder_user/.cache/yay
     chown -R aur_builder_user:aur_builder_user /home/aur_builder_user
 
+    sed -i "s|debug lto)|!debug lto !autodeps)|g" /etc/makepkg.conf
+    sed -i "s|-T0 -)|-T0 -9 -)|g" /etc/makepkg.conf
+
     #--------------- Установка --------------------------------------
-    sudo -u aur_builder_user bash -lc "
-      git clone --quiet https://aur.archlinux.org/yay-bin.git ~/.cache/yay/yay-bin
-      cd ~/.cache/yay/yay-bin
-      makepkg --syncdeps --install --noconfirm --noprogressbar"
+    if [ ! -d /home/aur_builder_user/.cache/yay/yay-bin/.git ]; then
+        sudo -u aur_builder_user bash -lc "
+          git clone --quiet https://aur.archlinux.org/yay-bin.git ~/.cache/yay/yay-bin
+          cd ~/.cache/yay/yay-bin
+          makepkg --syncdeps --install --noconfirm --noprogressbar"
+    else
+        pacman -U --needed --noconfirm --noprogressbar /home/aur_builder_user/.cache/yay/yay-bin/yay-bin-*-x86_64.pkg.tar.zst
+    fi
 
     mapfile -t PACKAGES_ARR < <(sed -e 's/#.*//' -e 's/[[:space:]]*$//' -e '/^[[:space:]]*$/d' /root/aur-packages.conf)
 
@@ -33,34 +40,37 @@ aur-cache() {
       sudo -u aur_builder_user bash -lc "yay -S --quiet --needed --noconfirm --noprogressbar $pkg"
     done
 
-    rm -rf /home/aur_builder_user/.cache/yay/**/src/
-    rm -rf /home/aur_builder_user/.cache/yay/intellij-idea-ultimate-edition
-    rm -rf /home/aur_builder_user/.cache/yay/gitkraken
+    if [ ! -d /home/aur_builder_user/.cache/yay/intellij-idea-ultimate-edition/.git ]; then
+        sudo -u aur_builder_user bash -lc "
+          git clone --quiet https://aur.archlinux.org/intellij-idea-ultimate-edition.git ~/.cache/yay/intellij-idea-ultimate-edition
+          cd ~/.cache/yay/intellij-idea-ultimate-edition
+          sed -i 's|download.jetbrains.com|download-cdn.jetbrains.com|g' ./PKGBUILD
+          git config user.name 'you@example.com'
+          git config user.email 'you@example.com'
+          git commit -a -m 'use cdn'
+          makepkg --syncdeps --install --noconfirm --noprogressbar"
+    fi
 
-    sudo -u aur_builder_user bash -lc "
-      git clone --quiet https://aur.archlinux.org/intellij-idea-ultimate-edition.git ~/.cache/yay/intellij-idea-ultimate-edition
-      cd ~/.cache/yay/intellij-idea-ultimate-edition
-      sed -i 's|download.jetbrains.com|download-cdn.jetbrains.com|g' ./PKGBUILD
-      git config user.name 'you@example.com'
-      git config user.email 'you@example.com'
-      git commit -a -m 'use cdn'
-      makepkg --syncdeps --install --noconfirm --noprogressbar"
+    if [ ! -d /home/aur_builder_user/.cache/yay/gitkraken/.git ]; then
+        sudo -u aur_builder_user bash -lc "
+          git clone --quiet https://aur.archlinux.org/gitkraken.git ~/.cache/yay/gitkraken
+          cd ~/.cache/yay/gitkraken
+          sed -i 's|https://api.gitkraken.dev/releases/production/linux/x64/\${pkgver}/gitkraken-amd64.tar.gz|https://gitflic.ru/project/skylab/bookstore/release/aff938ee-7571-4846-b2e1-a5e528737ab6/177afc3c-54c2-4e5c-b575-88f5f5638c6f/download|g' ./PKGBUILD
+          sed -i 's|\"eula.html\"|\"eula.html\"\\n\"https://gitflic.ru/project/skylab/bookstore/release/aff938ee-7571-4846-b2e1-a5e528737ab6/ab261d54-6a17-47cb-8f6f-46e6972371b5/download\"|g' ./PKGBUILD
+          sed -i \"s|'5b7b39b331bc32a606e1e79c695df4519c9b220225be00fb34ef368c3af319a6')|'5b7b39b331bc32a606e1e79c695df4519c9b220225be00fb34ef368c3af319a6'\n'SKIP')|g\" ./PKGBUILD
+          sed -i '73i cd ./gtkrn-patch' ./PKGBUILD
+          sed -i '74i sed -i \"s|/opt/gitkraken|\$pkgdir/opt/gitkraken|g\" ./src/patcher.ts' ./PKGBUILD
+          sed -i '75i yarn install' ./PKGBUILD
+          sed -i '76i yarn build' ./PKGBUILD
+          sed -i '77i node ./dist/bin/gitcracken-patcher.js' ./PKGBUILD
+          git config user.name 'you@example.com'
+          git config user.email 'you@example.com'
+          git commit -a -m 'use patch'
+          makepkg --syncdeps --install --noconfirm --noprogressbar"
+    fi
 
-    sudo -u aur_builder_user bash -lc "
-      git clone --quiet https://aur.archlinux.org/gitkraken.git ~/.cache/yay/gitkraken
-      cd ~/.cache/yay/gitkraken
-      sed -i 's|https://api.gitkraken.dev/releases/production/linux/x64/\${pkgver}/gitkraken-amd64.tar.gz|https://gitflic.ru/project/skylab/bookstore/release/aff938ee-7571-4846-b2e1-a5e528737ab6/177afc3c-54c2-4e5c-b575-88f5f5638c6f/download|g' ./PKGBUILD
-      sed -i 's|\"eula.html\"|\"eula.html\"\\n\"https://gitflic.ru/project/skylab/bookstore/release/aff938ee-7571-4846-b2e1-a5e528737ab6/ab261d54-6a17-47cb-8f6f-46e6972371b5/download\"|g' ./PKGBUILD
-      sed -i \"s|'5b7b39b331bc32a606e1e79c695df4519c9b220225be00fb34ef368c3af319a6')|'5b7b39b331bc32a606e1e79c695df4519c9b220225be00fb34ef368c3af319a6'\n'SKIP')|g\" ./PKGBUILD
-      sed -i '73i cd ./gtkrn-patch' ./PKGBUILD
-      sed -i '74i sed -i \"s|/opt/gitkraken|\$pkgdir/opt/gitkraken|g\" ./src/patcher.ts' ./PKGBUILD
-      sed -i '75i yarn install' ./PKGBUILD
-      sed -i '76i yarn build' ./PKGBUILD
-      sed -i '77i node ./dist/bin/gitcracken-patcher.js' ./PKGBUILD
-      git config user.name 'you@example.com'
-      git config user.email 'you@example.com'
-      git commit -a -m 'use patch'
-      makepkg --syncdeps --install --noconfirm --noprogressbar"
+    rm -rf /home/aur_builder_user/.cache/yay/yandex-browser/src
+    rm -f /home/aur_builder_user/.cache/yay/gitkraken/pkg/gitkraken/opt/gitkraken/resources/app.asar.*.backup
 
     rsync -r /home/aur_builder_user/.cache/yay/ /targetfs/homefs/user/.cache/yay/
 }
