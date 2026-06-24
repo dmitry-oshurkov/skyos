@@ -19,10 +19,5 @@ man/version.rst
 build-iso.env
 
 configs/releng/airootfs/targetfs/rootfs/etc/hosts
-configs/releng/airootfs/targetfs/rootfs/opt
-configs/releng/airootfs/targetfs/rootfs/usr/share/grub
-configs/releng/airootfs/targetfs/rootfs/usr/share/icons
-configs/releng/airootfs/targetfs/rootfs/usr/share/plank
-configs/releng/airootfs/targetfs/rootfs/usr/share/themes
 configs/releng/airootfs/targetfs/rootfs/var
 configs/releng/airootfs/targetfs/homefs/user/.cache/yay

@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=X-GNOME-Metatheme
+Name=Sky-Arc-Darker
+Comment=A flat theme with transparent elements
+Encoding=UTF-8
+
+[X-GNOME-Metatheme]
+GtkTheme=Sky-Arc-Darker
+MetacityTheme=Sky-Arc-Darker
+IconTheme=Adwaita
+CursorTheme=DMZ-Black
+ButtonLayout=menu:minimize,maximize,close

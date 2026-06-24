@@ -62,44 +62,16 @@ aur-cache() {
       git commit -a -m 'use patch'
       makepkg --syncdeps --install --noconfirm --noprogressbar"
 
-    rm -rf /home/aur_builder_user/.cache/yay/**/*-debug*.zst
-    rm -rf /home/aur_builder_user/.cache/yay/flacon/flacon
-    rm -rf /home/aur_builder_user/.cache/yay/newaita-reborn-icons-git/Newaita-reborn
-    rm -rf /home/aur_builder_user/.cache/yay/ocs-url/ocs-url
-    rm -rf /home/aur_builder_user/.cache/yay/ocs-url/qtil
-    rm -rf /home/aur_builder_user/.cache/yay/simplescreenrecorder/ssr
-    rm -rf /home/aur_builder_user/.cache/yay/yay-bin/pkg
-    rm -rf /home/aur_builder_user/.cache/yay/gitkraken/pkg
-    rm -rf /home/aur_builder_user/.cache/yay/gitkraken/src
-    rm -rf /home/aur_builder_user/.cache/yay/intellij-idea-ultimate-edition/pkg
-    rm -rf /home/aur_builder_user/.cache/yay/intellij-idea-ultimate-edition/src
     rsync -r /home/aur_builder_user/.cache/yay/ /targetfs/homefs/user/.cache/yay/
 }
 
 custom() {
-    rm -rf /targetfs/rootfs/opt/jetbra
     rm -rf /targetfs/rootfs/etc/hosts
     rm -rf /targetfs/rootfs/var/tmp/skyos
-    rm -rf /targetfs/rootfs/usr/share/themes
-    rm -rf /targetfs/rootfs/usr/share/plank/themes
-    rm -rf /targetfs/rootfs/usr/share/icons
-    rm -rf /targetfs/rootfs/usr/share/grub/themes
-    mkdir -p /targetfs/rootfs/opt/jetbra
     mkdir -p /targetfs/rootfs/var/tmp/skyos
-    mkdir -p /targetfs/rootfs/usr/share/themes
-    mkdir -p /targetfs/rootfs/usr/share/plank/themes
-    mkdir -p /targetfs/rootfs/usr/share/icons
-    mkdir -p /targetfs/rootfs/usr/share/grub/themes
 
-    curl -sL https://github.com/dmitry-oshurkov/files/releases/download/1/jtbr.tar.gz | tar -xz -C /targetfs/rootfs/opt
     curl -sL -o /targetfs/rootfs/etc/hosts https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts
     curl -sLO --output-dir /targetfs/rootfs/var/tmp/skyos https://open-vsx.org/api/MS-CEINTL/vscode-language-pack-ru/1.121.0/file/MS-CEINTL.vscode-language-pack-ru-1.121.0.vsix
-
-    curl -sL https://github.com/dmitry-oshurkov/sky-arc-theme/releases/download/22.1/Sky-Arc-Darker.tar.gz | tar -xz -C /targetfs/rootfs/usr/share/themes/
-    curl -sL https://github.com/dmitry-oshurkov/mint-themes/releases/download/22.1/themes.tar.gz | tar -xz -C /targetfs/rootfs/usr/share/themes/
-    curl -sL https://github.com/dmitry-oshurkov/sky-arc-theme/releases/download/22.1/Sky-Arc-Darker-Plank.tar.gz | tar -xz -C /targetfs/rootfs/usr/share/plank/themes/
-    curl -sL https://github.com/dmitry-oshurkov/files/releases/download/1/Empty-Butterfly-Yellow-vr1.tar.gz | tar -xz -C /targetfs/rootfs/usr/share/icons/
-    curl -sL https://github.com/dmitry-oshurkov/files/releases/download/1/skyos.tar.gz | tar -xz -C /targetfs/rootfs/usr/share/grub/themes
 }
 
 pacman-cache
