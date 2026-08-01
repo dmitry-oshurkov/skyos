@@ -75,6 +75,7 @@ sleep-inactive-ac-timeout=0
 sleep-inactive-battery-timeout=1800
 
 [org/cinnamon/settings-daemon/plugins/xsettings]
+buttons-have-icons=false
 menus-have-icons=true
 
 [org/cinnamon/theme]

@@ -18,7 +18,7 @@ aur-cache() {
 
     mkdir -p /targetfs/homefs/user/.cache/yay
     mkdir -p /home/auruser/.cache/yay
-    cp -r /targetfs/homefs/user/.cache/yay/* /home/auruser/.cache/yay
+    rsync -r /targetfs/homefs/user/.cache/yay/ /home/auruser/.cache/yay/
     chown -R auruser:auruser /home/auruser
 
     sed -i "s|debug lto)|!debug lto !autodeps)|g" /etc/makepkg.conf
@@ -34,12 +34,6 @@ aur-cache() {
         pacman -U --needed --noconfirm --noprogressbar /home/auruser/.cache/yay/yay-bin/yay-bin-*-x86_64.pkg.tar.zst
     fi
 
-    mapfile -t PACKAGES_ARR < <(sed -e 's/#.*//' -e 's/[[:space:]]*$//' -e '/^[[:space:]]*$/d' /root/aur-packages.conf)
-
-    for pkg in "${PACKAGES_ARR[@]}"; do
-      sudo -u auruser bash -lc "yay -S --quiet --needed --noconfirm --noprogressbar $pkg"
-    done
-
     if [ ! -d /home/auruser/.cache/yay/intellij-idea-ultimate-edition/.git ]; then
         sudo -u auruser bash -lc "
           git clone --quiet https://aur.archlinux.org/intellij-idea-ultimate-edition.git ~/.cache/yay/intellij-idea-ultimate-edition
@@ -47,15 +41,13 @@ aur-cache() {
           sed -i 's|download.jetbrains.com|download-cdn.jetbrains.com|g' ./PKGBUILD
           git config user.name 'you@example.com'
           git config user.email 'you@example.com'
-          git commit -a -m 'use cdn'
-          makepkg --syncdeps --install --noconfirm --noprogressbar"
+          git commit -a -m 'use cdn'"
     fi
 
     if [ ! -d /home/auruser/.cache/yay/gitkraken/.git ]; then
         sudo -u auruser bash -lc "
           git clone --quiet https://aur.archlinux.org/gitkraken.git ~/.cache/yay/gitkraken
           cd ~/.cache/yay/gitkraken
-          sed -i 's|https://api.gitkraken.dev/releases/production/linux/x64/\${pkgver}/gitkraken-amd64.tar.gz|https://gitflic.ru/project/skylab/bookstore/release/aff938ee-7571-4846-b2e1-a5e528737ab6/177afc3c-54c2-4e5c-b575-88f5f5638c6f/download|g' ./PKGBUILD
           sed -i 's|\"eula.html\"|\"eula.html\"\\n\"https://gitflic.ru/project/skylab/bookstore/release/aff938ee-7571-4846-b2e1-a5e528737ab6/ab261d54-6a17-47cb-8f6f-46e6972371b5/download\"|g' ./PKGBUILD
           sed -i \"s|'5b7b39b331bc32a606e1e79c695df4519c9b220225be00fb34ef368c3af319a6')|'5b7b39b331bc32a606e1e79c695df4519c9b220225be00fb34ef368c3af319a6'\n'SKIP')|g\" ./PKGBUILD
           sed -i '73i cd ./gtkrn-patch' ./PKGBUILD
@@ -65,22 +57,31 @@ aur-cache() {
           sed -i '77i node ./dist/bin/gitcracken-patcher.js' ./PKGBUILD
           git config user.name 'you@example.com'
           git config user.email 'you@example.com'
-          git commit -a -m 'use patch'
-          makepkg --syncdeps --install --noconfirm --noprogressbar"
+          git commit -a -m 'use patch'"
     fi
 
+    mapfile -t PACKAGES_ARR < <(sed -e 's/#.*//' -e 's/[[:space:]]*$//' -e '/^[[:space:]]*$/d' /root/aur-packages.conf)
+
+    for pkg in "${PACKAGES_ARR[@]}"; do
+      sudo -u auruser bash -lc "yay -S --quiet --needed --noconfirm --noprogressbar $pkg"
+    done
+
+    rm -rf /home/auruser/.cache/yay/intellij-idea-ultimate-edition/pkg
+    rm -rf /home/auruser/.cache/yay/intellij-idea-ultimate-edition/src
+    rm -rf /home/auruser/.cache/yay/qjournalctl/pkg
+    rm -rf /home/auruser/.cache/yay/qjournalctl/src
     rm -rf /home/auruser/.cache/yay/yandex-browser/src
     rm -f /home/auruser/.cache/yay/gitkraken/pkg/gitkraken/opt/gitkraken/resources/app.asar.*.backup
 
-    rsync -r /home/auruser/.cache/yay/ /targetfs/homefs/user/.cache/yay/
+    rsync --quiet --recursive /home/auruser/.cache/yay/ /targetfs/homefs/user/.cache/yay/
 }
 
 custom() {
-    rm -rf /targetfs/rootfs/etc/hosts
+    rm -f /targetfs/rootfs/etc/hosts
     rm -rf /targetfs/rootfs/var/tmp/skyos
     mkdir -p /targetfs/rootfs/var/tmp/skyos
 
-    curl -sL -o /targetfs/rootfs/etc/hosts https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts
+    curl -sL -o /targetfs/rootfs/etc/hosts https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts # check
     curl -sLO --output-dir /targetfs/rootfs/var/tmp/skyos https://open-vsx.org/api/MS-CEINTL/vscode-language-pack-ru/1.121.0/file/MS-CEINTL.vscode-language-pack-ru-1.121.0.vsix
 }
 
@@ -88,7 +89,10 @@ pacman-cache
 aur-cache
 custom
 
+rm -rf /var/cache/pacman/pkg/download*
 pacman -S --clean --noconfirm
 
 mv /var/cache/pacman/pkg/*.{zst,zst.sig} /targetfs/rootfs/var/cache/pacman/pkg
 chmod -R a+w /targetfs
+
+echo make-packages-cache completed

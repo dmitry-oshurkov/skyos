@@ -19,14 +19,27 @@ mount $EFI_PART /mnt/boot/efi
 mkdir -p /mnt/home
 mount $HOME_PART /mnt/home
 
+# Переместить ВСЕ каталоги из /mnt/home в /mnt/home/old
+mkdir -p /mnt/home/old-tmp
+shopt -s nullglob
+for d in /mnt/home/*/; do
+  base="$(basename "${d%/}")"
+  [ $d = /mnt/home/old-tmp/ ] && continue
+  [ $d = /mnt/home/lost+found/ ] && continue
+  mv $d /mnt/home/old-tmp/$base
+done
+mv /mnt/home/old-tmp /mnt/home/old
+
 tune2fs -m 1 $ROOT_PART # 1% reserved space on /
 tune2fs -m 0 $HOME_PART #remove root reserved space on /home
 
 
 #--------------- Установка системы -------------------------
+sed -i "s|Server = |#Server = |g" /etc/pacman.d/mirrorlist
 echo 'Server = https://mirror.yandex.ru/archlinux/$repo/os/$arch' >> /etc/pacman.d/mirrorlist
 pacman -S --refresh
 
+echo -e "\e[96mПеремещение файлов.\e[0m"
 mv /targetfs/rootfs/* /mnt/
 mv /targetfs/homefs/* /mnt/home
 
@@ -36,10 +49,9 @@ pacstrap -K /mnt $PACKAGES
 
 #--------------- Настройка разделов -----------------------
 genfstab -U /mnt > /mnt/etc/fstab
-sed -i '/\/.swap/d' /mnt/etc/fstab
-sed -i '/skyserver:\/public/d' /mnt/etc/fstab
+echo "tmpfs                                     /tmp           tmpfs   defaults,noatime,mode=1777 0 0" >> /mnt/etc/fstab
 echo "/.swap                                    none           swap    defaults,discard 0 0" >> /mnt/etc/fstab
-echo "skyserver:/sky                            /sky           nfs     nofail,retry=1,timeo=20,_netdev,noatime,bg   0 0" >> /mnt/etc/fstab
+echo "skyserver:/sky                            /sky           nfs     soft,intr,timeo=10,retry=3,_netdev,noatime,bg   0 0" >> /mnt/etc/fstab
 
 fallocate -l 7629M /mnt/.swap # 8 GB = 7629 MiB
 chmod 600 /mnt/.swap

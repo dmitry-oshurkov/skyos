@@ -25,7 +25,10 @@ mkdir $HOME/yandex.disk
 mkdir $HOME/mega.sync
 mkdir $HOME/projects
 mkdir $HOME/skylab
-rm -rf $HOME/Общедоступные
+mkdir $HOME/Загрузки
+mkdir $HOME/Шаблоны
+mkdir $HOME/Музыка
+mkdir $HOME/Видео
 
 sed -i "s|\$HOME|$HOME|g" $HOME/.config/gtk-3.0/bookmarks
 sed -i "s|\$HOME|$HOME|g" $HOME/.config/smplayer/smplayer.ini

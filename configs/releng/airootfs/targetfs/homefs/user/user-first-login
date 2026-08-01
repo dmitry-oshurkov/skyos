@@ -95,6 +95,9 @@ useragent=AnyConnect,
 xmlconfig-flags=0"
 
 
+echo "SETUVAR fish_greeting:\x1d" >> $HOME/.config/fish/fish_variables
+
+
 rm -f $HOME/.config/autostart/user-first-login.desktop
 rm -f $HOME/user-first-login
 

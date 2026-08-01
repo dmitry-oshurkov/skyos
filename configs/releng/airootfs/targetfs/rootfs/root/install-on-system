@@ -13,9 +13,6 @@ locale-gen
 # hostname
 echo $HOSTNAME > /etc/hostname
 cat >> /etc/hosts <<HOSTS
-127.0.0.1   localhost
-::1         localhost
-127.0.1.1   $HOSTNAME.localdomain $HOSTNAME
 
 # Local
 192.168.15.1         skyrouter
@@ -43,6 +40,8 @@ echo '%wheel ALL=(ALL) ALL' | EDITOR='tee -a' /usr/bin/visudo
 useradd --create-home --user-group $USER2NAME
 echo "$USER2NAME:$USER2_PASSWD" | chpasswd
 
+
+echo -e "\e[96mСинхронизация пользовательских файлов.\e[0m"
 
 rsync -r /home/user/ $USER_HOME/
 rm -rf /home/user
@@ -103,6 +102,8 @@ chown -R root:root /etc/NetworkManager/dispatcher.d/sync-$USERNAME-files
 chmod +x /etc/NetworkManager/dispatcher.d/sync-$USERNAME-files
 
 
+# pacman
+sed -i 's|#Color|Color\nILoveCandy|g' /etc/pacman.conf
 # ignore packages update
 #пока не нужно sed -i "s|#IgnorePkg   =|IgnorePkg = linux-lts linux-lts-headers cryptopro-csp-k1 icaclient|g" /etc/pacman.conf
 

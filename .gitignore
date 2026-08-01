@@ -20,4 +20,4 @@ build-iso.env
 
 configs/releng/airootfs/targetfs/rootfs/etc/hosts
 configs/releng/airootfs/targetfs/rootfs/var
-configs/releng/airootfs/targetfs/homefs/user/.cache/yay
+configs/releng/airootfs/targetfs/homefs/user/.cache/yay*
