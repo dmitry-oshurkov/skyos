@@ -105,7 +105,7 @@ chmod +x /etc/NetworkManager/dispatcher.d/sync-$USERNAME-files
 # pacman
 sed -i 's|#Color|Color\nILoveCandy|g' /etc/pacman.conf
 # ignore packages update
-sed -i "s|#IgnorePkg   =|IgnorePkg = cryptopro-csp-k1|g" /etc/pacman.conf
+sed -i "s|#IgnorePkg   =|IgnorePkg = cryptopro-csp-k1 icaclient|g" /etc/pacman.conf
 
 
 # default java

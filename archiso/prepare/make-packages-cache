@@ -74,6 +74,16 @@ aur-cache() {
       git config user.email 'you@example.com'
       git commit -a -m 'use fix'"
 
+    rm -rf /home/auruser/.cache/yay/icaclient
+    sudo -u auruser bash -lc "
+      git clone --quiet https://aur.archlinux.org/icaclient.git ~/.cache/yay/icaclient
+      cd ~/.cache/yay/icaclient
+      sed -i 's|^pkgver=.*|pkgver=26.04.0.105|g' ./PKGBUILD
+      sed -i 's|\$_source64|file:///tmp/bin/linuxx64-gcc-8-26.04.0.105.tar.gz|g' ./PKGBUILD
+      git config user.name 'you@example.com'
+      git config user.email 'you@example.com'
+      git commit -a -m 'use fix'"
+
     mapfile -t PACKAGES_ARR < <(sed -e 's/#.*//' -e 's/[[:space:]]*$//' -e '/^[[:space:]]*$/d' /root/aur-packages.conf)
 
     for pkg in "${PACKAGES_ARR[@]}"; do
