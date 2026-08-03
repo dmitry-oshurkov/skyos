@@ -11,6 +11,8 @@ pacman-cache() {
 }
 
 aur-cache() {
+    mv /root/bin /tmp
+
     #--------------- Временный пользователь -------------------------
     useradd -m -s /bin/bash -G wheel auruser
     mkdir -p /etc/sudoers.d
@@ -60,12 +62,26 @@ aur-cache() {
           git commit -a -m 'use patch'"
     fi
 
+    rm -rf /home/auruser/.cache/yay/cryptopro-csp-k1
+    sudo -u auruser bash -lc "
+      git clone --quiet https://aur.archlinux.org/cryptopro-csp-k1.git ~/.cache/yay/cryptopro-csp-k1
+      cd ~/.cache/yay/cryptopro-csp-k1
+      sed -i 's|^pkgver=.*|pkgver=5.0.13000|g' ./PKGBUILD
+      sed -i 's|^_cades_version=.*|_cades_version=\"2.0.15000-1\"|g' ./PKGBUILD
+      sed -i 's|7812c70bee0cf88328d689d78d769bca945779b9979369fb120adb7833f428f5|SKIP|g' ./PKGBUILD
+      sed -i 's|local://linux-amd64.tgz|file:///tmp/bin/linux-amd64.tgz|g' ./PKGBUILD
+      git config user.name 'you@example.com'
+      git config user.email 'you@example.com'
+      git commit -a -m 'use fix'"
+
     mapfile -t PACKAGES_ARR < <(sed -e 's/#.*//' -e 's/[[:space:]]*$//' -e '/^[[:space:]]*$/d' /root/aur-packages.conf)
 
     for pkg in "${PACKAGES_ARR[@]}"; do
       sudo -u auruser bash -lc "yay -S --quiet --needed --noconfirm --noprogressbar $pkg"
     done
 
+    rm -rf /home/auruser/.cache/yay/cryptopro-csp-k1/pkg
+    rm -rf /home/auruser/.cache/yay/cryptopro-csp-k1/src
     rm -rf /home/auruser/.cache/yay/intellij-idea-ultimate-edition/pkg
     rm -rf /home/auruser/.cache/yay/intellij-idea-ultimate-edition/src
     rm -rf /home/auruser/.cache/yay/qjournalctl/pkg

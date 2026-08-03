@@ -18,6 +18,7 @@ man/version.rst
 *.iml
 build-iso.env
 
+archiso/prepare/bin
 configs/releng/airootfs/targetfs/rootfs/etc/hosts
 configs/releng/airootfs/targetfs/rootfs/var
 configs/releng/airootfs/targetfs/homefs/user/.cache/yay*
