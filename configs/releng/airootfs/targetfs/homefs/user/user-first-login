@@ -14,7 +14,7 @@ sed -i '336s|425|625|g' $HOME/.config/cinnamon/spices/menu@cinnamon.org/0.json #
 sed -i 's|"value": "visual"|"value": "buttons"|g' $HOME/.config/cinnamon/spices/workspace-switcher@cinnamon.org/17.json
 sed -i '14d' $HOME/.config/cinnamon/spices/panel-launchers@cinnamon.org/13.json
 sed -i '14d' $HOME/.config/cinnamon/spices/panel-launchers@cinnamon.org/13.json
-sed -i '14s|"nemo.desktop"|"org.gnome.SystemMonitor.desktop",\n"org.gnome.Terminal.desktop",\n"org.gnome.Calculator.desktop",\n"org.gnome.Screenshot.desktop",\n"deluge.desktop",\n"org.gnome.meld.desktop",\n"postman.desktop",\n"bitwarden.desktop",\n"codium.desktop",\n"video-collector-client.desktop"|g' $HOME/.config/cinnamon/spices/panel-launchers@cinnamon.org/13.json
+sed -i '14s|"nemo.desktop"|"org.gnome.SystemMonitor.desktop",\n"org.gnome.Terminal.desktop",\n"org.gnome.Calculator.desktop",\n"org.gnome.Screenshot.desktop",\n"deluge.desktop",\n"org.gnome.meld.desktop",\n"postman.desktop",\n"bitwarden.desktop",\n"codium.desktop",\n"video-collector-client.desktop",\n"citrix-desktop-launcher.desktop"|g' $HOME/.config/cinnamon/spices/panel-launchers@cinnamon.org/13.json
 
 echo '{"width":{"type":"scale","default":10,"min":2,"max":400,"step":1,"value":7},"__md5__":"ce7d0d70f40859fec53e8c70cde93a17"}
 ' > $HOME/.config/cinnamon/spices/spacer@cinnamon.org/23.json

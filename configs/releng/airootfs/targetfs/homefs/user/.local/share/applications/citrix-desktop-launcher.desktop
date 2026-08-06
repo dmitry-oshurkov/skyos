@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Запуск стола Citrix
+Exec=java -jar /usr/bin/citrix-desktop-launcher.jar https://ng-mob2.gazprombank.ru/ https://GPB_USERNAME:GPB_PASSWD@mob22.gazprombank.ru/Citrix/XAXDWeb/
+Comment=
+Terminal=false
+PrefersNonDefaultGPU=false
+Icon=/opt/Citrix/ICAClient/icons/manager.png
+Type=Application
+Categories=RemoteAndVMs
