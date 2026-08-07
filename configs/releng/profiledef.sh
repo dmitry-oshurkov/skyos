@@ -29,4 +29,5 @@ file_permissions=(
   ["/targetfs/rootfs/usr/share/nemo/actions/set-zoom-level"]="0:0:755"
   ["/targetfs/homefs/user/.config/autostart/vscodium-backups.desktop"]="0:0:755"
   ["/targetfs/homefs/user/.local/share/applications/citrix-desktop-launcher.desktop"]="0:0:755"
+  ["/targetfs/homefs/user/ngate-client-installer-lin-offline-1.0.30-106-g5537bcb-x64"]="0:0:755"
 )

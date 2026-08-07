@@ -98,6 +98,10 @@ xmlconfig-flags=0"
 echo "SETUVAR fish_greeting:\x1d" >> $HOME/.config/fish/fish_variables
 
 
+$HOME/ngate-client-installer-lin-offline-1.0.30-106-g5537bcb-x64
+rm -f $HOME/ngate-client-installer-lin-offline-1.0.30-106-g5537bcb-x64
+
+
 rm -f $HOME/.config/autostart/user-first-login.desktop
 rm -f $HOME/user-first-login
 

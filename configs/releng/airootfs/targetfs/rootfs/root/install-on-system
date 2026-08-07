@@ -82,6 +82,11 @@ echo "
 " >> /opt/intellij-idea-ultimate-edition/bin/idea64.vmoptions
 
 
+# ica client
+/opt/cprocsp/bin/amd64/certmgr -install -store mRoot -file "/etc/ca-certificates/trust-source/anchors/GOST root 2024 UC GPB.cer"
+update-ca-trust
+
+
 # docker
 # todo nvidia
 # nvidia-ctk runtime configure --runtime=docker
