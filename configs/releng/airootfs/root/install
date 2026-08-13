@@ -8,18 +8,30 @@ echo -e "\e[96mНачало установки.\e[0m"
 
 
 #--------------- Подготовка разделов ----------------
+mkfs.btrfs -f $ROOT_PART
+mount --mkdir -o subvolid=5 $ROOT_PART /mnt/btrfs-top
+btrfs subvolume create /mnt/btrfs-top/@
+btrfs subvolume create /mnt/btrfs-top/@swap
+btrfs subvolume create /mnt/btrfs-top/@var
+umount /mnt/btrfs-top
+rmdir /mnt/btrfs-top
+mount -o subvol=@,compress=zstd,noatime $ROOT_PART /mnt
+
+mount --mkdir -o subvol=@swap,compress=no,noatime $ROOT_PART /mnt/.swap
+btrfs filesystem mkswapfile --size 7629m --uuid clear /mnt/.swap/swapfile # 8 GB = 7629 MiB
+mkswap /mnt/.swap/swapfile
+swapon /mnt/.swap/swapfile
+
+mount --mkdir -o subvol=@var,compress=zstd,noatime $ROOT_PART /mnt/var
+chattr +C /mnt/var # disable Copy-on-Write for /var; lsattr -d /var
+
 mkfs.fat -F 16 $EFI_PART
-mkfs.ext4 -F $ROOT_PART
+mount --mkdir $EFI_PART /mnt/boot/efi
 
-mount $ROOT_PART /mnt
+mount --mkdir $HOME_PART /mnt/home
+tune2fs -m 0 $HOME_PART #remove root reserved space on /home
 
-mkdir -p /mnt/boot/efi
-mount $EFI_PART /mnt/boot/efi
-
-mkdir -p /mnt/home
-mount $HOME_PART /mnt/home
-
-# Переместить ВСЕ каталоги из /mnt/home в /mnt/home/old
+# Переместить каталоги из /mnt/home в /mnt/home/old
 mkdir -p /mnt/home/old-tmp
 shopt -s nullglob
 for d in /mnt/home/*/; do
@@ -30,9 +42,6 @@ for d in /mnt/home/*/; do
 done
 mv /mnt/home/old-tmp /mnt/home/old
 
-tune2fs -m 1 $ROOT_PART # 1% reserved space on /
-tune2fs -m 0 $HOME_PART #remove root reserved space on /home
-
 
 #--------------- Установка системы -------------------------
 sed -i "s|Server = |#Server = |g" /etc/pacman.d/mirrorlist
@@ -40,7 +49,11 @@ echo 'Server = https://mirror.yandex.ru/archlinux/$repo/os/$arch' >> /etc/pacman
 pacman -S --refresh
 
 echo -e "\e[96mПеремещение файлов.\e[0m"
-mv /targetfs/rootfs/* /mnt/
+mv /targetfs/rootfs/etc /mnt/
+mv /targetfs/rootfs/opt /mnt/
+mv /targetfs/rootfs/root /mnt/
+mv /targetfs/rootfs/usr /mnt/
+mv /targetfs/rootfs/var/* /mnt/var
 mv /targetfs/homefs/* /mnt/home
 
 PACKAGES=$(sed 's/#.*//' /root/pacman-packages.conf | sed '/^[[:space:]]*$/d' | xargs)
@@ -50,12 +63,7 @@ pacstrap -K /mnt $PACKAGES
 #--------------- Настройка разделов -----------------------
 genfstab -U /mnt > /mnt/etc/fstab
 echo "tmpfs                                     /tmp           tmpfs   defaults,noatime,mode=1777 0 0" >> /mnt/etc/fstab
-echo "/.swap                                    none           swap    defaults,discard 0 0" >> /mnt/etc/fstab
 echo "skyserver:/sky                            /sky           nfs     soft,intr,timeo=10,retry=3,_netdev,noatime,bg   0 0" >> /mnt/etc/fstab
-
-fallocate -l 7629M /mnt/.swap # 8 GB = 7629 MiB
-chmod 600 /mnt/.swap
-mkswap /mnt/.swap
 
 
 #--------------- Настройка системы -------------------------
@@ -66,8 +74,9 @@ rm -f /mnt/root/install-on-system
 
 
 #--------------- Завершение --------------------------------
+swapoff /mnt/.swap/swapfile
 umount -R /mnt/boot/efi
 umount -R /mnt/home
 umount -R /mnt
 
-echo "Установка завершена. Перезагрузите систему."
+echo -e "\e[96mУстановка завершена. Перезагрузите систему.\e[0m"
