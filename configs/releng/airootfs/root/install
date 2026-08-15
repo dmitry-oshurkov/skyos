@@ -46,7 +46,6 @@ mv /mnt/home/old-tmp /mnt/home/old
 #--------------- Установка системы -------------------------
 sed -i "s|Server = |#Server = |g" /etc/pacman.d/mirrorlist
 echo 'Server = https://mirror.yandex.ru/archlinux/$repo/os/$arch' >> /etc/pacman.d/mirrorlist
-pacman -S --refresh
 
 echo -e "\e[96mПеремещение файлов.\e[0m"
 mv /targetfs/rootfs/etc /mnt/
