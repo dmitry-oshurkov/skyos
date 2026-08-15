@@ -1,0 +1,8 @@
+[Plymouth Theme]
+Name=Sky
+Description=Sky theme.
+ModuleName=script
+
+[script]
+ImageDir=/usr/share/plymouth/themes/sky
+ScriptFile=/usr/share/plymouth/themes/sky/sky.script
