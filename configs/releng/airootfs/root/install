@@ -8,6 +8,7 @@ echo -e "\e[96mНачало установки.\e[0m"
 
 
 #--------------- Подготовка разделов ----------------
+wipefs -a $ROOT_PART
 mkfs.btrfs -f $ROOT_PART
 mount --mkdir -o subvolid=5 $ROOT_PART /mnt/btrfs-top
 btrfs subvolume create /mnt/btrfs-top/@

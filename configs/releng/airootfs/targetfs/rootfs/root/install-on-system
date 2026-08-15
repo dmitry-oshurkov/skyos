@@ -9,6 +9,8 @@ ln -sf /usr/share/zoneinfo/$TIMEZONE /etc/localtime
 hwclock --systohc
 
 locale-gen
+LANG=ru_RU.UTF-8
+LC_ALL=ru_RU.UTF-8
 
 # hostname
 echo $HOSTNAME > /etc/hostname
@@ -118,8 +120,10 @@ archlinux-java set java-21-openjdk
 
 
 # grub
+sed -i "s|GRUB_DISTRIBUTOR=\"Arch\"|GRUB_DISTRIBUTOR=\"SkyOS\"|g" /etc/default/grub
 sed -i 's|GRUB_CMDLINE_LINUX_DEFAULT="loglevel=3 quiet"|GRUB_CMDLINE_LINUX_DEFAULT="splash quiet loglevel=3 vt.global_cursor_default=0"|g' /etc/default/grub # https://wiki.archlinux.org/title/Silent_boot_(Русский)
 sed -i "s|GRUB_TIMEOUT=5|GRUB_TIMEOUT=2|g" /etc/default/grub
+sed -i "s|GRUB_DISABLE_RECOVERY|#GRUB_DISABLE_RECOVERY|g" /etc/default/grub
 sed -i 's|#GRUB_THEME="/path/to/gfxtheme"|GRUB_THEME="/usr/share/grub/themes/skyos/theme.txt"|g' /etc/default/grub
 sed -i "s|GRUB_GFXMODE=auto|GRUB_GFXMODE=$WORKING_RESOLUTION|g" /etc/default/grub
 

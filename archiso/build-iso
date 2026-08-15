@@ -2,24 +2,20 @@
 
 source archiso/build-iso.env
 
-INST=releng/airootfs/root/install
-INST_SYS=releng/airootfs/targetfs/rootfs/root/install-on-system
-INST_USR=releng/airootfs/targetfs/homefs/user/install-on-user
+sed -i "s|\$EFI_PART|$EFI_PART|g" releng/airootfs/root/install
+sed -i "s|\$ROOT_PART|$ROOT_PART|g" releng/airootfs/root/install
+sed -i "s|\$HOME_PART|$HOME_PART|g" releng/airootfs/root/install
 
-sed -i "s|\$EFI_PART|$EFI_PART|g" $INST
-sed -i "s|\$ROOT_PART|$ROOT_PART|g" $INST
-sed -i "s|\$HOME_PART|$HOME_PART|g" $INST
+sed -i "s|\$WORKING_RESOLUTION|$WORKING_RESOLUTION|g" releng/airootfs/targetfs/rootfs/root/install-on-system
+sed -i "s|\$TIMEZONE|$TIMEZONE|g" releng/airootfs/targetfs/rootfs/root/install-on-system
+sed -i "s|\$HOSTNAME|$HOSTNAME|g" releng/airootfs/targetfs/rootfs/root/install-on-system
+sed -i "s|\$USERNAME|$USERNAME|g" releng/airootfs/targetfs/rootfs/root/install-on-system
+sed -i "s|\$USER_PASSWD|$USER_PASSWD|g" releng/airootfs/targetfs/rootfs/root/install-on-system
+sed -i "s|\$USER2NAME|$USER2NAME|g" releng/airootfs/targetfs/rootfs/root/install-on-system
+sed -i "s|\$USER2_PASSWD|$USER2_PASSWD|g" releng/airootfs/targetfs/rootfs/root/install-on-system
 
-sed -i "s|\$WORKING_RESOLUTION|$WORKING_RESOLUTION|g" $INST_SYS
-sed -i "s|\$TIMEZONE|$TIMEZONE|g" $INST_SYS
-sed -i "s|\$HOSTNAME|$HOSTNAME|g" $INST_SYS
-sed -i "s|\$USERNAME|$USERNAME|g" $INST_SYS
-sed -i "s|\$USER_PASSWD|$USER_PASSWD|g" $INST_SYS
-sed -i "s|\$USER2NAME|$USER2NAME|g" $INST_SYS
-sed -i "s|\$USER2_PASSWD|$USER2_PASSWD|g" $INST_SYS
-
-sed -i "s|\$YANDEX_DISK_IID|$YANDEX_DISK_IID|g" $INST_USR
-sed -i "s|\$YANDEX_DISK_PASSWD|$YANDEX_DISK_PASSWD|g" $INST_USR
+sed -i "s|\$YANDEX_DISK_IID|$YANDEX_DISK_IID|g" releng/airootfs/targetfs/homefs/user/install-on-user
+sed -i "s|\$YANDEX_DISK_PASSWD|$YANDEX_DISK_PASSWD|g" releng/airootfs/targetfs/homefs/user/install-on-user
 
 sed -i "s|GPB_USERNAME|$GPB_USERNAME|g" releng/airootfs/targetfs/homefs/user/.local/share/applications/citrix-desktop-launcher.desktop
 sed -i "s|GPB_PASSWD|$GPB_PASSWD|g" releng/airootfs/targetfs/homefs/user/.local/share/applications/citrix-desktop-launcher.desktop
