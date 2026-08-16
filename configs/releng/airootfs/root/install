@@ -4,6 +4,18 @@ loadkeys ru
 setfont cyr-sun16
 timedatectl set-ntp true
 
+dialog \
+    --title "Установка SkyOS" \
+    --yes-label "Да" \
+    --no-label "Нет" \
+    --default-button "yes" \
+    --erase-on-exit \
+    --yesno "Устанавливается SkyOS:\n
+    - в раздел $ROOT_PART (будет отформатирован)\n
+    - хост $HOSTNAME\n
+    - пользователь $USERNAME\n\nПродолжить выполнение?" 10 60 \
+|| exit 0
+
 echo -e "\e[96mНачало установки.\e[0m"
 
 

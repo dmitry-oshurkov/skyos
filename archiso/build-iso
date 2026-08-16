@@ -5,6 +5,8 @@ source archiso/build-iso.env
 sed -i "s|\$EFI_PART|$EFI_PART|g" releng/airootfs/root/install
 sed -i "s|\$ROOT_PART|$ROOT_PART|g" releng/airootfs/root/install
 sed -i "s|\$HOME_PART|$HOME_PART|g" releng/airootfs/root/install
+sed -i "s|\$HOSTNAME|$HOSTNAME|g" releng/airootfs/root/install
+sed -i "s|\$USERNAME|$USERNAME|g" releng/airootfs/root/install
 
 sed -i "s|\$WORKING_RESOLUTION|$WORKING_RESOLUTION|g" releng/airootfs/targetfs/rootfs/root/install-on-system
 sed -i "s|\$TIMEZONE|$TIMEZONE|g" releng/airootfs/targetfs/rootfs/root/install-on-system
