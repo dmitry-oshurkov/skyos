@@ -1,0 +1,16 @@
+[user]
+	email = os.d.m@ya.ru
+	name = Dmitry Oshurkov
+	signingKey = 
+[gpg]
+	program = gpg
+	format = openpgp
+[commit]
+	gpgSign = false
+[tag]
+	forceSignAnnotated = false
+[gpg "ssh"]
+	program = 
+	allowedSignersFile = 
+[core]
+	autocrlf = input

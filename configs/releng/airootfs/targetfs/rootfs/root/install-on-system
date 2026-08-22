@@ -177,3 +177,5 @@ grub-mkconfig -o /boot/grub/grub.cfg
 
 # образ initramfs
 mkinitcpio -P
+
+timeshift --create --comments "После установки системы"

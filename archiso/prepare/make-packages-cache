@@ -121,4 +121,6 @@ pacman -S --clean --noconfirm
 mv /var/cache/pacman/pkg/*.{zst,zst.sig} /targetfs/rootfs/var/cache/pacman/pkg
 chmod -R a+w /targetfs
 
-echo make-packages-cache completed
+echo
+echo
+echo make-packages-cache COMPLETED
