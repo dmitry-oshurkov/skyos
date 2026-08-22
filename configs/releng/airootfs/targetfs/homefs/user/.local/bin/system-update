@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+echo "Создание снимка Timeshift..."
+
+if sudo timeshift --create --comments "Перед обновлением системы"; then
+
+    echo "Снимок успешно создан."
+    echo "Запуск обновления yay..."
+
+    yay
+
+    status=$?
+
+    if [ "$status" -eq 0 ]; then
+        echo "Обновление завершено успешно."
+    else
+        echo "yay завершился с ошибкой."
+    fi
+
+else
+    echo "Ошибка: снимок Timeshift не создан."
+    echo "Обновление отменено."
+    read -r -p "Нажмите Enter для выхода..."
+    exit 1
+fi
+
+echo
+read -r -p "Нажмите Enter для выхода..."
+exit "$status"

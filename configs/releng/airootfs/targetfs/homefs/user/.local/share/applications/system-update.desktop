@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Обновление системы
+Comment=Создать снимок Timeshift и обновить систему через yay
+Exec=gnome-terminal -e /home/USERNAME/.local/bin/system-update
+Icon=system-software-update
+Terminal=false
+Categories=System;Settings;
