@@ -49,16 +49,16 @@ aur-cache() {
         sudo -u auruser bash -lc "
           git clone --quiet https://aur.archlinux.org/gitkraken.git ~/.cache/yay/gitkraken
           cd ~/.cache/yay/gitkraken
-          sed -i 's|\"eula.html\"|\"eula.html\"\\n\"https://gitflic.ru/project/skylab/bookstore/release/aff938ee-7571-4846-b2e1-a5e528737ab6/ab261d54-6a17-47cb-8f6f-46e6972371b5/download\"|g' ./PKGBUILD
+          git checkout 485ef10ce681fb05296bbad2b5aa2dc6a6594d4d # 12.4.0
+          sed -i 's|https://api.gitkraken.dev/releases/production/linux/x64/\${pkgver}|file:///tmp/bin|g' ./PKGBUILD
+          sed -i 's|\"eula.html\"|\"eula.html\"\\n\"file:///tmp/bin/gtkrn-patch.tar.gz\"|g' ./PKGBUILD
           sed -i \"s|'5b7b39b331bc32a606e1e79c695df4519c9b220225be00fb34ef368c3af319a6')|'5b7b39b331bc32a606e1e79c695df4519c9b220225be00fb34ef368c3af319a6'\n'SKIP')|g\" ./PKGBUILD
           sed -i '73i cd ./gtkrn-patch' ./PKGBUILD
           sed -i '74i sed -i \"s|/opt/gitkraken|\$pkgdir/opt/gitkraken|g\" ./src/patcher.ts' ./PKGBUILD
           sed -i '75i yarn install' ./PKGBUILD
           sed -i '76i yarn build' ./PKGBUILD
           sed -i '77i node ./dist/bin/gitcracken-patcher.js' ./PKGBUILD
-          git config user.name 'you@example.com'
-          git config user.email 'you@example.com'
-          git commit -a -m 'use patch'"
+          makepkg --syncdeps --install --noconfirm --noprogressbar"
     fi
 
     rm -rf /home/auruser/.cache/yay/cryptopro-csp-k1
@@ -86,7 +86,7 @@ aur-cache() {
     mapfile -t PACKAGES_ARR < <(sed -e 's/#.*//' -e 's/[[:space:]]*$//' -e '/^[[:space:]]*$/d' /root/aur-packages.conf)
 
     for pkg in "${PACKAGES_ARR[@]}"; do
-        [[ "$pkg" == "intellij-idea-ultimate-edition" ]] && continue
+        [[ "$pkg" == "intellij-idea-ultimate-edition" || "$pkg" == "gitkraken" ]] && continue
         sudo -u auruser bash -lc "yay -S --quiet --needed --noconfirm --noprogressbar $pkg"
     done
 
@@ -97,7 +97,8 @@ aur-cache() {
     rm -rf /home/auruser/.cache/yay/qjournalctl/pkg
     rm -rf /home/auruser/.cache/yay/qjournalctl/src
     rm -rf /home/auruser/.cache/yay/yandex-browser/src
-    rm -f /home/auruser/.cache/yay/gitkraken/pkg/gitkraken/opt/gitkraken/resources/app.asar.*.backup
+    rm -rf /home/auruser/.cache/yay/gitkraken/pkg
+    rm -rf /home/auruser/.cache/yay/gitkraken/src
 
     rsync --quiet --recursive /home/auruser/.cache/yay/ /targetfs/homefs/user/.cache/yay/
 }
