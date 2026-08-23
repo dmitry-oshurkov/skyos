@@ -24,6 +24,12 @@ sed -i "s|USERNAME|$USERNAME|g" releng/airootfs/targetfs/homefs/user/.local/shar
 sed -i "s|GPB_USERNAME|$GPB_USERNAME|g" releng/airootfs/targetfs/homefs/user/.local/share/applications/citrix-desktop-launcher.desktop
 sed -i "s|GPB_PASSWD|$GPB_PASSWD|g" releng/airootfs/targetfs/homefs/user/.local/share/applications/citrix-desktop-launcher.desktop
 
+# находит подкаталоги первого уровня внутри yay, и в каждом удаляет все непосредственные подкаталоги, кроме .git
+find releng/airootfs/targetfs/homefs/user/.cache/yay -mindepth 1 -maxdepth 1 -type d -print0 | while IFS= read -r -d '' d; do find "$d" -mindepth 1 -maxdepth 1 -type d ! -name .git -exec rm -rf -- {} +; done
+
+mkdir -p work/iso
+echo "Сборка: $(date)" > work/iso/SkyOS-build-$(date +%F)
+
 mkdir -p archiso/out
 
 archiso/mkarchiso -v -w work -o archiso/out releng

@@ -1,3 +1,4 @@
 **/targetfs/rootfs/opt
 **/targetfs/rootfs/usr
 **/targetfs/rootfs/var
+*.iso

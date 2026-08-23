@@ -10,13 +10,14 @@ dialog \
     --no-label "Нет" \
     --default-button "yes" \
     --erase-on-exit \
+    --colors \
     --yesno "Устанавливается SkyOS:\n
-    - в раздел $ROOT_PART (будет отформатирован)\n
-    - хост $HOSTNAME\n
-    - пользователь $USERNAME\n\nПродолжить выполнение?" 10 60 \
+    - в раздел \Z1$ROOT_PART\Zn (будет отформатирован)\n
+    - хост \Z1$HOSTNAME\Zn\n
+    - пользователь \Z1$USERNAME\Zn\n\nПродолжить выполнение?" 10 60 \
 || exit 0
 
-echo -e "\e[96mНачало установки.\e[0m"
+echo -e "\e[92mНачало установки.\e[0m"
 
 
 #--------------- Подготовка разделов ----------------
@@ -57,10 +58,7 @@ mv /mnt/home/old-tmp /mnt/home/old
 
 
 #--------------- Установка системы -------------------------
-sed -i "s|Server = |#Server = |g" /etc/pacman.d/mirrorlist
-echo 'Server = https://mirror.yandex.ru/archlinux/$repo/os/$arch' >> /etc/pacman.d/mirrorlist
-
-echo -e "\e[96mПеремещение файлов.\e[0m"
+echo -e "\e[92mПеремещение файлов.\e[0m"
 mv /targetfs/rootfs/etc /mnt/
 mv /targetfs/rootfs/opt /mnt/
 mv /targetfs/rootfs/root /mnt/
@@ -91,4 +89,4 @@ umount -R /mnt/boot/efi
 umount -R /mnt/home
 umount -R /mnt
 
-echo -e "\e[96mУстановка завершена. Перезагрузите систему.\e[0m"
+echo -e "\e[92mУстановка завершена. Перезагрузите систему.\e[0m"

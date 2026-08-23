@@ -45,6 +45,10 @@ gsettings set net.launchpad.plank.dock.settings:/net/launchpad/plank/docks/dock1
 plank &
 
 
+# bash prompt
+sed -i 's|^PS1=.*|PS1='\''\\[\\033[01;32m\\]\\u@\\h\\[\\033[00m\\]:\\[\\033[01;34m\\]\\w\\[\\033[00m\\]\\$ '\''|' $HOME/.bashrc
+
+
 # folders icons
 gio set $HOME/Фотографии metadata::custom-icon file:///usr/share/icons/Newaita-reborn-pop-os-dark/places/64/folder-photos.svg
 gio set "$HOME/Семейные древа" metadata::custom-icon file:///usr/share/icons/Newaita-reborn-pop-os-dark/places/64/folder-activities.svg

@@ -1,13 +1,16 @@
 #!/usr/bin/env bash
 
 pacman-cache() {
+    echo -e "\e[35mКопирование пакетов.\e[0m"
+
     mkdir -p /targetfs/rootfs/var/cache/pacman/pkg
     cp /targetfs/rootfs/var/cache/pacman/pkg/*.{zst,zst.sig} /var/cache/pacman/pkg
 
     mapfile -t PACMAN_PACKAGES_ARR < <(sed -e 's/#.*//' -e 's/[[:space:]]*$//' -e '/^[[:space:]]*$/d' /root/pacman-packages.conf)
 
-    PACMAN_PACKAGES=$(sed 's/#.*//' /root/pacman-packages.conf | sed '/^[[:space:]]*$/d' | xargs)
-    pacman -S --needed --noconfirm --noprogressbar $PACMAN_PACKAGES
+    for pkg in "${PACMAN_PACKAGES_ARR[@]}"; do
+        pacman -S --needed --noconfirm --noprogressbar $pkg || echo -e "\e[91mНе удалось установить пакет: $pkg\e[0m"
+    done
 }
 
 aur-cache() {
@@ -18,6 +21,8 @@ aur-cache() {
     mkdir -p /etc/sudoers.d
     echo "auruser ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/auruser && chmod 440 /etc/sudoers.d/auruser
 
+    echo -e "\e[35mСинхронизация AUR-пакетов.\e[0m"
+
     mkdir -p /targetfs/homefs/user/.cache/yay
     mkdir -p /home/auruser/.cache/yay
     rsync -r /targetfs/homefs/user/.cache/yay/ /home/auruser/.cache/yay/
@@ -27,7 +32,7 @@ aur-cache() {
     sed -i "s|-T0 -)|-T0 -9 -)|g" /etc/makepkg.conf
 
     #--------------- Установка --------------------------------------
-    if [ ! -d /home/auruser/.cache/yay/yay-bin/.git ]; then
+    if [[ ! -f /home/auruser/.cache/yay/yay-bin/PKGBUILD ]]; then
         sudo -u auruser bash -lc "
           git clone --quiet https://aur.archlinux.org/yay-bin.git ~/.cache/yay/yay-bin
           cd ~/.cache/yay/yay-bin
@@ -36,7 +41,7 @@ aur-cache() {
         pacman -U --needed --noconfirm --noprogressbar /home/auruser/.cache/yay/yay-bin/yay-bin-*-x86_64.pkg.tar.zst
     fi
 
-    if [ ! -d /home/auruser/.cache/yay/intellij-idea-ultimate-edition/.git ]; then
+    if [[ ! -f /home/auruser/.cache/yay/intellij-idea-ultimate-edition/PKGBUILD ]]; then
         sudo -u auruser bash -lc "
           git clone --quiet https://aur.archlinux.org/intellij-idea-ultimate-edition.git ~/.cache/yay/intellij-idea-ultimate-edition
           cd ~/.cache/yay/intellij-idea-ultimate-edition
@@ -52,7 +57,7 @@ aur-cache() {
           makepkg --syncdeps --install --noconfirm --noprogressbar"
     fi
 
-    if [ ! -d /home/auruser/.cache/yay/gitkraken/.git ]; then
+    if [[ ! -f /home/auruser/.cache/yay/gitkraken/PKGBUILD ]]; then
         sudo -u auruser bash -lc "
           git clone --quiet https://aur.archlinux.org/gitkraken.git ~/.cache/yay/gitkraken
           cd ~/.cache/yay/gitkraken
@@ -68,33 +73,35 @@ aur-cache() {
           makepkg --syncdeps --install --noconfirm --noprogressbar"
     fi
 
-    rm -rf /home/auruser/.cache/yay/cryptopro-csp-k1
-    sudo -u auruser bash -lc "
-      git clone --quiet https://aur.archlinux.org/cryptopro-csp-k1.git ~/.cache/yay/cryptopro-csp-k1
-      cd ~/.cache/yay/cryptopro-csp-k1
-      sed -i 's|^pkgver=.*|pkgver=5.0.13000|g' ./PKGBUILD
-      sed -i 's|^_cades_version=.*|_cades_version=\"2.0.15000-1\"|g' ./PKGBUILD
-      sed -i 's|7812c70bee0cf88328d689d78d769bca945779b9979369fb120adb7833f428f5|SKIP|g' ./PKGBUILD
-      sed -i 's|local://linux-amd64.tgz|file:///tmp/bin/linux-amd64.tgz|g' ./PKGBUILD
-      git config user.name 'you@example.com'
-      git config user.email 'you@example.com'
-      git commit -a -m 'use fix'"
+    if [[ ! -f /home/auruser/.cache/yay/cryptopro-csp-k1/PKGBUILD ]]; then
+        sudo -u auruser bash -lc "
+          git clone --quiet https://aur.archlinux.org/cryptopro-csp-k1.git ~/.cache/yay/cryptopro-csp-k1
+          cd ~/.cache/yay/cryptopro-csp-k1
+          sed -i 's|^pkgver=.*|pkgver=5.0.13000|g' ./PKGBUILD
+          sed -i 's|^_cades_version=.*|_cades_version=\"2.0.15000-1\"|g' ./PKGBUILD
+          sed -i 's|7812c70bee0cf88328d689d78d769bca945779b9979369fb120adb7833f428f5|SKIP|g' ./PKGBUILD
+          sed -i 's|local://linux-amd64.tgz|file:///tmp/bin/linux-amd64.tgz|g' ./PKGBUILD
+          git config user.name 'you@example.com'
+          git config user.email 'you@example.com'
+          git commit -a -m 'use fix'"
+    fi
 
-    rm -rf /home/auruser/.cache/yay/icaclient
-    sudo -u auruser bash -lc "
-      git clone --quiet https://aur.archlinux.org/icaclient.git ~/.cache/yay/icaclient
-      cd ~/.cache/yay/icaclient
-      sed -i 's|^pkgver=.*|pkgver=26.04.0.105|g' ./PKGBUILD
-      sed -i 's|\$_source64|file:///tmp/bin/linuxx64-gcc-8-26.04.0.105.tar.gz|g' ./PKGBUILD
-      git config user.name 'you@example.com'
-      git config user.email 'you@example.com'
-      git commit -a -m 'use fix'"
+    if [[ ! -f /home/auruser/.cache/yay/icaclient/PKGBUILD ]]; then
+        sudo -u auruser bash -lc "
+          git clone --quiet https://aur.archlinux.org/icaclient.git ~/.cache/yay/icaclient
+          cd ~/.cache/yay/icaclient
+          sed -i 's|^pkgver=.*|pkgver=26.04.0.105|g' ./PKGBUILD
+          sed -i 's|\$_source64|file:///tmp/bin/linuxx64-gcc-8-26.04.0.105.tar.gz|g' ./PKGBUILD
+          git config user.name 'you@example.com'
+          git config user.email 'you@example.com'
+          git commit -a -m 'use fix'"
+    fi
 
     mapfile -t PACKAGES_ARR < <(sed -e 's/#.*//' -e 's/[[:space:]]*$//' -e '/^[[:space:]]*$/d' /root/aur-packages.conf)
 
     for pkg in "${PACKAGES_ARR[@]}"; do
-        [[ "$pkg" == "intellij-idea-ultimate-edition" || "$pkg" == "gitkraken" ]] && continue
-        sudo -u auruser bash -lc "yay -S --quiet --needed --noconfirm --noprogressbar $pkg"
+        [[ $pkg == "intellij-idea-ultimate-edition" || $pkg == "gitkraken" ]] && continue
+        sudo -u auruser yay -S --quiet --needed --noconfirm --noprogressbar $pkg || echo -e "\e[91mНе удалось установить пакет: $pkg\e[0m"
     done
 
     rm -rf /home/auruser/.cache/yay/cryptopro-csp-k1/pkg
