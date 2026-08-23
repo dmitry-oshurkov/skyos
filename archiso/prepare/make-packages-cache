@@ -42,6 +42,13 @@ aur-cache() {
           cd ~/.cache/yay/intellij-idea-ultimate-edition
           git checkout 726880fc79491034925503805894513feccb24ee # 2025.3.4
           sed -i 's|https://download.jetbrains.com/idea|file:///tmp/bin|g' ./PKGBUILD
+          sed -i '70i\
+              printf \"%s\\\\n\" \
+                  \"-javaagent:/opt/jetbra/ja-netfilter.jar=jetbrains\" \
+                  \"--add-opens=java.base/jdk.internal.org.objectweb.asm=ALL-UNNAMED\" \
+                  \"--add-opens=java.base/jdk.internal.org.objectweb.asm.tree=ALL-UNNAMED\" \
+                  >> \"\\\$pkgdir\"/opt/\\\$pkgname/bin/idea64.vmoptions
+              ' ./PKGBUILD
           makepkg --syncdeps --install --noconfirm --noprogressbar"
     fi
 
