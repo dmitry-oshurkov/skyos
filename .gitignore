@@ -8,7 +8,6 @@ codesigning*
 *.img
 *.cer
 *.crt
-*.key
 *.pem
 user-data
 meta-data

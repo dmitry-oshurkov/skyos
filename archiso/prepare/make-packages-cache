@@ -40,10 +40,9 @@ aur-cache() {
         sudo -u auruser bash -lc "
           git clone --quiet https://aur.archlinux.org/intellij-idea-ultimate-edition.git ~/.cache/yay/intellij-idea-ultimate-edition
           cd ~/.cache/yay/intellij-idea-ultimate-edition
-          sed -i 's|download.jetbrains.com|download-cdn.jetbrains.com|g' ./PKGBUILD
-          git config user.name 'you@example.com'
-          git config user.email 'you@example.com'
-          git commit -a -m 'use cdn'"
+          git checkout 726880fc79491034925503805894513feccb24ee # 2025.3.4
+          sed -i 's|https://download.jetbrains.com/idea|file:///tmp/bin|g' ./PKGBUILD
+          makepkg --syncdeps --install --noconfirm --noprogressbar"
     fi
 
     if [ ! -d /home/auruser/.cache/yay/gitkraken/.git ]; then
@@ -87,7 +86,8 @@ aur-cache() {
     mapfile -t PACKAGES_ARR < <(sed -e 's/#.*//' -e 's/[[:space:]]*$//' -e '/^[[:space:]]*$/d' /root/aur-packages.conf)
 
     for pkg in "${PACKAGES_ARR[@]}"; do
-      sudo -u auruser bash -lc "yay -S --quiet --needed --noconfirm --noprogressbar $pkg"
+        [[ "$pkg" == "intellij-idea-ultimate-edition" ]] && continue
+        sudo -u auruser bash -lc "yay -S --quiet --needed --noconfirm --noprogressbar $pkg"
     done
 
     rm -rf /home/auruser/.cache/yay/cryptopro-csp-k1/pkg
