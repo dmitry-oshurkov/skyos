@@ -28,6 +28,8 @@ sed -i 's|#greeter-setup-script=|greeter-setup-script=/usr/bin/numlockx on|g' /e
 sed -i 's|#logind-check-graphical=true|logind-check-graphical=true|g' /etc/lightdm/lightdm.conf # fix for system boots so fast
 sed -i "s|#display-setup-script=|display-setup-script=xrandr -s $WORKING_RESOLUTION|g" /etc/lightdm/lightdm.conf
 
+brightnessctl set 12%
+
 # boot logo
 plymouth-set-default-theme sky
 
