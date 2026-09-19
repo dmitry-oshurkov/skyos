@@ -45,7 +45,7 @@ aur-cache() {
         sudo -u auruser bash -lc "
           git clone --quiet https://aur.archlinux.org/intellij-idea-ultimate-edition.git ~/.cache/yay/intellij-idea-ultimate-edition
           cd ~/.cache/yay/intellij-idea-ultimate-edition
-          git checkout 726880fc79491034925503805894513feccb24ee # 2025.3.4
+          git checkout 06fdba317135ccab6d96e65e14f8ff1065c7d792 # 2026.2.3
           sed -i 's|https://download.jetbrains.com/idea|file:///tmp/bin|g' ./PKGBUILD
           sed -i '70i\
               printf \"%s\\\\n\" \
