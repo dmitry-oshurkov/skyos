@@ -73,7 +73,7 @@ pacstrap -K /mnt $PACKAGES
 #--------------- Настройка разделов -----------------------
 genfstab -U /mnt > /mnt/etc/fstab
 echo "tmpfs                                     /tmp           tmpfs   defaults,noatime,mode=1777 0 0" >> /mnt/etc/fstab
-echo "skyserver:/sky                            /sky           nfs     soft,intr,timeo=10,retry=3,_netdev,noatime,bg   0 0" >> /mnt/etc/fstab
+echo "skyserver:/sky                            /sky           nfs     nofail,timeo=10,retry=1,_netdev,noatime,bg   0 0" >> /mnt/etc/fstab
 
 
 #--------------- Настройка системы -------------------------
