@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# todo remove old packages
+
 pacman-cache() {
     echo -e "\e[35mКопирование пакетов.\e[0m"
 

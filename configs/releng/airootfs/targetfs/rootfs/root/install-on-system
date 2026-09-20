@@ -84,10 +84,8 @@ archlinux-java set java-21-openjdk
 sed -i 's|#Color|Color\nILoveCandy|g' /etc/pacman.conf
 # ignore packages update
 sed -i "s|#IgnorePkg   =|IgnorePkg = cryptopro-csp-k1 icaclient intellij-idea-ultimate-edition gitkraken|g" /etc/pacman.conf
-
 # docker
-# todo nvidia
-# nvidia-ctk runtime configure --runtime=docker
+#nvidia-ctk runtime configure --runtime=docker
 
 rm -rf /usr/share/backgrounds/gnome/
 rm -rf /usr/share/gnome-background-properties/
@@ -132,6 +130,7 @@ echo 'X-GNOME-Autostart-enabled=false' >> $USER_HOME/.config/autostart/blueman.d
 
 
 # ica client
+/opt/cprocsp/bin/amd64/certmgr -install -store mRoot -file "/etc/ca-certificates/trust-source/anchors/RSA middle Bank GPB CA Server.cer"
 /opt/cprocsp/bin/amd64/certmgr -install -store mRoot -file "/etc/ca-certificates/trust-source/anchors/GOST root 2024 UC GPB.cer"
 update-ca-trust
 

@@ -20,7 +20,7 @@ Server = https://mirror.franscorack.com/archlinux/\$repo/os/\$arch
 EOF
 
 RUN pacman -S --refresh \
-    && pacman -S --quiet --noconfirm --noprogressbar --needed base-devel git sudo
+    && pacman -S --quiet --noconfirm --noprogressbar --needed base-devel git sudo rsync
 
 WORKDIR /root
 COPY . .
