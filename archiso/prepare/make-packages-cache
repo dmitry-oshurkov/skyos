@@ -43,6 +43,13 @@ aur-cache() {
         pacman -U --needed --noconfirm --noprogressbar /home/auruser/.cache/yay/yay-bin/yay-bin-*-x86_64.pkg.tar.zst
     fi
 
+    mapfile -t PACKAGES_ARR < <(sed -e 's/#.*//' -e 's/[[:space:]]*$//' -e '/^[[:space:]]*$/d' /root/aur-packages.conf)
+
+    for pkg in "${PACKAGES_ARR[@]}"; do
+        [[ $pkg == "gitkraken" || $pkg == "cryptopro-csp-k1" || $pkg == "icaclient" ]] && continue
+        sudo -u auruser yay -S --quiet --needed --noconfirm --noprogressbar $pkg || echo -e "\e[91mНе удалось установить пакет: $pkg\e[0m"
+    done
+
     if [[ ! -f /home/auruser/.cache/yay/gitkraken/PKGBUILD ]]; then
         sudo -u auruser bash -lc "
           git clone --quiet https://aur.archlinux.org/gitkraken.git ~/.cache/yay/gitkraken
@@ -74,13 +81,6 @@ aur-cache() {
           sed -i 's|\$_source64|file:///tmp/bin/linuxx64-gcc-8-26.04.0.105.tar.gz|g' ./PKGBUILD
           makepkg --syncdeps --install --noconfirm --noprogressbar"
     fi
-
-    mapfile -t PACKAGES_ARR < <(sed -e 's/#.*//' -e 's/[[:space:]]*$//' -e '/^[[:space:]]*$/d' /root/aur-packages.conf)
-
-    for pkg in "${PACKAGES_ARR[@]}"; do
-        [[ $pkg == "gitkraken" || $pkg == "cryptopro-csp-k1" || $pkg == "icaclient" ]] && continue
-        sudo -u auruser yay -S --quiet --needed --noconfirm --noprogressbar $pkg || echo -e "\e[91mНе удалось установить пакет: $pkg\e[0m"
-    done
 
     rm -rf /home/auruser/.cache/yay/cryptopro-csp-k1/pkg
     rm -rf /home/auruser/.cache/yay/cryptopro-csp-k1/src
