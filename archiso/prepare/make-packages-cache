@@ -82,15 +82,16 @@ aur-cache() {
           makepkg --syncdeps --install --noconfirm --noprogressbar"
     fi
 
-    rm -rf /home/auruser/.cache/yay/cryptopro-csp-k1/pkg
-    rm -rf /home/auruser/.cache/yay/cryptopro-csp-k1/src
-    rm -rf /home/auruser/.cache/yay/intellij-idea-ultimate-edition/pkg
-    rm -rf /home/auruser/.cache/yay/intellij-idea-ultimate-edition/src
-    rm -rf /home/auruser/.cache/yay/qjournalctl/pkg
-    rm -rf /home/auruser/.cache/yay/qjournalctl/src
-    rm -rf /home/auruser/.cache/yay/yandex-browser/src
-    rm -rf /home/auruser/.cache/yay/gitkraken/pkg
-    rm -rf /home/auruser/.cache/yay/gitkraken/src
+    rm -rf /home/auruser/.cache/yay/alacenc/alacenc
+    rm -rf /home/auruser/.cache/yay/flacon/flacon
+    rm -rf /home/auruser/.cache/yay/gtk2/gtk
+    rm -rf /home/auruser/.cache/yay/newaita-reborn-icons-git/Newaita-reborn
+    rm -rf /home/auruser/.cache/yay/ocs-url/ocs-url
+    rm -rf /home/auruser/.cache/yay/ocs-url/qtil
+    rm -rf /home/auruser/.cache/yay/simplescreenrecorder/ssr
+    rm -rf /home/auruser/.cache/yay/**/src
+    rm -rf /home/auruser/.cache/yay/**/pkg
+    rm -rf /home/auruser/.cache/yay/**/*.{tar.gz,tgz,deb,rpm,AppImage,tar.xz}
 
     rsync --quiet --recursive /home/auruser/.cache/yay/ /targetfs/homefs/user/.cache/yay/
 }
