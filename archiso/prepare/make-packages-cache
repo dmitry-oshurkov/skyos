@@ -43,28 +43,10 @@ aur-cache() {
         pacman -U --needed --noconfirm --noprogressbar /home/auruser/.cache/yay/yay-bin/yay-bin-*-x86_64.pkg.tar.zst
     fi
 
-    if [[ ! -f /home/auruser/.cache/yay/intellij-idea-ultimate-edition/PKGBUILD ]]; then
-        sudo -u auruser bash -lc "
-          git clone --quiet https://aur.archlinux.org/intellij-idea-ultimate-edition.git ~/.cache/yay/intellij-idea-ultimate-edition
-          cd ~/.cache/yay/intellij-idea-ultimate-edition
-          git checkout 06fdba317135ccab6d96e65e14f8ff1065c7d792 # 2026.2.3
-          sed -i 's|https://download.jetbrains.com/idea|file:///tmp/bin|g' ./PKGBUILD
-          sed -i '70i\
-              printf \"%s\\\\n\" \
-                  \"-javaagent:/opt/jetbra/ja-netfilter.jar=jetbrains\" \
-                  \"--add-opens=java.base/jdk.internal.org.objectweb.asm=ALL-UNNAMED\" \
-                  \"--add-opens=java.base/jdk.internal.org.objectweb.asm.tree=ALL-UNNAMED\" \
-                  >> \"\\\$pkgdir\"/opt/\\\$pkgname/bin/idea64.vmoptions
-              ' ./PKGBUILD
-          makepkg --syncdeps --install --noconfirm --noprogressbar"
-    fi
-
     if [[ ! -f /home/auruser/.cache/yay/gitkraken/PKGBUILD ]]; then
         sudo -u auruser bash -lc "
           git clone --quiet https://aur.archlinux.org/gitkraken.git ~/.cache/yay/gitkraken
           cd ~/.cache/yay/gitkraken
-          git checkout 485ef10ce681fb05296bbad2b5aa2dc6a6594d4d # 12.4.0
-          sed -i 's|https://api.gitkraken.dev/releases/production/linux/x64/\${pkgver}|file:///tmp/bin|g' ./PKGBUILD
           sed -i 's|\"eula.html\"|\"eula.html\"\\n\"file:///tmp/bin/gtkrn-patch.tar.gz\"|g' ./PKGBUILD
           sed -i \"s|'5b7b39b331bc32a606e1e79c695df4519c9b220225be00fb34ef368c3af319a6')|'5b7b39b331bc32a606e1e79c695df4519c9b220225be00fb34ef368c3af319a6'\n'SKIP')|g\" ./PKGBUILD
           sed -i '73i cd ./gtkrn-patch' ./PKGBUILD
@@ -79,30 +61,24 @@ aur-cache() {
         sudo -u auruser bash -lc "
           git clone --quiet https://aur.archlinux.org/cryptopro-csp-k1.git ~/.cache/yay/cryptopro-csp-k1
           cd ~/.cache/yay/cryptopro-csp-k1
-          sed -i 's|^pkgver=.*|pkgver=5.0.13000|g' ./PKGBUILD
-          sed -i 's|^_cades_version=.*|_cades_version=\"2.0.15000-1\"|g' ./PKGBUILD
-          sed -i 's|7812c70bee0cf88328d689d78d769bca945779b9979369fb120adb7833f428f5|SKIP|g' ./PKGBUILD
+          git checkout 20ac1cdb8c7c133e7b9c4ad3fd3dd754582b08d8 # 5.0.13000
           sed -i 's|local://linux-amd64.tgz|file:///tmp/bin/linux-amd64.tgz|g' ./PKGBUILD
-          git config user.name 'you@example.com'
-          git config user.email 'you@example.com'
-          git commit -a -m 'use fix'"
+          makepkg --syncdeps --install --noconfirm --noprogressbar"
     fi
 
     if [[ ! -f /home/auruser/.cache/yay/icaclient/PKGBUILD ]]; then
         sudo -u auruser bash -lc "
           git clone --quiet https://aur.archlinux.org/icaclient.git ~/.cache/yay/icaclient
           cd ~/.cache/yay/icaclient
-          sed -i 's|^pkgver=.*|pkgver=26.04.0.105|g' ./PKGBUILD
+          git checkout 47f1d653c74e2b32f3e98c4be25de1c6e9afdaaf # 26.04.0.105
           sed -i 's|\$_source64|file:///tmp/bin/linuxx64-gcc-8-26.04.0.105.tar.gz|g' ./PKGBUILD
-          git config user.name 'you@example.com'
-          git config user.email 'you@example.com'
-          git commit -a -m 'use fix'"
+          makepkg --syncdeps --install --noconfirm --noprogressbar"
     fi
 
     mapfile -t PACKAGES_ARR < <(sed -e 's/#.*//' -e 's/[[:space:]]*$//' -e '/^[[:space:]]*$/d' /root/aur-packages.conf)
 
     for pkg in "${PACKAGES_ARR[@]}"; do
-        [[ $pkg == "intellij-idea-ultimate-edition" || $pkg == "gitkraken" ]] && continue
+        [[ $pkg == "gitkraken" || $pkg == "cryptopro-csp-k1" || $pkg == "icaclient" ]] && continue
         sudo -u auruser yay -S --quiet --needed --noconfirm --noprogressbar $pkg || echo -e "\e[91mНе удалось установить пакет: $pkg\e[0m"
     done
 

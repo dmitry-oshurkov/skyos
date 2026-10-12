@@ -83,7 +83,7 @@ archlinux-java set java-21-openjdk
 # pacman
 sed -i 's|#Color|Color\nILoveCandy|g' /etc/pacman.conf
 # ignore packages update
-sed -i "s|#IgnorePkg   =|IgnorePkg = cryptopro-csp-k1 icaclient intellij-idea-ultimate-edition gitkraken|g" /etc/pacman.conf
+sed -i "s|#IgnorePkg   =|IgnorePkg = cryptopro-csp-k1 icaclient|g" /etc/pacman.conf
 # docker
 #nvidia-ctk runtime configure --runtime=docker
 
@@ -127,6 +127,14 @@ sed -i "s|Exec=mailspring %U|Exec=mailspring --background|g" $USER_HOME/.config/
 cp /etc/xdg/autostart/blueman.desktop $USER_HOME/.config/autostart/blueman.desktop
 chmod +x $USER_HOME/.config/autostart/blueman.desktop
 echo 'X-GNOME-Autostart-enabled=false' >> $USER_HOME/.config/autostart/blueman.desktop
+
+
+# intellij-idea-ultimate-edition patch
+echo "
+-javaagent:/opt/jetbra/ja-netfilter.jar=jetbrains
+--add-opens=java.base/jdk.internal.org.objectweb.asm=ALL-UNNAMED
+--add-opens=java.base/jdk.internal.org.objectweb.asm.tree=ALL-UNNAMED
+" >> /opt/intellij-idea-ultimate-edition/bin/idea64.vmoptions
 
 
 # ica client
