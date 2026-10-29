@@ -8,14 +8,12 @@ Changelog
 Added
 -----
 
-- Add ghostty-terminfo and kmscon-terminfo packages to releng to support terminal emulators using them. E.g. when
-  installing via SSH.
+- Add boot entries for the Memtest86+ IA32, AA64 and LOONGARCH64 EFI binaries.
 
 Changed
 -------
 
-- Replaced the ``ntfs-3g`` package with the ``ntfsprogs`` package in the releng profile since we do not require the FUSE
-  driver, but only the userspace utilities. For now, ``ntfs-3g`` still gets pulled in as a dependency of other packages.
+- Adapt to the EFI binary name change of the memtest86+-efi package.
 
 Deprecated
 ----------
@@ -23,10 +21,103 @@ Deprecated
 Fixed
 -----
 
-- Fixed a typo that prevented including the UEFI shell for UEFI architectures other than x64.
+Removed
+-------
+
+- Remove ``linux-atm`` from releng profiles. ATM support was dropped with linux 7.2.
+- Remove ``kms`` mkinitcpio hook.
+
+[91] - 2026-09-27
+=================
+
+Added
+-----
+
+- Add support for architecture-specific kernel parameters in all boot loaders.
+- Add an AArch64-specific package list to the releng profile.
+- Add support for generating AArch64 EFI executables with stubble and platform device trees.
+- Support compressing the bootstrap tarball with ``lz4``.
+- Support using ``pzstd`` to create ``.zst`` bootstrap tarballs.
+
+Changed
+-------
+
+- Document the use of ``unshare`` in the man page.
+- Warn when running ``mkarchiso`` as root via sudo, run0 or a similar tool since it is fully supported to run it as a
+  regular user instead.
+- Simplify UEFI shell menu entries in GRUB configuration.
+- Do not fail if a boot loader for mixed mode booting (for x86_64 systems with IA32 UEFI) cannot be found. Instead,
+  simply skip support for mixed mode booting.
+
+Fixed
+-----
+
+- Do not use reStructuredText line blocks in the man page to avoid them being shown as monospace code blocks in HTML.
+- Prevent failure if ``bootstrap_tarball_compression`` is not set in ``profiledef.sh``.
 
 Removed
 -------
+
+- Remove ``buildmodes`` from both profile's ``profiledef.sh`` since it does not differ from the default (i.e. ``iso``).
+- Remove leftover ``/etc/modprobe.d/broadcom-wl.conf`` from the releng profile. Its only purpose was to override
+  ``/usr/lib/modprobe.d/broadcom-wl.conf`` that was shipped with the (removed) ``broadcom-wl`` package.
+- Remove custom ``/etc/mkinitcpio.d/linux.preset`` from both profiles. The default preset is good enough and this
+  reduces the number of files to change when customizing archiso profiles.
+
+[90] - 2026-09-01
+=================
+
+Added
+-----
+
+- Support the ``i486`` and ``pentium4`` architectures in the ``run_archiso`` script.
+
+Changed
+-------
+
+- Skip BIOS boot modes for non-x86 architectures, instead of failing, to allow using the same profile for all
+  architectures.
+- Use xz's ``arm64`` BCJ filter, in addition to ``x86``, to better compress the releng profile's squashfs image on
+  AArch64.
+
+Fixed
+-----
+
+- Create the ``grubenv`` and UUID search files regardless of the order of the ``iso`` and ``netboot`` build modes.
+- Copy the airootfs ``/boot`` directory to the working directory and use it for boot loader setup, so that its files
+  are still available when the ``netboot`` build mode runs before ``iso``.
+
+Removed
+-------
+
+- Removed ``broadcom-wl`` from releng packages since the package has been removed from the official repositories.
+
+[89] - 2026-07-25
+=================
+
+Added
+-----
+
+- Add ghostty-terminfo and kmscon-terminfo packages to releng to support terminal emulators using them. E.g. when
+  installing via SSH.
+- Support running ``mkarchiso`` as a regular (non-root) user by using ``unshare``. This requires user namespace support
+  in the kernel.
+- Allow BIOS boot modes and check the initramfs for microcode on the ``i486`` and ``pentium4`` architectures.
+
+Changed
+-------
+
+- Replaced the ``ntfs-3g`` package with the ``ntfsprogs`` package in the releng profile since we do not require the FUSE
+  driver, but only the userspace utilities. For now, ``ntfs-3g`` still gets pulled in as a dependency of other packages.
+
+Fixed
+-----
+
+- Stop requiring ``tune2fs`` for ``ext4+squashfs`` images.
+- Validate ``install_dir`` characters for ISO and netboot builds and its length for ISO builds.
+- Reject profiles that use the ``uefi.systemd-boot`` and ``uefi.grub`` boot modes together.
+- Fixed a typo that prevented including the UEFI shell for UEFI architectures other than x64.
+- Correctly support compressing the bootstrap tarball with bzip2.
 
 [88] - 2026-03-26
 =================

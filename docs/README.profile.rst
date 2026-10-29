@@ -33,8 +33,9 @@ The image file is constructed from some of the variables in ``profiledef.sh``: `
 * ``iso_application``: A free-form string that states the application (i.e. its use-case) of the resulting image (defaults
   to ``mkarchiso iso``)
 * ``iso_version``: A string that states the version of the resulting image (defaults to ``""``)
-* ``install_dir``: A string (maximum eight characters long, which **must** consist of ``[a-z0-9]``) that states the
-  directory on the resulting image into which all files will be installed (defaults to ``mkarchiso``)
+* ``install_dir``: A string that states the directory into which all files are installed in the ``iso`` and ``netboot``
+  build modes (defaults to ``mkarchiso``). It must consist of **only** ``[a-z0-9]``. For the ``iso`` build mode, it must not
+  exceed 30 characters.
 * ``buildmodes``: An optional list of strings, that state the build modes that the profile uses. Only the following are
   understood:
 
@@ -65,7 +66,8 @@ The image file is constructed from some of the variables in ``profiledef.sh``: `
 * ``airootfs_image_tool_options``: An array of options to pass to the tool to create the airootfs image. ``mksquashfs`` and
   ``mkfs.erofs`` are supported. See ``mksquashfs --help`` or ``mkfs.erofs --help`` for all possible options
 * ``bootstrap_tarball_compression``: An array containing the compression program and arguments passed to it for
-  compressing the bootstrap tarball (defaults to ``cat``). For example: ``bootstrap_tarball_compression=(zstd -c -T0 --long -19)``.
+  compressing the bootstrap tarball (defaults to an uncompressed tarball). For example:
+  ``bootstrap_tarball_compression=(zstd -c -T0 --long -19)``.
 * ``file_permissions``: An associative array that lists files and/or directories who need specific ownership or
   permissions. The array's keys contain the path and the value is a colon separated list of owner UID, owner GID and
   access mode. E.g. ``file_permissions=(["/etc/shadow"]="0:0:400")``. When directories are listed with a trailing backslash (``/``) **all** files and directories contained within the listed directory will have the same owner UID, owner GID, and access mode applied recursively.
@@ -144,6 +146,8 @@ respective variables in ``profiledef.sh``:
 * ``%ARCHISO_LABEL%``: Set this using the ``iso_label`` variable in ``profiledef.sh``.
 * ``%INSTALL_DIR%``: Set this using the ``install_dir`` variable in ``profiledef.sh``.
 * ``%ARCH%``: Set this using the ``arch`` variable in ``profiledef.sh``.
+* ``%KERNEL_PARAMS%``: Set this using an architecture-specific variable in ``profiledef.sh``, such as ``kernel_params_aarch64`` or
+  ``kernel_params_x86_64``.
 
 Additionally there are also *custom template identifiers* have harcoded values set by ``mkarchiso`` that cannot be
 overridden:
