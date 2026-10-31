@@ -21,8 +21,8 @@ sed -i "s|\$YANDEX_DISK_PASSWD|$YANDEX_DISK_PASSWD|g" releng/airootfs/targetfs/h
 
 sed -i "s|USERNAME|$USERNAME|g" releng/airootfs/targetfs/homefs/user/.local/share/applications/system-update.desktop
 
-sed -i "s|GPB_USERNAME|$GPB_USERNAME|g" releng/airootfs/targetfs/homefs/user/.local/share/applications/citrix-desktop-launcher.desktop
-sed -i "s|GPB_PASSWD|$GPB_PASSWD|g" releng/airootfs/targetfs/homefs/user/.local/share/applications/citrix-desktop-launcher.desktop
+sed -i "s|GPB_USERNAME|$GPB_USERNAME|g" releng/airootfs/targetfs/homefs/user/.local/share/citrix-desktop-launcher/args
+sed -i "s|GPB_PASSWD|$GPB_PASSWD|g" releng/airootfs/targetfs/homefs/user/.local/share/citrix-desktop-launcher/args
 
 # находит подкаталоги первого уровня внутри yay, и в каждом удаляет все непосредственные подкаталоги, кроме .git
 find releng/airootfs/targetfs/homefs/user/.cache/yay -mindepth 1 -maxdepth 1 -type d -print0 | while IFS= read -r -d '' d; do find "$d" -mindepth 1 -maxdepth 1 -type d ! -name .git -exec rm -rf -- {} +; done

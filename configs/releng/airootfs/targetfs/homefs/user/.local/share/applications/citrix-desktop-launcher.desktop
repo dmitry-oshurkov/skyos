@@ -1,6 +1,6 @@
 [Desktop Entry]
 Name=Запуск стола Citrix
-Exec=java -jar /usr/bin/citrix-desktop-launcher.jar https://ng-mob2.gazprombank.ru/ https://GPB_USERNAME:GPB_PASSWD@mob22.gazprombank.ru/Citrix/XAXDWeb/
+Exec=/usr/bin/citrix-desktop-launcher --file /home/dmitry/.local/share/citrix-desktop-launcher/args
 Comment=
 Terminal=false
 PrefersNonDefaultGPU=false
