@@ -15,7 +15,7 @@ LC_ALL=ru_RU.UTF-8
 
 # grub
 sed -i "s|GRUB_DISTRIBUTOR=\"Arch\"|GRUB_DISTRIBUTOR=\"SkyOS\"|g" /etc/default/grub
-sed -i 's|GRUB_CMDLINE_LINUX_DEFAULT="loglevel=3 quiet"|GRUB_CMDLINE_LINUX_DEFAULT="splash quiet loglevel=3 vt.global_cursor_default=0"|g' /etc/default/grub # https://wiki.archlinux.org/title/Silent_boot_(Русский)
+sed -i 's|GRUB_CMDLINE_LINUX_DEFAULT="loglevel=3 quiet"|GRUB_CMDLINE_LINUX_DEFAULT="splash quiet loglevel=3 vt.global_cursor_default=0 acpi_backlight=native"|g' /etc/default/grub # https://wiki.archlinux.org/title/Silent_boot_(Русский)
 sed -i "s|GRUB_TIMEOUT=5|GRUB_TIMEOUT=2|g" /etc/default/grub
 sed -i "s|GRUB_DISABLE_RECOVERY|#GRUB_DISABLE_RECOVERY|g" /etc/default/grub
 sed -i 's|#GRUB_THEME="/path/to/gfxtheme"|GRUB_THEME="/usr/share/grub/themes/skyos/theme.txt"|g' /etc/default/grub
@@ -55,6 +55,7 @@ cat >> /etc/hosts <<HOSTS
 #Other
 89.187.169.39       image.tmdb.org
 0.0.0.0             release.gitkraken.com
+0.0.0.0             account.jetbrains.com
 HOSTS
 
 
@@ -86,6 +87,8 @@ sed -i 's|#Color|Color\nILoveCandy|g' /etc/pacman.conf
 sed -i "s|#IgnorePkg   =|IgnorePkg = cryptopro-csp-k1 icaclient|g" /etc/pacman.conf
 # docker
 #nvidia-ctk runtime configure --runtime=docker
+# citrix
+sed -i "s|MouseSendsControlV=\*|MouseSendsControlV=false|g" /opt/Citrix/ICAClient/config/All_Regions.ini
 
 rm -rf /usr/share/backgrounds/gnome/
 rm -rf /usr/share/gnome-background-properties/

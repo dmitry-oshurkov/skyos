@@ -3,7 +3,6 @@
     <deployment type="dockerfile">
       <settings>
         <option name="containerName" value="" />
-        <option name="commandLineOptions" value="--rm" />
         <option name="sourceFilePath" value="archiso/prepare/Dockerfile" />
         <option name="volumeBindings">
           <list>

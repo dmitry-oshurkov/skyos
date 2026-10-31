@@ -89,6 +89,7 @@ aur-cache() {
     rm -rf /home/auruser/.cache/yay/ocs-url/ocs-url
     rm -rf /home/auruser/.cache/yay/ocs-url/qtil
     rm -rf /home/auruser/.cache/yay/simplescreenrecorder/ssr
+    rm -rf /home/auruser/.cache/yay/mediaelch-git/mediaelch
     rm -rf /home/auruser/.cache/yay/**/src
     rm -rf /home/auruser/.cache/yay/**/pkg
     rm -rf /home/auruser/.cache/yay/**/*.{tar.gz,tgz,deb,rpm,AppImage,tar.xz}
