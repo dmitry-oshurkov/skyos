@@ -3,11 +3,6 @@
 # todo remove old packages
 
 pacman-cache() {
-    echo -e "\e[35mКопирование пакетов.\e[0m"
-
-    mkdir -p /targetfs/rootfs/var/cache/pacman/pkg
-    cp /targetfs/rootfs/var/cache/pacman/pkg/*.{zst,zst.sig} /var/cache/pacman/pkg
-
     mapfile -t PACMAN_PACKAGES_ARR < <(sed -e 's/#.*//' -e 's/[[:space:]]*$//' -e '/^[[:space:]]*$/d' /root/pacman-packages.conf)
 
     for pkg in "${PACMAN_PACKAGES_ARR[@]}"; do
@@ -23,11 +18,6 @@ aur-cache() {
     mkdir -p /etc/sudoers.d
     echo "auruser ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/auruser && chmod 440 /etc/sudoers.d/auruser
 
-    echo -e "\e[35mСинхронизация AUR-пакетов.\e[0m"
-
-    mkdir -p /targetfs/homefs/user/.cache/yay
-    mkdir -p /home/auruser/.cache/yay
-    rsync -r /targetfs/homefs/user/.cache/yay/ /home/auruser/.cache/yay/
     chown -R auruser:auruser /home/auruser
 
     sed -i "s|debug lto)|!debug lto !autodeps)|g" /etc/makepkg.conf
@@ -91,18 +81,13 @@ aur-cache() {
     rm -rf /home/auruser/.cache/yay/simplescreenrecorder/ssr
     rm -rf /home/auruser/.cache/yay/**/src
     rm -rf /home/auruser/.cache/yay/**/pkg
+    rm -rf /home/auruser/.cache/yay/**/LICENSES
     rm -rf /home/auruser/.cache/yay/**/*.{tar.gz,tgz,deb,rpm,AppImage,tar.xz}
-
-    rsync --quiet --recursive /home/auruser/.cache/yay/ /targetfs/homefs/user/.cache/yay/
 }
 
 custom() {
-    rm -f /targetfs/rootfs/etc/hosts
-    rm -rf /targetfs/rootfs/var/tmp/skyos
-    mkdir -p /targetfs/rootfs/var/tmp/skyos
-
-    curl -sL -o /targetfs/rootfs/etc/hosts https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts # check
-    curl -sLO --output-dir /targetfs/rootfs/var/tmp/skyos https://open-vsx.org/api/MS-CEINTL/vscode-language-pack-ru/1.121.0/file/MS-CEINTL.vscode-language-pack-ru-1.121.0.vsix
+    curl -sL -o /etc/hosts https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts # check
+    curl -sLO --output-dir /var/tmp/skyos https://open-vsx.org/api/MS-CEINTL/vscode-language-pack-ru/1.121.0/file/MS-CEINTL.vscode-language-pack-ru-1.121.0.vsix
 }
 
 pacman-cache
@@ -112,8 +97,8 @@ custom
 rm -rf /var/cache/pacman/pkg/download*
 pacman -S --clean --noconfirm
 
-mv /var/cache/pacman/pkg/*.{zst,zst.sig} /targetfs/rootfs/var/cache/pacman/pkg
-chmod -R a+w /targetfs
+chmod -R a+w /var/cache/pacman/pkg
+chmod -R a+w /home/auruser/.cache/yay
 
 echo
 echo

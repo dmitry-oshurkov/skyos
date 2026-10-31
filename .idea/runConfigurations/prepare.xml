@@ -7,8 +7,20 @@
         <option name="volumeBindings">
           <list>
             <DockerVolumeBindingImpl>
-              <option name="containerPath" value="/targetfs" />
-              <option name="hostPath" value="$PROJECT_DIR$/configs/releng/airootfs/targetfs" />
+              <option name="containerPath" value="/var/cache/pacman/pkg" />
+              <option name="hostPath" value="$PROJECT_DIR$/configs/releng/airootfs/targetfs/rootfs/var/cache/pacman/pkg" />
+            </DockerVolumeBindingImpl>
+            <DockerVolumeBindingImpl>
+              <option name="containerPath" value="$PROJECT_DIR$/../../../../auruser/.cache/yay" />
+              <option name="hostPath" value="$PROJECT_DIR$/configs/releng/airootfs/targetfs/homefs/user/.cache/yay" />
+            </DockerVolumeBindingImpl>
+            <DockerVolumeBindingImpl>
+              <option name="containerPath" value="/var/tmp/skyos" />
+              <option name="hostPath" value="$PROJECT_DIR$/configs/releng/airootfs/targetfs/rootfs/var/tmp/skyos" />
+            </DockerVolumeBindingImpl>
+            <DockerVolumeBindingImpl>
+              <option name="containerPath" value="/etc/hosts" />
+              <option name="hostPath" value="$PROJECT_DIR$/configs/releng/airootfs/targetfs/rootfs/etc/hosts" />
             </DockerVolumeBindingImpl>
           </list>
         </option>
