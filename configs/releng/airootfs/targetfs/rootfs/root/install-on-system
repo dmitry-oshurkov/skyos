@@ -123,9 +123,10 @@ cp /usr/share/applications/Yandex.Disk-indicator.desktop $USER_HOME/.config/auto
 chmod +x $USER_HOME/.config/autostart/Yandex.Disk-indicator.desktop
 echo 'X-GNOME-Autostart-enabled=false' >> $USER_HOME/.config/autostart/Yandex.Disk-indicator.desktop
 
-cp /usr/share/applications/mailspring.desktop $USER_HOME/.config/autostart/mailspring.desktop
-chmod +x $USER_HOME/.config/autostart/mailspring.desktop
-sed -i "s|Exec=mailspring %U|Exec=mailspring --background|g" $USER_HOME/.config/autostart/mailspring.desktop
+cp /usr/share/applications/org.gnome.Geary.desktop $USER_HOME/.config/autostart/org.gnome.Geary.desktop
+chmod +x $USER_HOME/.config/autostart/org.gnome.Geary.desktop
+sed -i "s|Exec=geary %U|Exec=geary --gapplication-service|g" $USER_HOME/.config/autostart/org.gnome.Geary.desktop
+sed -i "/DBusActivatable=true/d" $USER_HOME/.config/autostart/org.gnome.Geary.desktop
 
 cp /etc/xdg/autostart/blueman.desktop $USER_HOME/.config/autostart/blueman.desktop
 chmod +x $USER_HOME/.config/autostart/blueman.desktop

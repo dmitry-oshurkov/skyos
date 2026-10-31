@@ -81,6 +81,9 @@ menus-have-icons=true
 [org/cinnamon/theme]
 name='Sky-Mint-Y-Dark-Aqua'
 
+[org/gnome/Geary]
+run-in-background=true
+
 [org/gnome/desktop/interface]
 monospace-font-name='Source Code Pro 11'
 
