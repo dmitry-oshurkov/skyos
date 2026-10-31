@@ -3,7 +3,7 @@
     <deployment type="dockerfile">
       <settings>
         <option name="containerName" value="" />
-        <option name="commandLineOptions" value="--rm --privileged" />
+        <option name="commandLineOptions" value="--privileged" />
         <option name="sourceFilePath" value="Dockerfile" />
         <option name="volumeBindings">
           <list>

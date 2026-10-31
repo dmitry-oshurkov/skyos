@@ -55,6 +55,7 @@ cat >> /etc/hosts <<HOSTS
 #Other
 89.187.169.39       image.tmdb.org
 0.0.0.0             release.gitkraken.com
+0.0.0.0             account.jetbrains.com
 HOSTS
 
 

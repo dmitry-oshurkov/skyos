@@ -1,5 +1,4 @@
 {
-    "data-root": "/home/docker",
     "registry-mirrors": [
         "https://dockerhub.timeweb.cloud",
         "https://dh-mirror.gitverse.ru",
