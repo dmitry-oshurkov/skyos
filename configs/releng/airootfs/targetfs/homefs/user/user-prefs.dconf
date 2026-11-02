@@ -8,9 +8,9 @@ theme='Sky-Arc-Darker'
 desklet-snap-interval=25
 enabled-applets=['panel1:left:0:menu@cinnamon.org:0', 'panel1:right:4:systray@cinnamon.org:3', 'panel1:right:8:notifications@cinnamon.org:5', 'panel1:right:9:removable-drives@cinnamon.org:7', 'panel1:center:2:keyboard@cinnamon.org:8', 'panel1:right:11:network@cinnamon.org:9', 'panel1:right:13:sound@cinnamon.org:10', 'panel1:right:15:power@cinnamon.org:11', 'panel1:center:0:calendar@cinnamon.org:12', 'panel1:right:7:trash@cinnamon.org:14', 'panel1:right:6:recent@cinnamon.org:15', 'panel1:right:2:workspace-switcher@cinnamon.org:17', 'panel1:right:17:user@cinnamon.org:18', 'panel1:left:3:panel-launchers@cinnamon.org:13', 'panel1:center:1:spacer@cinnamon.org:23', 'panel1:right:16:spacer@cinnamon.org:24', 'panel1:right:14:spacer@cinnamon.org:25', 'panel1:right:12:spacer@cinnamon.org:26', 'panel1:right:10:spacer@cinnamon.org:27', 'panel1:right:5:spacer@cinnamon.org:32', 'panel1:right:3:spacer@cinnamon.org:33', 'panel1:right:18:spacer@cinnamon.org:34', 'panel1:right:1:spacer@cinnamon.org:35', 'panel1:right:19:cornerbar@cinnamon.org:35']
 enabled-desklets=['clock@schorschii:1:150:900']
-favorite-apps=['system-update.desktop', 'citrix-desktop-launcher.desktop']
+favorite-apps=['system-update.desktop', 'citrix-desktop-launcher.desktop', 'MediaElch.desktop']
 next-applet-id=36
-next-desklet-id=2
+next-desklet-id=4
 panel-zone-icon-sizes='[{"panelId": 1, "left": 22, "center": 22, "right": 22}]'
 panel-zone-symbolic-icon-sizes='[{"panelId": 1, "left": 16, "center": 16, "right": 16}]'
 panel-zone-text-sizes='[{"panelId": 1, "left": 0.0, "center": 11.0, "right": 0.0}]'
@@ -58,6 +58,9 @@ lock-enabled=false
 [org/cinnamon/desktop/session]
 idle-delay=uint32 0
 
+[org/cinnamon/desktop/sound]
+volume-sound-enabled=false
+
 [org/cinnamon/desktop/wm/preferences]
 num-workspaces=3
 titlebar-font='Sans Bold 11'
@@ -82,6 +85,7 @@ menus-have-icons=true
 name='Sky-Mint-Y-Dark-Aqua'
 
 [org/gnome/Geary]
+images-trusted-domains=['gosuslugi.ru', 'mos.ru', 'ozon.ru', 'github.com', 'bitwarden.com', 'yandex.ru']
 run-in-background=true
 
 [org/gnome/desktop/interface]
@@ -155,4 +159,4 @@ sidebar-width=300
 start-with-menu-bar=false
 
 [org/x/apps/favorites]
-list=[ 'file://$HOME/projects/skylab/scripts/os-setup/skybook-cachy::application/x-shellscript', 'file://$HOME/projects/skylab/scripts/tools/backup::application/x-shellscript', 'file://$HOME/projects/skylab/scripts/multimedia/place-photo-video::application/x-shellscript', 'file://$HOME/projects/skylab/scripts/multimedia/rescan-home-video-nfo::application/x-shellscript', 'file://$HOME/projects/skylab/scripts/tools/pacman-fix::application/x-shellscript', 'file://$HOME/projects/skylab/scripts/tools/yay-cleanup::application/x-shellscript']
+list=[ 'file:///home/USERNAME/projects/skylab/scripts/os-setup/skybook-cachy::application/x-shellscript', 'file:///home/USERNAME/projects/skylab/scripts/tools/backup::application/x-shellscript', 'file:///home/USERNAME/projects/skylab/scripts/multimedia/place-photo-video::application/x-shellscript', 'file:///home/USERNAME/projects/skylab/scripts/multimedia/rescan-home-video-nfo::application/x-shellscript', 'file:///home/USERNAME/projects/skylab/scripts/tools/pacman-fix::application/x-shellscript', 'file:///home/USERNAME/projects/skylab/scripts/tools/yay-cleanup::application/x-shellscript']

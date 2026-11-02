@@ -20,6 +20,7 @@ sed -i "s|\$YANDEX_DISK_IID|$YANDEX_DISK_IID|g" releng/airootfs/targetfs/homefs/
 sed -i "s|\$YANDEX_DISK_PASSWD|$YANDEX_DISK_PASSWD|g" releng/airootfs/targetfs/homefs/user/install-on-user
 
 sed -i "s|USERNAME|$USERNAME|g" releng/airootfs/targetfs/homefs/user/.local/share/applications/system-update.desktop
+sed -i "s|USERNAME|$USERNAME|g" releng/airootfs/targetfs/homefs/user/user-prefs.dconf
 
 sed -i "s|GPB_USERNAME|$GPB_USERNAME|g" releng/airootfs/targetfs/homefs/user/.local/share/citrix-desktop-launcher/args
 sed -i "s|GPB_PASSWD|$GPB_PASSWD|g" releng/airootfs/targetfs/homefs/user/.local/share/citrix-desktop-launcher/args

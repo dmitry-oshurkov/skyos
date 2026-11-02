@@ -21,6 +21,7 @@ archiso/prepare/bin
 configs/releng/airootfs/targetfs/rootfs/etc/hosts
 configs/releng/airootfs/targetfs/rootfs/var
 configs/releng/airootfs/targetfs/rootfs/usr/bin/citrix-desktop-launcher
+configs/releng/airootfs/targetfs/rootfs/usr/bin/qemu-vm-mgr
 configs/releng/airootfs/targetfs/homefs/user/.cache/yay*
 configs/releng/airootfs/targetfs/homefs/user/.cache/playwright-rust*
 configs/releng/airootfs/targetfs/homefs/user/ngate-client-installer-lin-offline-1.0.30-106-g5537bcb-x64

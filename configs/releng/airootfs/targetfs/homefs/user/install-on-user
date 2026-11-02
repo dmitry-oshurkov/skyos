@@ -39,3 +39,10 @@ sed -i "s|\$HOME|$HOME|g" $HOME/.gradle/gradle.properties
 # davs://zhakova.yulianna@mail.ru@webdav.cloud.mail.ru/ cloud.mail.ru 2
 # davs://+79689208789@webdav.cloudbeeline.ru/ cloudbeeline.ru 1
 # davs://+79080904199@webdav.cloudbeeline.ru/ cloudbeeline.ru 2
+
+
+# citrix
+sed -i "s|MouseSendsControlV=\*|MouseSendsControlV=false|g" $HOME/.ICAClient/All_Regions.ini
+sed -i "s|KeyboardEventMode=Automatic|KeyboardEventMode=Scancode|g" $HOME/.ICAClient/wfclient.ini
+sed -i "s|KeyboardSyncMode=Once|KeyboardSyncMode=No|g" $HOME/.ICAClient/wfclient.ini
+sed -i "s|AllowAudioInput=True|AllowAudioInput=False|g" $HOME/.ICAClient/wfclient.ini
